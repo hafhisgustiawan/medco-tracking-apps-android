@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="loading"
+			type="Boolean"
+			android:value="false" />
+
+		<variable
+			name="userItem"
+			type="com.medco.trackingapp.model.UserItem" />
+
+		<variable
+			name="privateDataItem"
+			type="com.medco.trackingapp.model.PrivateDataItem" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:paddingBottom="24sp"
+		tools:context=".fragment.UpdatePrivateDataFragment">
+
+		<View
+			android:id="@+id/line_top"
+			android:layout_width="100dp"
+			android:layout_height="5dp"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="6dp"
+			android:background="@drawable/line_bg"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16sp"
+			android:hint="@string/txt_title_update_private_fragment"
+			android:text='@{privateDataItem.type == "name" ? "Perbarui Nama": "Perbarui Email"}'
+			android:textColor="@color/black"
+			android:textSize="20sp"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/line_top" />
+
+		<TextView
+			android:id="@+id/tv_label_data_old"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16sp"
+			android:layout_marginTop="32dp"
+			android:hint="@string/current_name"
+			android:text='@{privateDataItem.type == "name" ? "Nama sekarang": "Email sekarang"}'
+			android:textColor="@color/text_transparent"
+			android:textSize="12sp"
+			android:textStyle="bold"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+		<TextView
+			android:id="@+id/tv_data_old"
+			android:layout_width="0sp"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16sp"
+			android:layout_marginTop="6sp"
+			android:hint="@string/txt_min"
+			android:text='@{privateDataItem.type == "name" ? userItem.name: userItem.email}'
+			android:textColor="@color/black"
+			android:textSize="14sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_label_data_old" />
+
+		<TextView
+			android:id="@+id/tv_label_data_new"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16sp"
+			android:layout_marginTop="24dp"
+			android:hint="@string/input_new_name"
+			android:text='@{privateDataItem.type == "name" ? "Masukkan nama baru": "Masukkan email baru"}'
+			android:textColor="@color/text_transparent"
+			android:textSize="12sp"
+			android:textStyle="bold"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_data_old" />
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/til_data_new"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+			validateUpdatePrivateDataNewData="@{privateDataItem}"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="6sp"
+			android:elevation="4dp"
+			android:hint='@{privateDataItem.type == "name" ? "Nama baru": "Email baru"}'
+			app:boxBackgroundColor="@color/softPrimaryDark"
+			app:endIconMode="clear_text"
+			app:errorEnabled="true"
+			app:errorTextAppearance="@style/error_appearance"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_label_data_new">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/et_data_new"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="text"
+				android:text="@{privateDataItem.newData}"
+				android:textColor="@color/black"
+				android:textSize="14sp"
+				tools:ignore="TextContrastCheck,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<com.google.android.material.textfield.TextInputLayout
+			android:id="@+id/til_password"
+			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+			validateUpdatePrivateDataPwd="@{privateDataItem}"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16dp"
+			android:elevation="4dp"
+			android:hint="@string/txt_placeholder_password"
+			app:boxBackgroundColor="@color/softPrimaryDark"
+			app:endIconMode="clear_text"
+			app:errorEnabled="true"
+			app:errorTextAppearance="@style/error_appearance"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/til_data_new"
+			app:passwordToggleEnabled="true">
+
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/et_password"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="textPassword"
+				android:text="@{privateDataItem.password}"
+				android:textColor="@color/black"
+				android:textSize="14sp"
+				tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+		</com.google.android.material.textfield.TextInputLayout>
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/btn_save"
+			validateUpdatePrivateDataBtn="@{privateDataItem}"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16sp"
+			android:layout_marginTop="20sp"
+			android:backgroundTint="@color/colorPrimaryDark"
+			android:paddingVertical="16sp"
+			android:progressVisible="@{loading}"
+			android:text="@string/txt_save"
+			android:textColor="@color/white"
+			android:textSize="14sp"
+			android:visibility="visible"
+			app:iconGravity="textStart"
+			app:iconSize="18sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/til_password"
+			tools:ignore="VisualLintOverlap,VisualLintBounds,VisualLintButtonSize,TextContrastCheck" />
+
+		<TextView
+			android:id="@+id/tv_close"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16sp"
+			android:text="@string/txt_close"
+			android:textColor="@color/red"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/btn_save" />
+
+		<View
+			android:id="@+id/spacer"
+			android:layout_width="match_parent"
+			android:layout_height="720sp"
+			android:layout_marginTop="48sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_close"
+			tools:ignore="VisualLintBounds" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

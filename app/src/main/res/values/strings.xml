@@ -1,3 +1,26 @@
 <resources>
 	<string name="app_name">Tracking App</string>
+	<string name="collection_user">user</string>
+	<string name="txt_placeholder_name">Nama personal</string>
+	<string name="txt_placeholder_email">personalemail@email.com</string>
+	<string name="txt_placeholder_role">User</string>
+	<string name="txt_placeholder_date">Selasa, 01 Januari 2024, 00:00</string>
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="txt_not_found">Data tidak ada</string>
+	<string name="txt_title_account">Akun Anda</string>
+	<string name="img_btn_desc">This is button description and mantap</string>
+	<string name="txt_min">-</string>
+	<string name="txt_about_application">Tentang Aplikasi</string>
+	<string name="txt_close">Tutup</string>
+	<string name="txt_next">Lanjutkan</string>
+	<string name="txt_placeholder_reset_password">Instruksi untuk mengatur ulang kata sandi akan dikirimkan ke email perso@email.com</string>
+	<string name="title_reset_password">Mengatur Ulang Kata Sandi</string>
+	<string name="txt_title_about_app">Tentang Aplikasi</string>
+	<string name="txt_title_update_private_fragment">Perbarui Nama</string>
+	<string name="txt_placeholder_password">Kata sandi</string>
+	<string name="txt_save">simpan</string>
+	<string name="current_name">Nama sekarang</string>
+	<string name="input_new_name">Masukkan nama baru</string>
+	<string name="new_name">Nama baru</string>
 </resources>

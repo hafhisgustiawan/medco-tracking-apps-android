@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="formatter"
+			type="java.text.SimpleDateFormat" />
+
+		<variable
+			name="userItem"
+			type="com.medco.trackingapp.model.UserItem" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="16sp"
+		android:layout_marginBottom="16sp"
+		android:background="@drawable/state_select_soft_primary_dark">
+
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/img_user"
+			loadUserImg="@{userItem.photo}"
+			android:layout_width="0sp"
+			android:layout_height="0sp"
+			android:layout_margin="12sp"
+			android:background="@color/dark_white"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:shapeAppearanceOverlay="@style/ShapeNormalCorner"
+			tools:ignore="ImageContrastCheck" />
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="0sp"
+			android:layout_height="wrap_content"
+			android:layout_margin="12sp"
+			android:ellipsize="end"
+			android:hint="@string/txt_placeholder_name"
+			android:maxLines="1"
+			android:text="@{userItem.name}"
+			android:textColor="@color/black"
+			android:textSize="14sp"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/img_user"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_email"
+			android:layout_width="0sp"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="12sp"
+			android:layout_marginTop="2sp"
+			android:ellipsize="end"
+			android:hint="@string/txt_placeholder_email"
+			android:maxLines="1"
+			android:text='@{userItem.email}'
+			android:textColor="@color/text_transparent"
+			android:textSize="12sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/img_user"
+			app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+		<TextView
+			android:id="@+id/tv_status"
+			android:layout_width="0sp"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="12sp"
+			android:layout_marginTop="2sp"
+			android:ellipsize="end"
+			android:hint="@string/txt_placeholder_role"
+			android:maxLines="1"
+			android:textColor="@color/black"
+			android:textSize="12sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/img_user"
+			app:layout_constraintTop_toBottomOf="@id/tv_email" />
+
+		<TextView
+			android:id="@+id/tv_date"
+			android:layout_width="0sp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="10sp"
+			android:layout_marginTop="4sp"
+			android:layout_marginEnd="12sp"
+			android:layout_marginBottom="12sp"
+			android:drawablePadding="4sp"
+			android:ellipsize="end"
+			android:gravity="center_vertical"
+			android:hint="@string/txt_placeholder_date"
+			android:maxLines="1"
+			android:text='@{userItem.timeRegister != null ? formatter.format(userItem.timeRegister.toDate) : "-"}'
+			android:textColor="@color/text_transparent"
+			android:textSize="10sp"
+			app:drawableStartCompat="@drawable/baseline_event_18"
+			app:drawableTint="@color/text_transparent"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/img_user"
+			app:layout_constraintTop_toBottomOf="@id/tv_status"
+			tools:ignore="SmallSp" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
