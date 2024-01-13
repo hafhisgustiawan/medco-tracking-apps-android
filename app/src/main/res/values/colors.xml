@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="purple_200">#FFBB86FC</color>
+	<color name="purple_500">#FF6200EE</color>
+	<color name="purple_700">#FF3700B3</color>
+	<color name="teal_200">#FF03DAC5</color>
+	<color name="teal_700">#FF018786</color>
+	<color name="black">#FF000000</color>
+	<color name="white">#FFFFFFFF</color>
+
+	<color name="colorPrimary">#164863</color>
+	<color name="colorPrimaryDark">#164863</color>
+	<color name="softPrimaryDark">#DDF2FD</color>
+	<color name="colorAccent">#427D9D</color>
+
+	<color name="whiteCardColor">#fff</color>
+	<color name="textColorData">#000C5D</color>
+	<color name="textTransparent">#F1ECEC</color>
+	<color name="white_transparent_bg">#EDEDED</color>
+
+	<color name="soft_purple">#d0d1fd</color>
+	<color name="gold">#FFD700</color>
+	<color name="light_purple">#8F00FF</color>
+	<color name="dark_purple">#3A0067</color>
+	<color name="orange">#BF6300</color>
+	<color name="soft_yellow">#FFCA92</color>
+	<color name="yellow">#FFB700</color>
+	<color name="red">#DC0000</color>
+	<color name="blue">#3860C6</color>
+	<color name="dark_blue">#253E96</color>
+	<color name="blue_light">#00A5FF</color>
+	<color name="soft_blue_light">#CBE9FA</color>
+	<color name="green">#009688</color>
+	<color name="dark_green">#006522</color>
+	<color name="soft_green">#191DCD1A</color>
+	<color name="faded_green">#4B8A60</color>
+	<color name="greenLight">#08A823</color>
+	<color name="maroon">#870000</color>
+	<color name="soft_red">#E85555</color>
+	<color name="softer_red">#D67D7D</color>
+	<color name="softest_red">#FAB9B9</color>
+	<color name="soft_white">#E1E1E1</color>
+	<color name="dark_bg_icon">#CDCDCD</color>
+	<color name="dark_white">#B5B5B5</color>
+	<color name="text_transparent">#676767</color>
+	<color name="text_very_transparent">#838383</color>
+	<color name="transparent">#E1E1E1</color>
+	<color name="translucent_black">#90000000</color>
+	<color name="very_transparent_white">#10000000</color>
+	<color name="transparent_white">#40000000</color>
+	<color name="transparent_black">#50000000</color>
+	<color name="transparent_light">#BFFBFBFB</color>
+	<color name="dark_blue_light">#3E6D9C</color></resources>

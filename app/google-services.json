@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "184417192041",
+    "project_id": "our-project-b446f",
+    "storage_bucket": "our-project-b446f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184417192041:android:dad96b618b7dc00b21baf8",
+        "android_client_info": {
+          "package_name": "com.medco.trackingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184417192041-dnmo342ltmsugfpu92kl4h4h3l9b8raq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medco.trackingapp",
+            "certificate_hash": "626f37124d20228004733dfe0d900abbab51fa7f"
+          }
+        },
+        {
+          "client_id": "184417192041-3jp7is8t2darefgb4v0lc6c3sfs57vsc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfa44BxtKVG_lpr7lHG-DYK0SQPZoVvdU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184417192041-3jp7is8t2darefgb4v0lc6c3sfs57vsc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
