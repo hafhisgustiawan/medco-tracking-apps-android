@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<item
+		android:id="@+id/nav_home"
+		android:icon="@drawable/baseline_home_filled_24"
+		android:title="@string/home"
+		app:cnb_iconColor="@color/colorPrimaryDark" />
+
+	<item
+		android:id="@+id/nav_well"
+		android:icon="@drawable/baseline_all_out_24"
+		android:title="@string/well"
+		app:cnb_iconColor="@color/colorPrimaryDark" />
+
+	<item
+		android:id="@+id/nav_report"
+		android:icon="@drawable/baseline_data_exploration_24"
+		android:title="@string/report"
+		app:cnb_iconColor="@color/colorPrimaryDark" />
+
+	<item
+		android:id="@+id/nav_user"
+		android:icon="@drawable/baseline_groups_3_24"
+		android:title="@string/user"
+		app:cnb_iconColor="@color/colorPrimaryDark" />
+
+	<item
+		android:id="@+id/nav_acc"
+		android:icon="@drawable/baseline_account_box_24"
+		android:title="@string/account"
+		app:cnb_iconColor="@color/colorPrimaryDark" />
+</menu>

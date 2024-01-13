@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">Tracking App</string>
+	<string name="app_name">Well Tracking App</string>
 	<string name="collection_user">user</string>
 	<string name="txt_placeholder_name">Nama personal</string>
 	<string name="txt_placeholder_email">personalemail@email.com</string>
@@ -23,4 +23,24 @@
 	<string name="current_name">Nama sekarang</string>
 	<string name="input_new_name">Masukkan nama baru</string>
 	<string name="new_name">Nama baru</string>
+	<string name="title_splash_1">Mengoptimalkan Kinerja Sumur Migas dengan Aplikasi Well Tracking</string>
+	<string name="sub_title_splash_1">Pantau Kondisi Sumur secara Real-Time untuk Efisiensi Operasional Maksimal. Dapatkan Laporan Kondisi Sumur yang Terperinci, Analisis Proaktif, dan Pemahaman yang Mendalam untuk Membimbing Keputusan Strategis dalam Pengelolaan Sumur Migas</string>
+	<string name="title_splash_2">Inovasi Terkini dengan Aplikasi Well Tracking untuk Industri Migas</string>
+	<string name="sub_title_splash_2">Laporan Kondisi Sumur yang Akurat dan Cepat untuk Pengelolaan Sumber Daya yang Lebih Baik. Manfaatkan Analisis Terkini, Integrasi Data yang Mulus, dan Visualisasi Informatif untuk Meningkatkan Pengawasan dan Keefektifan Operasional dalam Industri Migas</string>
+	<string name="title_splash_3">Pandangan Mendalam Aplikasi Well Tracking Medco untuk Pemantauan Sumur yang Presisi</string>
+	<string name="sub_title_splash_3">Integrasi Data dan Analisis Mendalam untuk Keputusan yang Lebih Cerdas dalam Pengelolaan Sumur Migas. Evaluasi Performa dan Solusi Berbasis Data untuk Meningkatkan Produktivitas dan Keberlanjutan dalam Industri Migas</string>
+	<string name="txt_skip" translatable="false">Skip</string>
+	<string name="next">lanjut</string>
+	<string name="home">Utama</string>
+	<string name="well">Sumur</string>
+	<string name="report">Laporan</string>
+	<string name="user">Pengguna</string>
+	<string name="account">Akun Anda</string>
+	<string name="txt_welcome">Selamat Datang Kembali!</string>
+	<string name="text_sub_login">Ayo masuk untuk mengakses seluruh fitur aplikasi!</string>
+	<string name="txt_btn_google">masuk dengan google</string>
+	<string name="txt_btn_login_email">masuk dengan email</string>
+	<string name="txt_forget_password">Lupa kata sandi?</string>
+	<string name="txt_title_forget_password">Lupa Kata Sandi</string>
+	<string name="sub_title_reset_password">Silahkan isi alamat email anda</string>
 </resources>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/white_transparent_bg"
+	tools:context=".activity.AuthActivity">
+
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:title="@string/app_name"
+		app:titleTextAppearance="@style/toolbar_appearance"
+		app:titleTextColor="@color/black" />
+
+	<ImageView
+		android:id="@+id/animation"
+		android:layout_width="0sp"
+		android:layout_height="0sp"
+		android:contentDescription="@string/img_btn_desc"
+		android:padding="16sp"
+		android:src="@drawable/logo"
+		app:layout_constraintDimensionRatio="1:1"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/toolbar"
+		app:layout_constraintWidth_percent="0.8"
+		tools:ignore="VisualLintBounds" />
+
+	<TextView
+		android:id="@+id/tv_title"
+		android:layout_width="0sp"
+		android:layout_height="wrap_content"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:paddingHorizontal="4sp"
+		android:text="@string/txt_welcome"
+		android:textColor="@color/black"
+		android:textSize="16sp"
+		app:layout_constraintEnd_toEndOf="@id/btn_login_with_google"
+		app:layout_constraintStart_toStartOf="@id/btn_login_with_google"
+		app:layout_constraintTop_toBottomOf="@id/animation"
+		tools:ignore="VisualLintBounds" />
+
+	<TextView
+		android:id="@+id/tv_sub_title"
+		android:layout_width="0sp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="3sp"
+		android:ellipsize="end"
+		android:maxLines="1"
+		android:paddingHorizontal="4sp"
+		android:text="@string/text_sub_login"
+		android:textColor="@color/text_transparent"
+		android:textSize="14sp"
+		app:layout_constraintEnd_toEndOf="@id/btn_login_with_google"
+		app:layout_constraintStart_toStartOf="@id/btn_login_with_google"
+		app:layout_constraintTop_toBottomOf="@id/tv_title"
+		tools:ignore="VisualLintBounds" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/btn_login_with_google"
+		style="@style/Widget.MaterialComponents.Button.TextButton"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="16sp"
+		android:layout_marginTop="16sp"
+		android:backgroundTint="@color/white"
+		android:paddingHorizontal="8sp"
+		android:paddingVertical="2sp"
+		android:text="@string/txt_btn_google"
+		android:textColor="@color/black"
+		android:textSize="14sp"
+		app:cornerRadius="8sp"
+		app:icon="@drawable/ic_google_70"
+		app:iconTint="@null"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/tv_sub_title"
+		tools:ignore="VisualLintBounds,VisualLintButtonSize" />
+
+	<ProgressBar
+		android:id="@+id/progressbar"
+		style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+		android:layout_width="0sp"
+		android:layout_height="0dp"
+		android:layout_marginVertical="5dp"
+		android:background="@drawable/bg_btn_white"
+		android:padding="6sp"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="@id/btn_login_with_google"
+		app:layout_constraintEnd_toEndOf="@id/btn_login_with_google"
+		app:layout_constraintStart_toStartOf="@id/btn_login_with_google"
+		app:layout_constraintTop_toTopOf="@id/btn_login_with_google" />
+
+	<View
+		android:id="@+id/separate_line"
+		android:layout_width="0sp"
+		android:layout_height="1.5sp"
+		android:layout_marginHorizontal="16sp"
+		android:background="@color/soft_white"
+		app:layout_constraintBottom_toBottomOf="@id/tv_separate"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@id/tv_separate"
+		tools:ignore="SmallSp,VisualLintBounds" />
+
+	<TextView
+		android:id="@+id/tv_separate"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginVertical="16sp"
+		android:layout_marginBottom="16sp"
+		android:background="@color/white_transparent_bg"
+		android:paddingHorizontal="6sp"
+		android:text="Atau gunakan metode"
+		android:textColor="@color/dark_white"
+		android:textSize="10sp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/btn_login_with_google"
+		tools:ignore="HardcodedText,SmallSp,TextContrastCheck,VisualLintBounds" />
+
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/btn_login_email"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="16sp"
+		android:layout_marginTop="16sp"
+		android:paddingHorizontal="24sp"
+		android:paddingVertical="16sp"
+		android:text="@string/txt_btn_login_email"
+		android:textSize="14sp"
+		app:cornerRadius="8sp"
+		app:icon="@drawable/baseline_email_24"
+		app:iconTint="@color/white"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/tv_separate"
+		tools:ignore="VisualLintBounds,TextContrastCheck,VisualLintButtonSize" />
+
+	<TextView
+		android:id="@+id/tv_forget_password"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16sp"
+		android:text="@string/txt_forget_password"
+		android:textColor="@color/text_transparent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/btn_login_email"
+		tools:ignore="VisualLintBounds,TextContrastCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

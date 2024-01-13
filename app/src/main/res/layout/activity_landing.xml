@@ -1,18 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools">
 
 	<data>
 
-		<variable
-			name="userItem"
-			type="com.medco.trackingapp.model.UserItem" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@color/white_transparent_bg"
 		tools:context=".activity.LandingActivity">
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16sp"
+			android:text="@string/app_name"
+			android:textColor="@color/black"
+			android:textSize="24sp"
+			android:textStyle="bold"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_skip"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="16sp"
+			android:text="@string/txt_skip"
+			android:textColor="@color/text_transparent"
+			android:textSize="14sp"
+			app:layout_constraintBottom_toBottomOf="@id/tv_title"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="@id/tv_title"
+			tools:ignore="TextContrastCheck" />
+
+		<androidx.viewpager2.widget.ViewPager2
+			android:id="@+id/view_pager"
+			android:layout_width="match_parent"
+			android:layout_height="0sp"
+			app:layout_constraintBottom_toTopOf="@id/btn_next"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+		<com.google.android.material.tabs.TabLayout
+			android:id="@+id/tab_layout"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@color/white_transparent_bg"
+			app:layout_constraintBottom_toBottomOf="@id/btn_previous"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="@id/btn_previous"
+			app:tabBackground="@drawable/tab_pager_selector"
+			app:tabGravity="center"
+			app:tabIndicatorHeight="0dp" />
+
+		<com.google.android.material.button.MaterialButton
+			android:id="@+id/btn_login"
+			android:layout_width="wrap_content"
+			android:layout_height="0sp"
+			android:layout_marginEnd="16sp"
+			android:text="@string/next"
+			android:visibility="gone"
+			app:cornerRadius="24sp"
+			app:icon="@drawable/baseline_arrow_forward_ios_16"
+			app:iconGravity="end"
+			app:iconTint="@color/white"
+			app:layout_constraintBottom_toBottomOf="@id/btn_previous"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="@id/btn_previous" />
+
+		<ImageButton
+			android:id="@+id/btn_next"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16sp"
+			android:background="@drawable/bg_circle"
+			android:backgroundTint="@color/colorPrimaryDark"
+			android:contentDescription="@string/img_btn_desc"
+			android:padding="16sp"
+			android:src="@drawable/baseline_arrow_forward_ios_16"
+			android:visibility="visible"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:tint="@color/white"
+			tools:ignore="RedundantDescriptionCheck,DuplicateSpeakableTextCheck" />
+
+		<ImageButton
+			android:id="@+id/btn_previous"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16sp"
+			android:background="@drawable/bg_circle"
+			android:backgroundTint="@color/white"
+			android:contentDescription="@string/img_btn_desc"
+			android:padding="16sp"
+			android:src="@drawable/baseline_arrow_back_ios_new_16"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:tint="@color/colorPrimaryDark"
+			tools:ignore="RedundantDescriptionCheck" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
