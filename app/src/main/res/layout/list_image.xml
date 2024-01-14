@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+
+		<import type="android.view.View" />
+
+		<variable
+			name="imageItem"
+			type="com.medco.trackingapp.model.ImageItem" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/img"
+			listImageSource="@{imageItem}"
+			android:layout_width="292sp"
+			android:layout_height="0sp"
+			android:layout_marginStart="16sp"
+			android:scaleType="center"
+			android:background="@color/soft_white"
+			android:src="@drawable/baseline_add_circle_outline_48"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintDimensionRatio="1:0.6"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:shapeAppearanceOverlay="@style/ShapeNormalCorner"
+			app:tint="@color/text_transparent" />
+
+		<ImageButton
+			android:id="@+id/btn_delete"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="12sp"
+			android:background="@android:color/transparent"
+			android:contentDescription="@string/txt_description"
+			android:src="@drawable/baseline_close_24"
+			android:visibility='@{imageItem == null ? View.GONE : View.VISIBLE}'
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:tint="@color/text_transparent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

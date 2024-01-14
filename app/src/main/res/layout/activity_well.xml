@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="wellItem"
+			type="com.medco.trackingapp.model.WellItem" />
+
+		<variable
+			name="userRef"
+			type="com.google.firebase.firestore.DocumentReference" />
+
+		<variable
+			name="currentWellRef"
+			type="com.google.firebase.firestore.DocumentReference" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/white_transparent_bg"
+		tools:context=".activity.WellActivity">
+
+		<androidx.coordinatorlayout.widget.CoordinatorLayout
+			android:id="@+id/layout_main"
+			android:layout_width="match_parent"
+			android:layout_height="0sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent">
+
+			<com.google.android.material.appbar.AppBarLayout
+				android:id="@+id/app_bar"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/white_transparent_bg"
+				android:elevation="0sp"
+				android:fitsSystemWindows="true"
+				app:elevation="0sp">
+
+				<com.google.android.material.appbar.CollapsingToolbarLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:elevation="0sp"
+					android:fitsSystemWindows="true"
+					app:layout_scrollFlags="scroll">
+
+					<androidx.constraintlayout.widget.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content">
+
+						<androidx.constraintlayout.widget.Guideline
+							android:id="@+id/gl_center"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:orientation="vertical"
+							app:layout_constraintGuide_percent="0.5" />
+
+						<androidx.constraintlayout.widget.ConstraintLayout
+							android:id="@+id/toolbar"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toTopOf="parent">
+
+							<TextView
+								android:id="@+id/tv_master_title"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:layout_marginVertical="16sp"
+								android:ellipsize="end"
+								android:gravity="center"
+								android:maxLines="1"
+								android:paddingHorizontal="16sp"
+								android:text="@string/text_title_detail_well"
+								android:textColor="@color/black"
+								android:textSize="22sp"
+								android:textStyle="bold"
+								app:layout_constraintBottom_toBottomOf="parent"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toTopOf="parent" />
+
+							<ImageButton
+								android:id="@+id/btn_more_option"
+								imgBtnVisibleForAdmin="@{userRef}"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:layout_marginEnd="14sp"
+								android:background="@android:color/transparent"
+								android:contentDescription="@string/img_btn_desc"
+								android:src="@drawable/baseline_more_vert_24"
+								app:layout_constraintBottom_toBottomOf="@id/tv_master_title"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintTop_toTopOf="@id/tv_master_title"
+								tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck,RedundantDescriptionCheck" />
+
+							<ImageButton
+								android:id="@+id/btn_back"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:layout_marginStart="14sp"
+								android:background="@android:color/transparent"
+								android:contentDescription="@string/img_btn_desc"
+								android:src="@drawable/baseline_arrow_back_24"
+								app:layout_constraintBottom_toBottomOf="@id/tv_master_title"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toTopOf="@id/tv_master_title"
+								tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck,RedundantDescriptionCheck" />
+
+						</androidx.constraintlayout.widget.ConstraintLayout>
+
+						<androidx.cardview.widget.CardView
+							android:id="@+id/card_img"
+							android:layout_width="match_parent"
+							android:layout_height="0sp"
+							android:layout_marginHorizontal="16sp"
+							android:layout_marginTop="8sp"
+							android:elevation="0sp"
+							app:cardCornerRadius="8sp"
+							app:cardElevation="0sp"
+							app:layout_constraintDimensionRatio="1:0.6"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+							<com.denzcoskun.imageslider.ImageSlider
+								android:id="@+id/img_slider"
+								loadImgSliderWell="@{wellItem}"
+								android:layout_width="match_parent"
+								android:layout_height="match_parent"
+								android:background="@drawable/bg_btn_white"
+								app:iss_auto_cycle="false"
+								app:iss_delay="0"
+								app:iss_error_image="@android:color/transparent"
+								app:iss_period="2000"
+								app:iss_placeholder="@android:color/transparent"
+								app:iss_title_background="@android:color/transparent"
+								app:layout_constraintDimensionRatio="1:0.6" />
+
+						</androidx.cardview.widget.CardView>
+
+						<androidx.constraintlayout.widget.ConstraintLayout
+							android:id="@+id/layout_information"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:padding="16sp"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/card_img">
+
+							<TextView
+								android:id="@+id/tv_title"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="8sp"
+								android:ellipsize="end"
+								android:hint="@string/txt_placeholder_title_well"
+								android:maxLines="1"
+								android:text='@{wellItem.name}'
+								android:textColor="@color/black"
+								android:textSize="18sp"
+								android:textStyle="bold"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toTopOf="parent" />
+
+							<TextView
+								android:id="@+id/tv_coordinates"
+								setAddressByGeoPointIntoTv="@{wellItem.location}"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="12sp"
+								android:drawablePadding="4sp"
+								android:ellipsize="end"
+								android:gravity="center_vertical"
+								android:hint="@string/placeholder_address"
+								android:maxLines="1"
+								android:textColor="@color/text_transparent"
+								android:textSize="12sp"
+								app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_16"
+								app:drawableStartCompat="@drawable/baseline_location_on_16"
+								app:drawableTint="@color/text_transparent"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toBottomOf="@id/tv_title"
+								tools:ignore="SmallSp" />
+
+							<TextView
+								android:id="@+id/tv_category"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="3sp"
+								android:drawablePadding="4sp"
+								android:ellipsize="end"
+								android:hint="@string/txt_placeholder_category"
+								android:maxLines="1"
+								android:text="@{wellItem.category}"
+								android:textColor="@color/text_transparent"
+								android:textSize="12sp"
+								app:drawableStartCompat="@drawable/baseline_category_16"
+								app:drawableTint="@color/text_transparent"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toBottomOf="@id/tv_coordinates"
+								tools:ignore="VisualLintBounds" />
+
+							<TextView
+								android:id="@+id/tv_date"
+								formatTimestampTv="@{wellItem.createdAt}"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="3sp"
+								android:drawablePadding="4sp"
+								android:ellipsize="end"
+								android:gravity="center_vertical"
+								android:hint="@string/txt_placeholder_date"
+								android:maxLines="1"
+								android:textColor="@color/text_transparent"
+								android:textSize="12sp"
+								app:drawableStartCompat="@drawable/baseline_event_18"
+								app:drawableTint="@color/text_transparent"
+								app:layout_constraintBottom_toBottomOf="parent"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toBottomOf="@id/tv_category"
+								tools:ignore="SmallSp" />
+
+						</androidx.constraintlayout.widget.ConstraintLayout>
+
+						<androidx.constraintlayout.widget.ConstraintLayout
+							android:id="@+id/layout_description"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginHorizontal="16sp"
+							android:layout_marginTop="8sp"
+							android:background="@drawable/bg_btn_white"
+							android:padding="16sp"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/layout_information">
+
+							<TextView
+								android:id="@+id/tv_title_description"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginEnd="3sp"
+								android:ellipsize="end"
+								android:maxLines="1"
+								android:text="@string/txt_description"
+								android:textColor="@color/text_transparent"
+								android:textSize="14sp"
+								android:textStyle="bold"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toTopOf="parent" />
+
+							<TextView
+								android:id="@+id/tv_description"
+								android:layout_width="match_parent"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="12sp"
+								android:hint="@string/txt_description"
+								android:text="@{wellItem.description}"
+								android:textColor="@color/black"
+								android:textSize="14sp"
+								app:layout_constraintBottom_toBottomOf="parent"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toBottomOf="@id/tv_title_description" />
+
+						</androidx.constraintlayout.widget.ConstraintLayout>
+
+						<androidx.constraintlayout.widget.ConstraintLayout
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginHorizontal="16sp"
+							android:layout_marginTop="8sp"
+							android:background="@drawable/bg_btn_white"
+							android:padding="16sp"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/layout_description">
+
+							<androidx.constraintlayout.widget.Guideline
+								android:id="@+id/gl"
+								android:layout_width="wrap_content"
+								android:layout_height="wrap_content"
+								android:orientation="vertical"
+								app:layout_constraintGuide_percent="0.5" />
+
+							<TextView
+								android:id="@+id/tv_title_distance"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:text="@string/distance"
+								android:textColor="@color/text_transparent"
+								android:textSize="14sp"
+								app:layout_constraintEnd_toStartOf="@id/gl"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toTopOf="parent" />
+
+							<TextView
+								android:id="@+id/tv_title_traveling_time"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="12sp"
+								android:text="@string/traveling_time"
+								android:textColor="@color/text_transparent"
+								android:textSize="14sp"
+								app:layout_constraintEnd_toStartOf="@id/gl"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toBottomOf="@id/tv_title_distance" />
+
+							<TextView
+								android:id="@+id/tv_distance"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:ellipsize="start"
+								android:hint="@string/txt_min"
+								android:maxLines="1"
+								android:textAlignment="textEnd"
+								android:textColor="@color/black"
+								android:textSize="14sp"
+								android:textStyle="bold"
+								app:layout_constraintBottom_toBottomOf="@id/tv_title_distance"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toEndOf="@id/gl"
+								app:layout_constraintTop_toTopOf="@id/tv_title_distance" />
+
+							<TextView
+								android:id="@+id/tv_traveling_time"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:ellipsize="start"
+								android:hint="@string/txt_min"
+								android:maxLines="1"
+								android:textAlignment="textEnd"
+								android:textColor="@color/black"
+								android:textSize="14sp"
+								android:textStyle="bold"
+								app:layout_constraintBottom_toBottomOf="@id/tv_title_traveling_time"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toEndOf="@id/gl"
+								app:layout_constraintTop_toTopOf="@id/tv_title_traveling_time" />
+
+						</androidx.constraintlayout.widget.ConstraintLayout>
+
+					</androidx.constraintlayout.widget.ConstraintLayout>
+
+				</com.google.android.material.appbar.CollapsingToolbarLayout>
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16sp"
+					android:layout_marginTop="24sp"
+					android:layout_marginBottom="8sp"
+					android:background="@drawable/bg_btn_white"
+					android:padding="16sp">
+
+					<TextView
+						android:id="@+id/tv_title_report"
+						android:layout_width="0sp"
+						android:layout_height="wrap_content"
+						android:layout_marginEnd="16sp"
+						android:text="@string/report"
+						android:textColor="@color/text_transparent"
+						android:textStyle="bold"
+						app:layout_constraintEnd_toStartOf="@id/btn_add_report"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+					<TextView
+						android:id="@+id/tv_total_report"
+						setTotalReportTv="@{currentWellRef}"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="8sp"
+						android:layout_marginEnd="4sp"
+						android:text="@string/txt_total"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@id/tv_title_report" />
+
+					<ImageButton
+						android:id="@+id/btn_add_report"
+						imgBtnVisibleForUser="@{userRef}"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:background="@android:color/transparent"
+						android:contentDescription="@string/img_btn_desc"
+						android:src="@drawable/baseline_library_add_24"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintTop_toTopOf="parent"
+						app:tint="@color/text_transparent"
+						tools:ignore="TouchTargetSizeCheck" />
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+
+			</com.google.android.material.appbar.AppBarLayout>
+
+			<androidx.core.widget.NestedScrollView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<androidx.recyclerview.widget.RecyclerView
+						android:id="@+id/rv_rating"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:minHeight="420sp"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+					<TextView
+						android:id="@+id/tv_not_found"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="@string/txt_not_found"
+						android:textColor="@color/text_very_transparent"
+						android:textSize="12sp"
+						android:visibility="visible"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent"
+						tools:ignore="HardcodedText" />
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+
+			</androidx.core.widget.NestedScrollView>
+
+		</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+		<ProgressBar
+			android:id="@+id/progressbar"
+			style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/bg_btn_soft_primary_dark"
+			android:padding="8sp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

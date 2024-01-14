@@ -35,7 +35,7 @@
 	<string name="next">lanjut</string>
 	<string name="home">Utama</string>
 	<string name="well">Sumur</string>
-	<string name="report">Laporan</string>
+	<string name="report">Laporan Pemantauan Sumur</string>
 	<string name="user">Pengguna</string>
 	<string name="account">Akun Anda</string>
 	<string name="txt_welcome">Selamat Datang Kembali!</string>
@@ -60,4 +60,26 @@
 	<string name="txt_input_user_data">Masukkan data pengguna</string>
 	<string name="name">Nama</string>
 	<string name="email">Email</string>
+	<string name="text_title_detail_well">Detail Sumur</string>
+	<string name="txt_placeholder_title_well">Judul atau Nama Sumur</string>
+	<string name="placeholder_address">Jl. Malikussaleh, Beuringen, Kab. Aceh Utara</string>
+	<string name="txt_placeholder_category">Kategori sumur</string>
+	<string name="txt_description">Deskripsi Sumur</string>
+	<string name="distance">Jarak tempuh</string>
+	<string name="traveling_time">Waktu tempuh</string>
+	<string name="zero">0</string>
+	<string name="txt_total">Total</string>
+	<string name="txt_report">Laporan</string>
+	<string name="txt_placeholder_result">Hasil</string>
+	<string name="txt_all">Semua</string>
+	<string name="txt_cat_as">AS (Alur Siwah)</string>
+	<string name="txt_cat_jr">JR (Julok Rayeuk)</string>
+	<string name="txt_cat_other_well">Other Well (Sumur Tua)</string>
+	<string name="txt_title_manage_well">Tambah Data Sumur</string>
+	<string name="txt_hint_choose_categories">Pilih kategori</string>
+	<string name="txt_well_location">Lokasi sumur</string>
+	<string name="marking_location">Tandai lokasi</string>
+	<string name="txt_address">Alamat</string>
+	<string name="delete">Hapus</string>
+	<string name="txt_title_set_location">Tandai Lokasi</string>
 </resources>

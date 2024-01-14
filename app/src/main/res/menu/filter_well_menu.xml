@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/action_all"
+		android:title="@string/txt_all" />
+
+	<item
+		android:id="@+id/action_as"
+		android:title="@string/txt_cat_as"/>
+
+	<item
+		android:id="@+id/action_jr"
+		android:title="@string/txt_cat_jr"/>
+
+	<item
+		android:id="@+id/action_other_well"
+		android:title="@string/txt_cat_other_well"/>
+</menu>

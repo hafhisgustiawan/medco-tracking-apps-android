@@ -30,7 +30,6 @@ import com.medco.trackingapp.fragment.ReportFragment;
 import com.medco.trackingapp.fragment.UserFragment;
 import com.medco.trackingapp.fragment.WellFragment;
 import com.medco.trackingapp.helper.SnackbarHelper;
-import com.medco.trackingapp.model.UserItem;
 
 public class MainActivity extends BaseActivity implements FirebaseAuth.AuthStateListener {
 
@@ -46,7 +45,6 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 	private FirebaseFirestore firebaseFirestore;
 	private FirebaseMessaging firebaseMessaging;
 	private DocumentReference currentUserRef;
-	private UserItem mUserItem;
 	//global value
 	private Animation animation;
 	private long mBackPressed;
@@ -82,6 +80,7 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 
 	@Override
 	public void initViews() {
+		binding.setUserRef(currentUserRef);
 		Fragment selectedFragment = initHomeFragment();
 		if (selectedFragment == null) return;
 		fragmentManager.beginTransaction().replace(R.id.fragment_container,

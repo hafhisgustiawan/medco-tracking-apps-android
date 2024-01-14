@@ -20,12 +20,6 @@
 		app:cnb_iconColor="@color/colorPrimaryDark" />
 
 	<item
-		android:id="@+id/nav_user"
-		android:icon="@drawable/baseline_groups_3_24"
-		android:title="@string/user"
-		app:cnb_iconColor="@color/colorPrimaryDark" />
-
-	<item
 		android:id="@+id/nav_acc"
 		android:icon="@drawable/baseline_account_box_24"
 		android:title="@string/account"

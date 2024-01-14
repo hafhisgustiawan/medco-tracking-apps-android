@@ -19,22 +19,15 @@ import com.medco.trackingapp.databinding.ListUserBinding;
 import com.medco.trackingapp.helper.CustomException;
 import com.medco.trackingapp.model.UserItem;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 public class UserAdapter extends FirestorePagingAdapter<UserItem,
 	UserAdapter.ViewHolder> {
 
 	public static final String TAG = "Notification Adapter";
 	private static final int ITEM = 0;
 	private static final int LOADING = 1;
-	// 1) FORMAT DATE
-	private final SimpleDateFormat dateFormat;
 	public Animation animation;
-	// 2) CONSTRUCTOR
 	public Context mContext;
 	private boolean isLoadingAdded = false;
-	// 3) CALLBACK
 	private OnItemClickListener listener;
 	private StateChangeListener stateListener;
 
@@ -43,9 +36,6 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 		super(options);
 		this.mContext = context;
 		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
-
-		Locale localeID = new Locale("in", "ID");
-		dateFormat = new SimpleDateFormat("E, dd MMM yyyy, H:mm", localeID);
 	}
 
 	public void setOnItemClickListener(OnItemClickListener listener) {
@@ -63,7 +53,6 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 
 		holder.itemView.setAnimation(animation);
 		holder.binding.setUserItem(model);
-		holder.binding.setFormatter(dateFormat);
 	}
 
 	@NonNull

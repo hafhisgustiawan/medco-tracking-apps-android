@@ -6,8 +6,12 @@
 	<data>
 
 		<variable
-			name="userItem"
-			type="com.medco.trackingapp.model.UserItem" />
+			name="currentWellRef"
+			type="com.google.firebase.firestore.DocumentReference" />
+
+		<variable
+			name="wellItem"
+			type="com.medco.trackingapp.model.WellItem" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -18,8 +22,8 @@
 		android:background="@drawable/state_select_soft_primary_dark">
 
 		<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/img_user"
-			loadUserImg="@{userItem.photo}"
+			android:id="@+id/img_well"
+			wellImageSource="@{wellItem}"
 			android:layout_width="0sp"
 			android:layout_height="0sp"
 			android:layout_margin="12sp"
@@ -37,55 +41,66 @@
 			android:layout_height="wrap_content"
 			android:layout_margin="12sp"
 			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_name"
+			android:hint="@string/txt_placeholder_title_well"
 			android:maxLines="1"
-			android:text="@{userItem.name}"
+			android:text='@{wellItem.name}'
 			android:textColor="@color/black"
 			android:textSize="14sp"
 			android:textStyle="bold"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_user"
+			app:layout_constraintStart_toEndOf="@id/img_well"
 			app:layout_constraintTop_toTopOf="parent" />
 
 		<TextView
-			android:id="@+id/tv_email"
-			android:layout_width="0sp"
+			android:id="@+id/tv_total_report"
+			setTotalReportTv="@{currentWellRef}"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="12sp"
-			android:layout_marginTop="2sp"
-			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_email"
-			android:maxLines="1"
-			android:text='@{userItem.email}'
-			android:textColor="@color/text_transparent"
-			android:textSize="12sp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_user"
-			app:layout_constraintTop_toBottomOf="@id/tv_title" />
+			android:layout_marginStart="12sp"
+			android:layout_marginTop="8sp"
+			android:background="@drawable/bg_btn_soft_primary_dark"
+			android:drawablePadding="4sp"
+			android:gravity="center_vertical"
+			android:hint="@string/txt_title_report"
+			android:paddingHorizontal="6sp"
+			android:paddingVertical="0sp"
+			android:textColor="@color/colorPrimaryDark"
+			android:textColorHint="@color/colorPrimaryDark"
+			android:textSize="10sp"
+			app:drawableStartCompat="@drawable/baseline_groups_3_18"
+			app:drawableTint="@color/colorPrimaryDark"
+			app:layout_constraintStart_toEndOf="@id/img_well"
+			app:layout_constraintTop_toBottomOf="@id/tv_title"
+			tools:ignore="SmallSp,TextContrastCheck" />
 
 		<TextView
-			android:id="@+id/tv_phone"
-			android:layout_width="0sp"
+			android:id="@+id/tv_category"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="12sp"
-			android:layout_marginTop="2sp"
-			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_phone"
-			android:maxLines="1"
-			android:text='@{userItem.phone}'
-			android:textColor="@color/black"
-			android:textSize="12sp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_user"
-			app:layout_constraintTop_toBottomOf="@id/tv_email" />
+			android:layout_marginStart="6sp"
+			android:background="@drawable/bg_btn_soft_primary_dark"
+			android:drawablePadding="4sp"
+			android:gravity="center_vertical"
+			android:hint="@string/txt_placeholder_category"
+			android:paddingHorizontal="6sp"
+			android:paddingVertical="2sp"
+			android:textColor="@color/colorPrimaryDark"
+			android:textColorHint="@color/colorPrimaryDark"
+			android:textSize="10sp"
+			app:drawableStartCompat="@drawable/baseline_category_16"
+			app:drawableTint="@color/colorPrimaryDark"
+			app:layout_constraintBottom_toBottomOf="@id/tv_total_report"
+			app:layout_constraintStart_toEndOf="@id/tv_total_report"
+			app:layout_constraintTop_toTopOf="@id/tv_total_report"
+			tools:ignore="SmallSp,TextContrastCheck" />
 
 		<TextView
 			android:id="@+id/tv_date"
-			formatTimestampTv="@{userItem.timeRegister}"
+			formatTimestampTv="@{wellItem.createdAt}"
 			android:layout_width="0sp"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="10sp"
-			android:layout_marginTop="4sp"
+			android:layout_marginTop="6sp"
 			android:layout_marginEnd="12sp"
 			android:layout_marginBottom="12sp"
 			android:drawablePadding="4sp"
@@ -99,8 +114,8 @@
 			app:drawableTint="@color/text_transparent"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_user"
-			app:layout_constraintTop_toBottomOf="@id/tv_phone"
+			app:layout_constraintStart_toEndOf="@id/img_well"
+			app:layout_constraintTop_toBottomOf="@id/tv_total_report"
 			tools:ignore="SmallSp" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
