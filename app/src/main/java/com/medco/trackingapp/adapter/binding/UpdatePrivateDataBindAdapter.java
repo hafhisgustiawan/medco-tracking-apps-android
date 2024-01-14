@@ -1,11 +1,15 @@
 package com.medco.trackingapp.adapter.binding;
 
+import android.text.InputType;
+
 import androidx.databinding.BindingAdapter;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.medco.trackingapp.helper.RegexPassword;
 import com.medco.trackingapp.helper.ValidationEmail;
+import com.medco.trackingapp.helper.ValidationPhone;
 import com.medco.trackingapp.model.PrivateDataItem;
 
 import java.util.Objects;
@@ -28,6 +32,12 @@ public class UpdatePrivateDataBindAdapter {
 		if (Objects.equals(item.getType(), "email") && !validationEmail.isValidEmail
 			(item.getNewData())) {
 			til.setError("Email tidak valid");
+		}
+
+		ValidationPhone validationPhone = new ValidationPhone();
+		if (Objects.equals(item.getType(), "phone") && !validationPhone.isValidPhone
+			(item.getNewData())) {
+			til.setError("Telepon tidak valid, gunakan awalan +62 atau 08");
 		}
 	}
 
@@ -82,6 +92,29 @@ public class UpdatePrivateDataBindAdapter {
 			return;
 		}
 
+		// 3) NEW EMAIL
+		ValidationPhone validationPhone = new ValidationPhone();
+		if (Objects.equals(item.getType(), "phone") && !validationPhone.isValidPhone
+			(item.getNewData())) {
+			return;
+		}
+
+		// 5) ALL BYPASS AND ENABLE BUTTON
 		btn.setEnabled(true);
+	}
+
+	@BindingAdapter("validateEtNewDataType")
+	public static void validateEtNewDataType(TextInputEditText et, PrivateDataItem item) {
+		if (item == null || item.getType() == null) return;
+		if (Objects.equals(item.getType(), "name")) {
+			et.setInputType(InputType.TYPE_TEXT_VARIATION_PERSON_NAME);
+			return;
+		}
+		if (Objects.equals(item.getType(), "email")) {
+			et.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+			return;
+		}
+
+		et.setInputType(InputType.TYPE_CLASS_PHONE);
 	}
 }

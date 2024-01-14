@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="userItem"
+			type="com.medco.trackingapp.model.UserItem" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:background="@color/white_transparent_bg"
+		tools:context=".fragment.HomeFragment">
+
+		<androidx.coordinatorlayout.widget.CoordinatorLayout
+			android:id="@+id/layout_main"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<com.google.android.material.appbar.AppBarLayout
+				android:id="@+id/app_bar"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:background="@color/white_transparent_bg"
+				android:elevation="0sp"
+				android:fitsSystemWindows="true"
+				app:elevation="0sp">
+
+				<com.google.android.material.appbar.CollapsingToolbarLayout
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:elevation="0sp"
+					android:fitsSystemWindows="true"
+					app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+					<androidx.constraintlayout.widget.ConstraintLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content">
+
+						<com.google.android.material.imageview.ShapeableImageView
+							android:id="@+id/img_user"
+							loadUserImg="@{userItem.photo}"
+							android:layout_width="68sp"
+							android:layout_height="0sp"
+							android:layout_margin="16sp"
+							android:background="@color/dark_white"
+							app:layout_constraintDimensionRatio="1:1"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintTop_toTopOf="parent"
+							app:shapeAppearanceOverlay="@style/ShapeCircle"
+							tools:ignore="ImageContrastCheck" />
+
+						<ImageButton
+							android:id="@+id/btn_manage_account"
+							android:layout_width="28sp"
+							android:layout_height="0sp"
+							android:layout_marginBottom="-4sp"
+							android:background="@drawable/bg_circle"
+							android:backgroundTint="@color/text_very_transparent"
+							android:contentDescription="@string/img_btn_desc"
+							android:src="@drawable/baseline_manage_accounts_24"
+							app:layout_constraintBottom_toBottomOf="@id/img_user"
+							app:layout_constraintDimensionRatio="1:1"
+							app:layout_constraintStart_toStartOf="@id/img_user"
+							app:tint="@color/soft_white"
+							tools:ignore="TouchTargetSizeCheck,ImageContrastCheck,RedundantDescriptionCheck" />
+
+						<TextView
+							android:id="@+id/tv_welcome"
+							android:layout_width="0sp"
+							android:layout_height="wrap_content"
+							android:layout_marginHorizontal="16sp"
+							android:layout_marginTop="10sp"
+							android:text="Selamat datang,"
+							android:textColor="@color/text_transparent"
+							android:textSize="14sp"
+							app:layout_constraintEnd_toStartOf="@id/img_user"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toTopOf="@id/img_user"
+							tools:ignore="HardcodedText,SmallSp" />
+
+						<TextView
+							android:id="@+id/tv_name_user"
+							android:layout_width="0sp"
+							android:layout_height="wrap_content"
+							android:layout_marginHorizontal="16sp"
+							android:layout_marginBottom="8sp"
+							android:ellipsize="end"
+							android:hint="@string/txt_placeholder_name"
+							android:maxLines="1"
+							android:text='@{userItem.name}'
+							android:textColor="@color/black"
+							android:textSize="16sp"
+							android:textStyle="bold"
+							app:layout_constraintBottom_toBottomOf="@id/img_user"
+							app:layout_constraintEnd_toStartOf="@id/img_user"
+							app:layout_constraintStart_toStartOf="parent" />
+
+						<TextView
+							android:id="@+id/tv_label_latest"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginStart="18sp"
+							android:layout_marginTop="24sp"
+							android:text="@string/txt_all_well"
+							android:textColor="@color/text_transparent"
+							android:textSize="14sp"
+							android:textStyle="bold"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/img_user" />
+
+						<TextView
+							android:id="@+id/tv_see_all_well"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_marginEnd="18sp"
+							android:text="@string/txt_see_all"
+							android:textColor="@color/colorAccent"
+							android:textSize="12sp"
+							app:layout_constraintBottom_toBottomOf="@id/tv_label_latest"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintTop_toTopOf="@id/tv_label_latest"
+							tools:ignore="TextContrastCheck" />
+
+						<androidx.recyclerview.widget.RecyclerView
+							android:id="@+id/rv_latest"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_marginTop="16sp"
+							android:minHeight="280sp"
+							android:nestedScrollingEnabled="false"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/tv_label_latest"
+							tools:ignore="RtlSymmetry" />
+
+						<TextView
+							android:id="@+id/tv_not_found_latest"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/txt_not_found"
+							android:textColor="@color/text_very_transparent"
+							android:textSize="12sp"
+							android:visibility="gone"
+							app:layout_constraintBottom_toBottomOf="@id/rv_latest"
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toTopOf="@id/rv_latest" />
+
+					</androidx.constraintlayout.widget.ConstraintLayout>
+
+				</com.google.android.material.appbar.CollapsingToolbarLayout>
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<TextView
+						android:id="@+id/tv_label_report"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="18sp"
+						android:layout_marginTop="24sp"
+						android:text="@string/txt_new_report"
+						android:textColor="@color/text_transparent"
+						android:textSize="14sp"
+						android:textStyle="bold"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+					<TextView
+						android:id="@+id/tv_see_all_report"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginEnd="18sp"
+						android:text="@string/txt_see_all"
+						android:textColor="@color/colorAccent"
+						android:textSize="12sp"
+						android:visibility="visible"
+						app:layout_constraintBottom_toBottomOf="@id/tv_label_report"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintTop_toTopOf="@id/tv_label_report"
+						tools:ignore="TextContrastCheck" />
+
+					<TextView
+						android:id="@+id/tv_not_found_report"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="60sp"
+						android:text="@string/txt_not_found"
+						android:textColor="@color/text_very_transparent"
+						android:textSize="12sp"
+						android:visibility="gone"
+						app:layout_constraintBottom_toBottomOf="parent"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@id/tv_label_report" />
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+
+			</com.google.android.material.appbar.AppBarLayout>
+
+			<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/rv_report"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginTop="16sp"
+				app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+		</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+		<ProgressBar
+			android:id="@+id/progressbar"
+			style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/bg_btn_gray"
+			android:padding="16sp"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<View
+			android:id="@+id/anchor_point"
+			android:layout_width="0sp"
+			android:layout_height="0sp"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

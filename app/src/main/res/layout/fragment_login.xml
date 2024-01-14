@@ -7,147 +7,117 @@
 
 		<variable
 			name="loading"
-			type="Boolean"
-			android:value="false" />
+			type="Boolean" />
 
 		<variable
-			name="userItem"
-			type="com.medco.trackingapp.model.UserItem" />
-
-		<variable
-			name="privateDataItem"
-			type="com.medco.trackingapp.model.PrivateDataItem" />
+			name="loginItem"
+			type="com.medco.trackingapp.model.LoginItem" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:orientation="vertical"
-		android:paddingBottom="24sp"
-		tools:context=".fragment.UpdatePrivateDataFragment">
+		tools:context=".fragment.LoginFragment">
 
 		<View
 			android:id="@+id/line_top"
-			android:layout_width="100dp"
-			android:layout_height="5dp"
+			android:layout_width="0sp"
+			android:layout_height="5sp"
 			android:layout_gravity="center_horizontal"
-			android:layout_marginTop="6dp"
+			android:layout_marginTop="6sp"
+			android:layout_marginBottom="8sp"
 			android:background="@drawable/line_bg"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent" />
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintWidth_percent="0.3"
+			tools:ignore="SmallSp" />
 
 		<TextView
 			android:id="@+id/tv_title"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="16sp"
-			android:hint="@string/txt_title_update_private_fragment"
-			android:text='@{privateDataItem.type == "name" ? "Perbarui Nama" : privateDataItem.type == "email" ? "Perbarui Email" : "Perbarui Telepon"}'
+			android:layout_marginTop="24sp"
+			android:text="@string/txt_welcome"
 			android:textColor="@color/black"
-			android:textSize="20sp"
-			android:textStyle="bold"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/line_top" />
+			android:textSize="18sp"
+			app:layout_constraintStart_toStartOf="@id/til_email"
+			app:layout_constraintTop_toBottomOf="@id/line_top"
+			tools:ignore="VisualLintBounds" />
 
 		<TextView
-			android:id="@+id/tv_label_data_old"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="16sp"
-			android:layout_marginTop="32dp"
-			android:hint="@string/current_name"
-			android:text='@{privateDataItem.type == "name" ? "Nama sekarang" : privateDataItem.type == "email" ? "Email sekarang" : "Telepon sekarang"}'
-			android:textColor="@color/text_transparent"
-			android:textSize="12sp"
-			android:textStyle="bold"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-		<TextView
-			android:id="@+id/tv_data_old"
+			android:id="@+id/tv_sub_title"
 			android:layout_width="0sp"
 			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="16sp"
-			android:layout_marginTop="6sp"
-			android:hint="@string/txt_min"
-			android:text='@{privateDataItem.type == "name" ? userItem.name : privateDataItem.type == "email" ? userItem.email : userItem.phone}'
-			android:textColor="@color/black"
-			android:textSize="14sp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/tv_label_data_old" />
-
-		<TextView
-			android:id="@+id/tv_label_data_new"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginHorizontal="16sp"
-			android:layout_marginTop="24dp"
-			android:hint="@string/input_new_name"
-			android:text='@{privateDataItem.type == "name" ? "Masukkan nama baru" : privateDataItem.type == "email" ? "Masukkan email baru" : "Masukkan telepon baru"}'
+			android:layout_marginTop="3sp"
+			android:ellipsize="end"
+			android:maxLines="1"
+			android:text="@string/txt_sub_title_fragment_login"
 			android:textColor="@color/text_transparent"
 			android:textSize="12sp"
-			android:textStyle="bold"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/tv_data_old" />
+			app:layout_constraintEnd_toEndOf="@id/til_email"
+			app:layout_constraintStart_toStartOf="@id/til_email"
+			app:layout_constraintTop_toBottomOf="@id/tv_title"
+			tools:ignore="VisualLintBounds" />
 
 		<com.google.android.material.textfield.TextInputLayout
-			android:id="@+id/til_data_new"
+			android:id="@+id/til_email"
 			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-			validateUpdatePrivateDataNewData="@{privateDataItem}"
+			validateTilEmailLogin="@{loginItem}"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="16dp"
-			android:layout_marginTop="6sp"
+			android:layout_marginTop="12sp"
 			android:elevation="4dp"
-			android:hint='@{privateDataItem.type == "name" ? "Nama baru" : privateDataItem.type == "email" ? "Email baru" : "Telepon baru"}'
+			android:hint="Email"
 			app:boxBackgroundColor="@color/softPrimaryDark"
 			app:endIconMode="clear_text"
 			app:errorEnabled="true"
 			app:errorTextAppearance="@style/error_appearance"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/tv_label_data_new">
+			app:layout_constraintTop_toBottomOf="@id/tv_sub_title"
+			tools:ignore="HardcodedText,VisualLintBounds">
 
 			<com.google.android.material.textfield.TextInputEditText
-				android:id="@+id/et_data_new"
-				validateEtNewDataType="@{privateDataItem}"
+				android:id="@+id/et_email"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:inputType="text"
-				android:text="@{privateDataItem.newData}"
+				android:inputType="textEmailAddress"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="16dp"
 				android:textColor="@color/black"
-				android:textSize="14sp"
-				tools:ignore="TextContrastCheck,VisualLintTextFieldSize,SpeakableTextPresentCheck" />
+				android:textSize="14dp"
+				tools:ignore="SpUsage,TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
 
 		</com.google.android.material.textfield.TextInputLayout>
 
 		<com.google.android.material.textfield.TextInputLayout
 			android:id="@+id/til_password"
 			style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-			validateUpdatePrivateDataPwd="@{privateDataItem}"
+			validateTilPasswordLogin="@{loginItem}"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="6sp"
 			android:elevation="4dp"
-			android:hint="@string/txt_placeholder_password"
+			android:hint="Kata Sandi"
 			app:boxBackgroundColor="@color/softPrimaryDark"
-			app:endIconMode="clear_text"
 			app:errorEnabled="true"
 			app:errorTextAppearance="@style/error_appearance"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/til_data_new"
-			app:passwordToggleEnabled="true">
+			app:layout_constraintTop_toBottomOf="@id/til_email"
+			app:passwordToggleEnabled="true"
+			tools:ignore="HardcodedText,VisualLintBounds">
 
 			<com.google.android.material.textfield.TextInputEditText
 				android:id="@+id/et_password"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:inputType="textPassword"
-				android:text="@{privateDataItem.password}"
+				android:paddingHorizontal="16dp"
+				android:paddingVertical="16dp"
 				android:textColor="@color/black"
 				android:textSize="14sp"
 				tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -155,25 +125,27 @@
 		</com.google.android.material.textfield.TextInputLayout>
 
 		<com.google.android.material.button.MaterialButton
-			android:id="@+id/btn_save"
+			android:id="@+id/btn_log_in"
 			style="@style/Widget.MaterialComponents.Button.Icon"
-			validateUpdatePrivateDataBtn="@{privateDataItem}"
+			validateBtnLogin="@{loginItem}"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="16sp"
-			android:layout_marginTop="20sp"
+			android:layout_marginTop="24sp"
+			android:includeFontPadding="false"
 			android:paddingVertical="16sp"
 			android:progressVisible="@{loading}"
-			android:text="@string/txt_save"
+			android:text="@string/txt_login"
 			android:textColor="@color/white"
 			android:textSize="14sp"
-			android:visibility="visible"
+			app:cornerRadius="8sp"
 			app:iconGravity="textStart"
 			app:iconSize="18sp"
+			app:iconTint="@color/white"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/til_password"
-			tools:ignore="VisualLintOverlap,VisualLintBounds,VisualLintButtonSize,TextContrastCheck" />
+			tools:ignore="VisualLintOverlap,VisualLintBounds,VisualLintButtonSize" />
 
 		<TextView
 			android:id="@+id/tv_close"
@@ -184,7 +156,7 @@
 			android:textColor="@color/red"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/btn_save" />
+			app:layout_constraintTop_toBottomOf="@id/btn_log_in" />
 
 		<View
 			android:id="@+id/spacer"

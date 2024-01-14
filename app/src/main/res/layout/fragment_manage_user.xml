@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="loading"
+			type="Boolean" />
+
+		<variable
+			name="userItem"
+			type="com.medco.trackingapp.model.UserItem" />
+
+		<variable
+			name="manageUserItem"
+			type="com.medco.trackingapp.model.viewmodel.ManageUserItem" />
+	</data>
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".fragment.ManageUserFragment">
+
+		<View
+			android:id="@+id/line_top"
+			android:layout_width="100dp"
+			android:layout_height="5dp"
+			android:layout_gravity="center_horizontal"
+			android:layout_marginTop="6dp"
+			android:background="@drawable/line_bg"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16sp"
+			android:hint="@string/txt_title_manage_user"
+			android:text='@{userItem == null ? "Tambah Pengguna" : "Perbarui Data Pengguna"}'
+			android:textColor="@color/black"
+			android:textSize="20sp"
+			android:textStyle="bold"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/line_top" />
+
+		<ScrollView
+			android:id="@+id/scroll_view"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="16sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_title">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<TextView
+					android:id="@+id/tv_label_data_new"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16sp"
+					android:layout_marginTop="16dp"
+					android:text="@string/txt_input_user_data"
+					android:textColor="@color/text_transparent"
+					android:textSize="12sp"
+					android:textStyle="bold"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/til_name"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16dp"
+					android:layout_marginTop="12sp"
+					android:elevation="4dp"
+					android:hint='@{"Nama "+userItem.name}'
+					app:boxBackgroundColor="@color/softPrimaryDark"
+					app:endIconMode="clear_text"
+					app:errorEnabled="true"
+					app:errorTextAppearance="@style/error_appearance"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/tv_label_data_new">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_name"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="textPersonName"
+						android:textColor="@color/black"
+						android:textSize="14sp"
+						tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/til_email"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16dp"
+					android:layout_marginTop="6sp"
+					android:elevation="4dp"
+					android:hint='@{"Email "+userItem.email}'
+					app:boxBackgroundColor="@color/softPrimaryDark"
+					app:endIconMode="clear_text"
+					app:errorEnabled="true"
+					app:errorTextAppearance="@style/error_appearance"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/til_name">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_email"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="textEmailAddress"
+						android:textColor="@color/black"
+						android:textSize="14sp"
+						tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/til_phone"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16dp"
+					android:layout_marginTop="6sp"
+					android:elevation="4dp"
+					android:hint='@{"Telepon "+userItem.phone}'
+					app:boxBackgroundColor="@color/softPrimaryDark"
+					app:endIconMode="clear_text"
+					app:errorEnabled="true"
+					app:errorTextAppearance="@style/error_appearance"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/til_email">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_phone"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="phone"
+						android:textColor="@color/black"
+						android:textSize="14sp"
+						tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/btn_save"
+					style="@style/Widget.MaterialComponents.Button.Icon"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16sp"
+					android:layout_marginTop="20sp"
+					android:hint="@string/txt_save"
+					android:paddingVertical="16sp"
+					android:progressVisible="@{loading}"
+					android:text='@{userItem == null ? "tambah" : "simpan"}'
+					android:textColor="@color/white"
+					android:textSize="14sp"
+					android:visibility="visible"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/til_phone"
+					tools:ignore="VisualLintOverlap,VisualLintBounds,VisualLintButtonSize,TextContrastCheck" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
+
+		</ScrollView>
+
+		<TextView
+			android:id="@+id/tv_close"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_margin="16sp"
+			android:text="@string/txt_close"
+			android:textColor="@color/red"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/scroll_view" />
+
+		<View
+			android:id="@+id/spacer"
+			android:layout_width="match_parent"
+			android:layout_height="420sp"
+			android:layout_marginTop="48sp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/tv_close"
+			tools:ignore="VisualLintBounds" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

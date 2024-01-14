@@ -7,6 +7,7 @@ public class UserItem {
 	private String name;
 	private String photo;
 	private String role;
+	private String phone;
 	private String uidDevice;
 	private Timestamp timeRegister;
 
@@ -56,5 +57,13 @@ public class UserItem {
 
 	public void setTimeRegister(Timestamp timeRegister) {
 		this.timeRegister = timeRegister;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }

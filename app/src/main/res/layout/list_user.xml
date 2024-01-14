@@ -68,14 +68,15 @@
 			app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
 		<TextView
-			android:id="@+id/tv_status"
+			android:id="@+id/tv_phone"
 			android:layout_width="0sp"
 			android:layout_height="wrap_content"
 			android:layout_marginHorizontal="12sp"
 			android:layout_marginTop="2sp"
 			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_role"
+			android:hint="@string/txt_placeholder_phone"
 			android:maxLines="1"
+			android:text='@{userItem.phone}'
 			android:textColor="@color/black"
 			android:textSize="12sp"
 			app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +104,7 @@
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toEndOf="@id/img_user"
-			app:layout_constraintTop_toBottomOf="@id/tv_status"
+			app:layout_constraintTop_toBottomOf="@id/tv_phone"
 			tools:ignore="SmallSp" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>

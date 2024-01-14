@@ -190,6 +190,19 @@ public class AccountFragment extends BaseFragment {
 			if (!fragmentManager.isDestroyed()) fragment.show(fragmentManager, TAG);
 		});
 
+		binding.layoutPhone.setOnClickListener(v -> {
+			if (mUserItem == null) return;
+			UpdatePrivateDataFragment fragment = new UpdatePrivateDataFragment(mUserItem, 2);
+			fragment.setCancelable(false);
+			fragment.ListenerApiClose(selector -> {
+				fragment.dismiss();
+				if (selector == 1) {
+					initViews();
+				}
+			});
+			if (!fragmentManager.isDestroyed()) fragment.show(fragmentManager, TAG);
+		});
+
 		binding.tvResetPassword.setOnClickListener(view -> {
 			ResetPasswordFragment fragment = new ResetPasswordFragment();
 			fragment.setCancelable(false);

@@ -10,12 +10,16 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.medco.trackingapp.R;
@@ -28,9 +32,11 @@ public class UserFragment extends BaseFragment {
 	public static final String TAG = "UserFragment";
 	private Context mContext;
 	private FragmentUserBinding binding;
+	private FragmentManager fragmentManager;
 	private SnackbarHelper snackbarHelper;
 	private Animation animation;
 	private CollectionReference userColl;
+	private DocumentReference currentUserRef;
 	private UserAdapter adapter;
 
 	public UserFragment() {
@@ -48,27 +54,43 @@ public class UserFragment extends BaseFragment {
 													 Bundle savedInstanceState) {
 		mContext = requireContext();
 		binding = FragmentUserBinding.inflate(inflater, container, false);
+		fragmentManager = requireActivity().getSupportFragmentManager();
 		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
 		snackbarHelper = new SnackbarHelper(requireActivity().findViewById(android.R.id
 			.content), binding.anchorPoint);
 
-		FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-		userColl = firestore.collection(getString(R.string.collection_user));
+		FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+		FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+		FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+		userColl = firebaseFirestore.collection(getString(R.string.collection_user));
+
+		if (firebaseUser == null) return binding.getRoot();
+		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
+			.document(firebaseUser.getUid());
 
 		initViews();
 		initListeners();
-
 		return binding.getRoot();
 	}
 
 	@Override
 	public void initViews() {
+		binding.setUserRef(currentUserRef);
 		initRecyclerView();
 	}
 
 	@Override
 	public void initListeners() {
-
+		binding.btnAdd.setOnClickListener(v -> {
+			if (fragmentManager.isDestroyed()) return;
+			ManageUserFragment fragment = new ManageUserFragment(null);
+			fragment.setCancelable(false);
+			fragment.ListenerApiClose(selector -> {
+				fragment.dismiss();
+				if (selector == 1) initViews();
+			});
+			fragment.show(fragmentManager, TAG);
+		});
 	}
 
 	private void showError(Exception e) {

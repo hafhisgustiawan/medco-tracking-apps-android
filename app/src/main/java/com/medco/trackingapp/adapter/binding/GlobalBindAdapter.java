@@ -5,10 +5,16 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
+import android.view.View;
+import android.widget.ImageButton;
 
 import androidx.databinding.BindingAdapter;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.medco.trackingapp.model.UserItem;
+
+import java.util.Objects;
 
 public class GlobalBindAdapter {
 	private static Drawable getProgressBarDrawable(final Context context) {
@@ -37,5 +43,18 @@ public class GlobalBindAdapter {
 		} else {
 			button.setIcon(null);
 		}
+	}
+
+	@BindingAdapter("imgBtnVisibleForAdmin")
+	public static void imgBtnVisibleForAdmin(ImageButton imgBtn, DocumentReference userRef) {
+		imgBtn.setVisibility(View.GONE);
+		if (userRef == null) return;
+		userRef.get().addOnCompleteListener(task -> {
+			if (!task.isSuccessful()) return;
+			UserItem userItem = task.getResult().toObject(UserItem.class);
+			if (userItem == null) return;
+			if (!Objects.equals(userItem.getRole(), "admin")) return;
+			imgBtn.setVisibility(View.VISIBLE);
+		});
 	}
 }

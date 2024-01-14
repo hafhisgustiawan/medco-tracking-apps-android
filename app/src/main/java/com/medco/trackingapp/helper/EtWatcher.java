@@ -18,7 +18,7 @@ public class EtWatcher implements TextWatcher {
 
 	@Override
 	public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-		func.call(charSequence != null ? charSequence.toString().trim() : "");
+		func.call(charSequence != null ? charSequence.toString() : "");
 	}
 
 	@Override

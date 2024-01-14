@@ -1,6 +1,8 @@
 <resources>
 	<string name="app_name">Well Tracking App</string>
 	<string name="collection_user">user</string>
+	<string name="collection_report">report</string>
+	<string name="collection_well">well</string>
 	<string name="txt_placeholder_name">Nama personal</string>
 	<string name="txt_placeholder_email">personalemail@email.com</string>
 	<string name="txt_placeholder_role">User</string>
@@ -43,4 +45,19 @@
 	<string name="txt_forget_password">Lupa kata sandi?</string>
 	<string name="txt_title_forget_password">Lupa Kata Sandi</string>
 	<string name="sub_title_reset_password">Silahkan isi alamat email anda</string>
+	<string name="txt_placeholder_phone">080099787766</string>
+	<string name="txt_sub_title_fragment_login">Isi kredensial email Anda untuk masuk ke dalam aplikasi</string>
+	<string name="txt_login">masuk</string>
+	<string name="txt_email">Email</string>
+	<string name="txt_phone">Telepon</string>
+	<string name="txt_all_well">Semua sumur</string>
+	<string name="txt_see_all">Lihat semua</string>
+	<string name="txt_new_report">Laporan terbaru</string>
+	<string name="txt_title_user">Pengguna</string>
+	<string name="txt_title_report">Laporan</string>
+	<string name="txt_title_well">Sumur</string>
+	<string name="txt_title_manage_user">Tambah Pengguna</string>
+	<string name="txt_input_user_data">Masukkan data pengguna</string>
+	<string name="name">Nama</string>
+	<string name="email">Email</string>
 </resources>

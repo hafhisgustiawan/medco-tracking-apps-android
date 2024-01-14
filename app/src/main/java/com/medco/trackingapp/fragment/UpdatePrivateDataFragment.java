@@ -36,7 +36,7 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 	public static final String TAG = "UpdatePrivateDataFragment";
 	// 1) constructor variable
 	public UserItem mUserItem;
-	public int mSelector; //0 -> name update || 1 -> email update
+	public int mSelector; //0 -> name || 1 -> email || 2 -> phone
 	// 3) callback
 	public ListenerClose listenerClose;
 	private Context mContext;
@@ -47,7 +47,6 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 	private FirebaseAuth firebaseAuth;
 	private FirebaseUser firebaseUser;
 	private DocumentReference currentUserRef;
-
 	// 3) view model
 	private PrivateDataViewModel mViewModel;
 
@@ -96,7 +95,7 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 		binding.setUserItem(mUserItem);
 
 		PrivateDataItem currentItem = new PrivateDataItem();
-		currentItem.setType(mSelector == 0 ? "name" : "email");
+		currentItem.setType(mSelector == 0 ? "name" : mSelector == 1 ? "email" : "phone");
 		mViewModel.setPrivateData(currentItem);
 
 		mViewModel.getPrivateData().observe(this, privateDataItem -> binding
@@ -104,6 +103,8 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 	}
 
 	public void initListeners() {
+		binding.tvClose.setOnClickListener(view1 -> listenerClose.listenerClose(0));
+
 		binding.etDataNew.addTextChangedListener(new EtWatcher(str -> {
 			PrivateDataItem item = mViewModel.getPrivateData().getValue();
 			if (item == null) return;
@@ -114,7 +115,7 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 		binding.etPassword.addTextChangedListener(new EtWatcher(str -> {
 			PrivateDataItem item = mViewModel.getPrivateData().getValue();
 			if (item == null) return;
-			item.setPassword(str);
+			item.setPassword(str.trim());
 			mViewModel.setPrivateData(item);
 		}));
 
@@ -131,11 +132,26 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 				.setPositiveButton("Ya", (dialogInterface, i) -> {
 					if (mSelector == 1) { //email update
 						checkLogin(newData, firebaseUser.getEmail(), password);
+					} else if (mSelector == 2) { //phone update
+						updatePhone(newData);
 					} else { //name update
 						updateName(newData);
 					}
 				}).create().show();
 		});
+	}
+
+	private void updatePhone(String newPhone) {
+		showProgress();
+		currentUserRef.update("phone", newPhone)
+			.addOnCompleteListener(task -> {
+				dismissProgress();
+				if (!task.isSuccessful()) {
+					showError(task.getException());
+					return;
+				}
+				listenerClose.listenerClose(1);
+			});
 	}
 
 	private void updateName(String newName) {
@@ -203,7 +219,6 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 
 	private void showProgress() {
 		binding.setLoading(false);
-		binding.btnSave.setEnabled(false);
 		mActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
 			WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 	}
@@ -211,7 +226,6 @@ public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
 	@SuppressLint("SetTextI18n")
 	private void dismissProgress() {
 		binding.setLoading(false);
-		binding.btnSave.setEnabled(true);
 		mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 	}
 
