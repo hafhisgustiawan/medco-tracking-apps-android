@@ -139,7 +139,7 @@ public class UserFragment extends BaseFragment {
 			.setLifecycleOwner(this)
 			.setQuery(getQuery(), config, UserItem.class).build();
 
-		adapter = new UserAdapter(options, mContext, currentUserRef);
+		adapter = new UserAdapter(options, mContext, currentUserRef, fragmentManager);
 		binding.rvUser.setLayoutManager(new LinearLayoutManager(mContext));
 		binding.rvUser.setAdapter(adapter);
 

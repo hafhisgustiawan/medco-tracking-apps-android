@@ -61,6 +61,7 @@
 			android:gravity="center_vertical"
 			android:hint="@string/txt_active"
 			android:text='@{userItem.role != null ? "Aktif" : "Non-aktif"}'
+			initUserAccStatusBg="@{userItem}"
 			android:paddingHorizontal="6sp"
 			android:paddingVertical="2sp"
 			android:textColor="@color/colorPrimaryDark"

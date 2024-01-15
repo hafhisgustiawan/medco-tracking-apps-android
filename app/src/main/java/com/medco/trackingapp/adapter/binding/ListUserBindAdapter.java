@@ -1,6 +1,7 @@
 package com.medco.trackingapp.adapter.binding;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
 
@@ -10,6 +11,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.medco.trackingapp.R;
 import com.medco.trackingapp.helper.GlideHelper;
+import com.medco.trackingapp.model.UserItem;
 
 public class ListUserBindAdapter {
 	@BindingAdapter("loadUserImg")
@@ -31,5 +33,13 @@ public class ListUserBindAdapter {
 			Glide.with(imgView.getContext()).load(task.getResult()).fitCenter()
 				.centerCrop().into(imgView);
 		});
+	}
+
+	@BindingAdapter("initUserAccStatusBg")
+	public static void initUserAccStatusBg(TextView textView, UserItem item) {
+		if (item == null) return;
+		int background = item.getRole() == null ? R.drawable.bg_btn_soft_red : R
+			.drawable.bg_btn_soft_primary_dark;
+		textView.setBackgroundResource(background);
 	}
 }

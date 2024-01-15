@@ -97,6 +97,7 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:inputType="textPersonName"
+						android:text="@{userItem.name}"
 						android:textColor="@color/black"
 						android:textSize="14sp"
 						tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -112,6 +113,7 @@
 					android:layout_marginHorizontal="16dp"
 					android:layout_marginTop="6sp"
 					android:elevation="4dp"
+					android:enabled="@{userItem != null ? false : true}"
 					android:hint='@{userItem.email != null ? "Email "+userItem.email : "Email"}'
 					app:boxBackgroundColor="@color/softPrimaryDark"
 					app:endIconMode="clear_text"
@@ -126,6 +128,7 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:inputType="textEmailAddress"
+						android:text="@{userItem.email}"
 						android:textColor="@color/black"
 						android:textSize="14sp"
 						tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
@@ -155,6 +158,7 @@
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:inputType="phone"
+						android:text="@{userItem.phone}"
 						android:textColor="@color/black"
 						android:textSize="14sp"
 						tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />

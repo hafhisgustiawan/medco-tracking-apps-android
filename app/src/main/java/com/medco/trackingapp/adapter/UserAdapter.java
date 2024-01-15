@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.medco.trackingapp.R;
 import com.medco.trackingapp.databinding.ListProgressVerticalBinding;
 import com.medco.trackingapp.databinding.ListUserBinding;
+import com.medco.trackingapp.fragment.ManageUserFragment;
 import com.medco.trackingapp.helper.CustomException;
 import com.medco.trackingapp.model.UserItem;
 
@@ -35,15 +37,18 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 	public Animation animation;
 	public Context mContext;
 	private boolean isLoadingAdded = false;
-	private final DocumentReference mUserRef;
+	public DocumentReference mUserRef;
+	public FragmentManager mFragmentManager;
 	private OnItemClickListener listener;
 	private StateChangeListener stateListener;
 
 	public UserAdapter(@NonNull FirestorePagingOptions<UserItem> options,
-										 Context context, DocumentReference userRef) {
+										 Context context, DocumentReference userRef,
+										 FragmentManager fragmentManager) {
 		super(options);
 		this.mContext = context;
 		this.mUserRef = userRef;
+		this.mFragmentManager = fragmentManager;
 		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
 	}
 
@@ -92,6 +97,15 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 								Toast.LENGTH_SHORT).show();
 							refresh();
 						});
+				} else {
+					if (mFragmentManager.isDestroyed()) return false;
+					ManageUserFragment fragment = new ManageUserFragment(snapshot);
+					fragment.setCancelable(false);
+					fragment.ListenerApiClose(selector -> {
+						fragment.dismiss();
+						if (selector == 1) refresh();
+					});
+					fragment.show(mFragmentManager, TAG);
 				}
 				return false;
 			});
