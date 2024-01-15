@@ -84,6 +84,7 @@
 			android:hint="@string/txt_placeholder_category"
 			android:paddingHorizontal="6sp"
 			android:paddingVertical="2sp"
+			initCategoriesWellIntoTv="@{wellItem.category}"
 			android:textColor="@color/colorPrimaryDark"
 			android:textColorHint="@color/colorPrimaryDark"
 			android:textSize="10sp"

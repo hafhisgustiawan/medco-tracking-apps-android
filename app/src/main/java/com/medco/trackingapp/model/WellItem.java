@@ -8,6 +8,7 @@ import java.util.List;
 public class WellItem {
 	private List<String> images;
 	private GeoPoint location;
+	private String address;
 	private String category; //enum as / jr / otherwell
 	private String name;
 	private String description;
@@ -16,7 +17,7 @@ public class WellItem {
 	public List<String> getImages() {
 		return images;
 	}
-
+	
 	public void setImages(List<String> images) {
 		this.images = images;
 	}
@@ -59,5 +60,13 @@ public class WellItem {
 
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

@@ -6,6 +6,10 @@
 	<data>
 
 		<variable
+			name="currentUserRef"
+			type="com.google.firebase.firestore.DocumentReference" />
+
+		<variable
 			name="userItem"
 			type="com.medco.trackingapp.model.UserItem" />
 	</data>
@@ -43,9 +47,30 @@
 			android:textColor="@color/black"
 			android:textSize="14sp"
 			android:textStyle="bold"
-			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/tv_status"
 			app:layout_constraintStart_toEndOf="@id/img_user"
 			app:layout_constraintTop_toTopOf="parent" />
+
+		<TextView
+			android:id="@+id/tv_status"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="6sp"
+			android:background="@drawable/bg_btn_soft_primary_dark"
+			android:drawablePadding="4sp"
+			android:gravity="center_vertical"
+			android:hint="@string/txt_active"
+			android:text='@{userItem.role != null ? "Aktif" : "Non-aktif"}'
+			android:paddingHorizontal="6sp"
+			android:paddingVertical="2sp"
+			android:textColor="@color/colorPrimaryDark"
+			android:textColorHint="@color/colorPrimaryDark"
+			android:textSize="10sp"
+			android:layout_marginEnd="12sp"
+			app:layout_constraintBottom_toBottomOf="@id/tv_title"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="@id/tv_title"
+			tools:ignore="SmallSp,TextContrastCheck" />
 
 		<TextView
 			android:id="@+id/tv_email"
@@ -59,7 +84,7 @@
 			android:text='@{userItem.email}'
 			android:textColor="@color/text_transparent"
 			android:textSize="12sp"
-			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/btn_more_option"
 			app:layout_constraintStart_toEndOf="@id/img_user"
 			app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
@@ -75,7 +100,7 @@
 			android:text='@{userItem.phone}'
 			android:textColor="@color/black"
 			android:textSize="12sp"
-			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/btn_more_option"
 			app:layout_constraintStart_toEndOf="@id/img_user"
 			app:layout_constraintTop_toBottomOf="@id/tv_email" />
 
@@ -98,10 +123,25 @@
 			app:drawableStartCompat="@drawable/baseline_event_18"
 			app:drawableTint="@color/text_transparent"
 			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/btn_more_option"
 			app:layout_constraintStart_toEndOf="@id/img_user"
 			app:layout_constraintTop_toBottomOf="@id/tv_phone"
 			tools:ignore="SmallSp" />
+
+		<ImageButton
+			android:id="@+id/btn_more_option"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="6sp"
+			imgBtnVisibleForAdmin="@{currentUserRef}"
+			android:background="@android:color/transparent"
+			android:backgroundTint="@color/text_transparent"
+			android:contentDescription="@string/img_btn_desc"
+			android:src="@drawable/baseline_more_vert_24"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:ignore="TouchTargetSizeCheck" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

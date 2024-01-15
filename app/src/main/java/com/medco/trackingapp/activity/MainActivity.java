@@ -30,6 +30,7 @@ import com.medco.trackingapp.fragment.ReportFragment;
 import com.medco.trackingapp.fragment.UserFragment;
 import com.medco.trackingapp.fragment.WellFragment;
 import com.medco.trackingapp.helper.SnackbarHelper;
+import com.medco.trackingapp.model.UserItem;
 
 public class MainActivity extends BaseActivity implements FirebaseAuth.AuthStateListener {
 
@@ -71,6 +72,11 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 			return;
 		}
 
+		if (firebaseUser.isAnonymous()) {
+			firebaseAuth.signOut();
+			return;
+		}
+
 		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
 			.document(firebaseUser.getUid());
 
@@ -80,13 +86,6 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 
 	@Override
 	public void initViews() {
-		binding.setUserRef(currentUserRef);
-		Fragment selectedFragment = initHomeFragment();
-		if (selectedFragment == null) return;
-		fragmentManager.beginTransaction().replace(R.id.fragment_container,
-			selectedFragment).commit();
-		binding.bottomNavigation.setItemSelected(R.id.nav_home, true);
-
 		showProgress();
 		currentUserRef.get().addOnCompleteListener(task -> {
 			dismissProgress();
@@ -95,8 +94,27 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 				return;
 			}
 
-			if (task.getResult().exists()) return;
-			firebaseAuth.signOut();
+			if (!task.getResult().exists()) {
+				firebaseAuth.signOut();
+				return;
+			}
+
+			UserItem userItem = task.getResult().toObject(UserItem.class);
+			if (userItem == null) return;
+
+			if (userItem.getRole() == null) {
+				// BLOCKED BY ADMIN KETIKA ROLE NULL
+				firebaseAuth.signOut();
+				return;
+			}
+
+			binding.setUserRef(currentUserRef);
+			Fragment selectedFragment = initHomeFragment();
+			if (selectedFragment == null) return;
+			fragmentManager.beginTransaction().replace(R.id.fragment_container,
+				selectedFragment).commit();
+			binding.bottomNavigation.setItemSelected(R.id.nav_home, true);
+
 		});
 	}
 

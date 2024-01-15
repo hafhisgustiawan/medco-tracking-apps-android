@@ -11,6 +11,10 @@
 			android:value="false" />
 
 		<variable
+			name="currentWellRef"
+			type="com.google.firebase.firestore.DocumentReference" />
+
+		<variable
 			name="wellItem"
 			type="com.medco.trackingapp.model.WellItem" />
 	</data>
@@ -52,7 +56,7 @@
 						android:hint="@string/txt_title_manage_well"
 						android:maxLines="1"
 						android:paddingHorizontal="16sp"
-						android:text='@{wellItem == null ? "Tambah Data Sumur" : "Perbarui Data Sumur"}'
+						android:text='@{currentWellRef == null ? "Tambah Data Sumur" : "Perbarui Data Sumur"}'
 						android:textColor="@color/black"
 						android:textSize="22sp"
 						android:textStyle="bold"
@@ -100,6 +104,7 @@
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_name"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilNameManageWell="@{wellItem}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16dp"
@@ -132,6 +137,7 @@
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_categories"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilCategoriesManageWell="@{wellItem}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16dp"
@@ -166,6 +172,7 @@
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_description"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilDescriptionManageWell="@{wellItem}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16dp"
@@ -229,6 +236,7 @@
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_latitude"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilLatitudeManageWell="@{wellItem}"
 					android:layout_width="0sp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="16dp"
@@ -250,6 +258,8 @@
 						text='@{wellItem.location != null ? String.valueOf(wellItem.location.latitude) : ""}'
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
+						android:focusable="false"
+						android:focusableInTouchMode="false"
 						android:inputType="numberDecimal"
 						android:paddingHorizontal="16dp"
 						android:paddingVertical="16dp"
@@ -262,6 +272,7 @@
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_longitude"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilLongitudeManageWell="@{wellItem}"
 					android:layout_width="0sp"
 					android:layout_height="wrap_content"
 					android:layout_marginStart="8sp"
@@ -283,6 +294,8 @@
 						text='@{wellItem.location != null ? String.valueOf(wellItem.location.longitude) : ""}'
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
+						android:focusable="false"
+						android:focusableInTouchMode="false"
 						android:inputType="numberDecimal"
 						android:paddingHorizontal="16dp"
 						android:paddingVertical="16dp"
@@ -295,6 +308,7 @@
 				<com.google.android.material.textfield.TextInputLayout
 					android:id="@+id/til_address"
 					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilAddressManageWell="@{wellItem}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16dp"
@@ -312,12 +326,12 @@
 
 					<com.google.android.material.textfield.TextInputEditText
 						android:id="@+id/et_address"
-						setAddressByGeoPointIntoEt="@{wellItem.location}"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
 						android:inputType="textMultiLine"
 						android:paddingHorizontal="16dp"
 						android:paddingVertical="16dp"
+						android:text='@{wellItem.address}'
 						android:textColor="@color/black"
 						android:textSize="14dp"
 						tools:ignore="SpUsage,TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
@@ -327,14 +341,15 @@
 				<com.google.android.material.button.MaterialButton
 					android:id="@+id/btn_save"
 					style="@style/Widget.MaterialComponents.Button.Icon"
+					validateBtnManageWell="@{wellItem}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16sp"
 					android:layout_marginTop="20sp"
-					android:backgroundTint="@color/colorPrimaryDark"
 					android:paddingVertical="16sp"
 					android:progressVisible="@{loading}"
-					android:text='@{wellItem == null ? "tambah" : "simpan", default="tambah"}'
+					android:text='@{currentWellRef == null ? "tambah" : "simpan"}'
+					android:hint="@string/txt_add"
 					android:textColor="@color/white"
 					android:textSize="14sp"
 					app:cornerRadius="8sp"

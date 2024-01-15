@@ -20,25 +20,35 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.medco.trackingapp.R;
 import com.medco.trackingapp.adapter.ImageAdapter;
 import com.medco.trackingapp.databinding.ActivityManageWellBinding;
+import com.medco.trackingapp.fragment.SetLocationFragment;
 import com.medco.trackingapp.helper.CustomException;
+import com.medco.trackingapp.helper.EtWatcher;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.ImageItem;
 import com.medco.trackingapp.model.WellItem;
+import com.medco.trackingapp.model.viewmodel.ManageWellViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ManageWellActivity extends BaseActivity {
 
@@ -52,10 +62,7 @@ public class ManageWellActivity extends BaseActivity {
 	private StorageReference storageReference;
 	private int selectedItemPosition;
 	private DocumentReference currentWellRef;
-	private WellItem mWellItem;
-
-	//value
-	private String selectedCat;
+	private ManageWellViewModel mViewModel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +75,7 @@ public class ManageWellActivity extends BaseActivity {
 		snackbarHelper = new SnackbarHelper(findViewById(android.R.id.content), null);
 
 		FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+		wellColl = firebaseFirestore.collection(getString(R.string.collection_well));
 
 		FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 		storageReference = firebaseStorage.getReference(getString(R.string.collection_well));
@@ -75,7 +83,10 @@ public class ManageWellActivity extends BaseActivity {
 		String path = getIntent().getStringExtra("path");
 		if (path != null) {
 			currentWellRef = firebaseFirestore.document(path);
+			binding.setCurrentWellRef(currentWellRef);
 		}
+
+		mViewModel = new ViewModelProvider(this).get(ManageWellViewModel.class);
 
 		checkPermission();
 	}
@@ -96,6 +107,7 @@ public class ManageWellActivity extends BaseActivity {
 
 	@Override
 	public void initViews() {
+		mViewModel.getManageWellState().observe(this, item -> binding.setWellItem(item));
 		initRecyclerView(); //include next step
 	}
 
@@ -103,6 +115,13 @@ public class ManageWellActivity extends BaseActivity {
 	public void initListeners() {
 		binding.btnBack.setOnClickListener(view -> getOnBackPressedDispatcher()
 			.onBackPressed());
+
+		binding.etName.addTextChangedListener(new EtWatcher(str -> {
+			WellItem item = mViewModel.getManageWellState().getValue();
+			if (item == null) return;
+			item.setName(str);
+			mViewModel.setManageWellState(item);
+		}));
 
 		binding.etCategories.setOnClickListener(view -> {
 			final String[] option = new String[3];
@@ -118,9 +137,202 @@ public class ManageWellActivity extends BaseActivity {
 			new AlertDialog.Builder(mContext)
 				.setTitle("Pilih Kategori")
 				.setItems(option, (dialog, which) -> {
-					selectedCat = realCat.get(which);
+					WellItem item = mViewModel.getManageWellState().getValue();
+					if (item == null) return;
+					item.setCategory(realCat.get(which));
 					binding.etCategories.setText(option[which]);
 				}).create().show();
+		});
+
+		binding.etDescription.addTextChangedListener(new EtWatcher(str -> {
+			WellItem item = mViewModel.getManageWellState().getValue();
+			if (item == null) return;
+			item.setDescription(str);
+			mViewModel.setManageWellState(item);
+		}));
+
+		binding.tvLocation.setOnClickListener(view -> {
+			SetLocationFragment fragment = new SetLocationFragment();
+			fragment.setCancelable(false);
+			fragment.ListenerApiClose(fragment::dismiss);
+			fragment.ListenerApiUpdate((lat, lng, add) -> {
+				WellItem item = mViewModel.getManageWellState().getValue();
+				if (item == null) return;
+				item.setLocation(new GeoPoint(lat, lng));
+				mViewModel.setManageWellState(item);
+				binding.etAddress.setText(add);
+				fragment.dismiss();
+			});
+			if (!fragmentManager.isDestroyed()) fragment.show(fragmentManager, TAG);
+		});
+
+		binding.etAddress.addTextChangedListener(new EtWatcher(str -> {
+			WellItem item = mViewModel.getManageWellState().getValue();
+			if (item == null) return;
+			item.setAddress(str);
+			mViewModel.setManageWellState(item);
+		}));
+
+		binding.btnSave.setOnClickListener(view -> {
+			if (adapter == null || adapter.getData() == null || adapter.getData().size() == 1) {
+				showError(new CustomException("Anda belum menambahkan foto sumur",
+					new Throwable()));
+				return;
+			}
+
+			String message = currentWellRef == null ?
+				"Anda yakin ingin menambahkan data sumur baru?" :
+				"Anda yakin ingin memperbarui data sumur ini?";
+
+			new AlertDialog.Builder(mContext)
+				.setCancelable(true)
+				.setMessage(message)
+				.setNegativeButton("Tidak", null)
+				.setPositiveButton("Ya", (dialogInterface, i) -> {
+					if (currentWellRef == null) {
+						addData();
+					} else {
+						deleteNotExistingData();
+					}
+				})
+				.create().show();
+
+		});
+	}
+
+	private void deleteNotExistingData() {
+		if (currentWellRef == null) {
+			showError(new CustomException("Referensi sumur tidak ditemukan", new Throwable()));
+			return;
+		}
+
+		WellItem item = mViewModel.getManageWellState().getValue();
+		if (item == null) return;
+
+		List<Task<Void>> deleteFileTasks = new ArrayList<>();
+		List<String> imgExist = new ArrayList<>();
+		adapter.getData().forEach(imageItem -> {
+			if (imageItem != null && imageItem.getImage() != null) {
+				imgExist.add(imageItem.getImage());
+			}
+		});
+
+		item.getImages().forEach(s -> {
+			if (!imgExist.contains(s)) {
+				StorageReference fileRef = storageReference.child(s);
+				deleteFileTasks.add(fileRef.delete());
+			}
+		});
+
+		if (deleteFileTasks.size() == 0) {
+			//skip ke proses selanjutnya
+			manipulateTasks(item);
+			return;
+		}
+
+		showProgress();
+		Tasks.whenAllComplete(deleteFileTasks)
+			.addOnCompleteListener(t -> {
+				dismissProgress();
+				if (!t.isSuccessful()) {
+					showError(t.getException());
+					return;
+				}
+				manipulateTasks(item);
+			});
+	}
+
+	private void manipulateTasks(WellItem item) {
+		List<UploadTask> putFileTasks = new ArrayList<>();
+		List<String> images = new ArrayList<>();
+		AtomicInteger i = new AtomicInteger();
+		adapter.getData().forEach(imageItem -> {
+			if (imageItem != null) {
+				if (imageItem.getUri() != null) {
+					String nameFile = imageItem.getImage() == null ? getUniqueID() + "." +
+						getFileExtension(imageItem.getUri()) : imageItem.getImage();
+
+					images.add(nameFile);
+					StorageReference fileRef = storageReference.child(nameFile);
+					putFileTasks.add(fileRef.putFile(imageItem.getUri()));
+				} else {
+					images.add(imageItem.getImage());
+				}
+			}
+			i.getAndIncrement();
+		});
+		item.setImages(images);
+		if (putFileTasks.size() == 0) {
+			updateData(item);
+			return;
+		}
+
+		showProgress();
+		Tasks.whenAllComplete(putFileTasks).addOnCompleteListener(task -> {
+			dismissProgress();
+			if (!task.isSuccessful()) {
+				showError(task.getException());
+				return;
+			}
+
+			updateData(item);
+		});
+	}
+
+	private void updateData(WellItem item) {
+		showProgress();
+		currentWellRef.set(item)
+			.addOnCompleteListener(t -> {
+				dismissProgress();
+				if (!t.isSuccessful()) {
+					showError(t.getException());
+					return;
+				}
+				Intent intent = new Intent(mContext, WellActivity.class);
+				intent.putExtra("path", currentWellRef.getPath());
+				startActivity(intent);
+				finish();
+			});
+	}
+
+	private void addData() {
+		WellItem item = mViewModel.getManageWellState().getValue();
+		if (item == null) return;
+		item.setCreatedAt(Timestamp.now());
+
+		List<UploadTask> putFileTasks = new ArrayList<>();
+		List<String> images = new ArrayList<>();
+		adapter.getData().forEach(imageItem -> {
+			if (imageItem != null && imageItem.getUri() != null) {
+				String nameFile = getUniqueID() + "." + getFileExtension(imageItem.getUri());
+				images.add(nameFile);
+				StorageReference fileRef = storageReference.child(nameFile);
+				putFileTasks.add(fileRef.putFile(imageItem.getUri()));
+			}
+		});
+		item.setImages(images);
+		if (putFileTasks.size() == 0) return;
+
+		showProgress();
+		Tasks.whenAllComplete(putFileTasks).addOnCompleteListener(task -> {
+			if (!task.isSuccessful()) {
+				dismissProgress();
+				showError(task.getException());
+				return;
+			}
+
+			wellColl.add(item)
+				.addOnCompleteListener(t -> {
+					dismissProgress();
+					if (!t.isSuccessful()) {
+						showError(t.getException());
+						return;
+					}
+					Intent intent = new Intent(mContext, WellActivity.class);
+					intent.putExtra("path", t.getResult().getPath());
+					startActivity(intent);
+					finish();
+				});
 		});
 	}
 
@@ -151,13 +363,12 @@ public class ManageWellActivity extends BaseActivity {
 				return;
 			}
 
-			mWellItem = task.getResult().toObject(WellItem.class);
-			if (mWellItem == null) return;
-			binding.setWellItem(mWellItem);
-			selectedCat = mWellItem.getCategory();
+			WellItem wellItem = task.getResult().toObject(WellItem.class);
+			if (wellItem == null) return;
+			mViewModel.setManageWellState(wellItem);
 
-			if (mWellItem.getImages() == null || adapter == null) return;
-			mWellItem.getImages().forEach(s -> {
+			if (wellItem.getImages() == null || adapter == null) return;
+			wellItem.getImages().forEach(s -> {
 				ImageItem item = new ImageItem();
 				item.setImage(s);
 				adapter.addData(item);
@@ -219,7 +430,7 @@ public class ManageWellActivity extends BaseActivity {
 		}
 	}
 
-	ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
+	public ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
 		new ActivityResultContracts.RequestMultiplePermissions(), result -> {
 			Log.d(TAG, ": " + result.toString());
 			if (result.containsValue(false)) {
@@ -229,7 +440,7 @@ public class ManageWellActivity extends BaseActivity {
 			}
 		});
 
-	ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(
+	public ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(
 		new ActivityResultContracts.StartActivityForResult(),
 		result -> {
 			if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null &&

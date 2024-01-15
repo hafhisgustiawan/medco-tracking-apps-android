@@ -2,6 +2,7 @@ package com.medco.trackingapp.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -32,11 +35,13 @@ import com.google.android.gms.location.Priority;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.medco.trackingapp.BuildConfig;
 import com.medco.trackingapp.R;
 import com.medco.trackingapp.databinding.ActivityWellBinding;
+import com.medco.trackingapp.fragment.CautionFragment;
 import com.medco.trackingapp.helper.CustomException;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.ResultMapsDistanceItem;
@@ -57,6 +62,7 @@ public class WellActivity extends BaseActivity {
 	private Animation animation;
 	private SnackbarHelper snackbarHelper;
 	private FragmentManager fragmentManager;
+	private CollectionReference reportColl;
 	private DocumentReference currentUserRef;
 	private DocumentReference currentWellRef;
 	private WellItem mWellItem;
@@ -73,6 +79,7 @@ public class WellActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mContext = this;
 		AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 		fragmentManager = getSupportFragmentManager();
 		binding = ActivityWellBinding.inflate(getLayoutInflater());
@@ -85,6 +92,7 @@ public class WellActivity extends BaseActivity {
 		FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 		if (firebaseUser == null) return;
 		FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+		reportColl = firebaseFirestore.collection(getString(R.string.collection_report));
 		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
 			.document(firebaseUser.getUid());
 
@@ -144,13 +152,20 @@ public class WellActivity extends BaseActivity {
 				showError(tsk.getException());
 				return;
 			}
+
+			if (!tsk.getResult().exists()) {
+				showDeletedView();
+				return;
+			}
+
 			mWellItem = tsk.getResult().toObject(WellItem.class);
 			binding.setWellItem(mWellItem);
 
-//			initRecyclerRating();
+//			initRecyclerReport();
 		});
 	}
 
+	@SuppressLint("NonConstantResourceId")
 	@Override
 	public void initListeners() {
 		binding.btnBack.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
@@ -171,6 +186,73 @@ public class WellActivity extends BaseActivity {
 					.LENGTH_INDEFINITE);
 			}
 		});
+
+		binding.btnMoreOption.setOnClickListener(view -> {
+			if (currentWellRef == null) return;
+			PopupMenu popupMenu = new PopupMenu(mContext, binding.btnMoreOption);
+			popupMenu.inflate(R.menu.delete_edit_menu);
+			popupMenu.setOnMenuItemClickListener(item -> {
+				switch (item.getItemId()) {
+					case R.id.action_edit:
+						Intent intent = new Intent(mContext, ManageWellActivity.class);
+						intent.putExtra("path", currentWellRef.getPath());
+						startActivity(intent);
+						break;
+					case R.id.action_delete:
+						new AlertDialog.Builder(mContext)
+							.setMessage("Anda yakin ingin menghapus data sumur ini?")
+							.setNegativeButton("Tidak", null)
+							.setPositiveButton("Ya", (dialogInterface, i) ->
+								deleteWellData()).create().show();
+						break;
+				}
+				return false;
+			});
+			popupMenu.show();
+		});
+	}
+
+	private void deleteWellData() {
+		if (currentWellRef == null) return;
+		showProgress();
+		reportColl.whereEqualTo("wellRef", currentWellRef).get()
+			.addOnCompleteListener(task -> {
+				dismissProgress();
+				if (!task.isSuccessful()) {
+					showError(task.getException());
+					return;
+				}
+				if (!task.getResult().isEmpty()) {
+					snackbarHelper.show("Data sumur ini tidak boleh dihapus ketika " +
+							"sudah tertaut dengan laporan pemantauan",
+						Snackbar.LENGTH_INDEFINITE);
+					return;
+				}
+				showProgress();
+				currentWellRef.delete().addOnCompleteListener(tsk -> {
+					dismissProgress();
+					if (!tsk.isSuccessful()) {
+						showError(tsk.getException());
+						return;
+					}
+					initViews();
+				});
+			});
+	}
+
+	private void showDeletedView() {
+		if (isFinishing() || fragmentManager.isDestroyed()) {
+			Toast.makeText(mContext, "Data sumur sudah dihapus!", Toast.LENGTH_SHORT)
+				.show();
+			getOnBackPressedDispatcher().onBackPressed();
+			return;
+		}
+
+		CautionFragment fragment = new CautionFragment(R.raw.delete,
+			"Paket wisata sudah dihapus!");
+		fragment.setCancelable(false);
+		fragment.ListenerApiClose(() -> getOnBackPressedDispatcher().onBackPressed());
+		fragment.show(fragmentManager, TAG);
 	}
 
 	private void getDistance(Location location) {

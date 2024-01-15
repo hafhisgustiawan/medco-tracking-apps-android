@@ -172,7 +172,6 @@
 
 							<TextView
 								android:id="@+id/tv_coordinates"
-								setAddressByGeoPointIntoTv="@{wellItem.location}"
 								android:layout_width="0sp"
 								android:layout_height="wrap_content"
 								android:layout_marginTop="12sp"
@@ -181,6 +180,7 @@
 								android:gravity="center_vertical"
 								android:hint="@string/placeholder_address"
 								android:maxLines="1"
+								android:text="@{wellItem.address}"
 								android:textColor="@color/text_transparent"
 								android:textSize="12sp"
 								app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_16"
@@ -193,6 +193,7 @@
 
 							<TextView
 								android:id="@+id/tv_category"
+								initCategoriesWellIntoTv="@{wellItem.category}"
 								android:layout_width="0sp"
 								android:layout_height="wrap_content"
 								android:layout_marginTop="3sp"
@@ -200,7 +201,6 @@
 								android:ellipsize="end"
 								android:hint="@string/txt_placeholder_category"
 								android:maxLines="1"
-								android:text="@{wellItem.category}"
 								android:textColor="@color/text_transparent"
 								android:textSize="12sp"
 								app:drawableStartCompat="@drawable/baseline_category_16"

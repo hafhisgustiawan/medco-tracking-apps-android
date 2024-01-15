@@ -174,7 +174,7 @@ public class ManageUserFragment extends BottomSheetDialogFragment {
 	private void updateUser(String name, String email, String phone) {
 		List<Task<Void>> tasks = new ArrayList<>();
 		tasks.add(mUserSnapshot.getReference().update("name", name));
-		tasks.add(mUserSnapshot.getReference().update("email", email));
+//		tasks.add(mUserSnapshot.getReference().update("email", email));
 		tasks.add(mUserSnapshot.getReference().update("phone", phone));
 
 		showProgress();

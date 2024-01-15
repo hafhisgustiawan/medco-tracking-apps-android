@@ -52,25 +52,6 @@ public class AuthActivity extends BaseActivity {
 	private FirebaseAuth firebaseAuth;
 	private FirebaseUser firebaseUser;
 	private CollectionReference userColl;
-	ActivityResultLauncher<Intent> signInGoogleLauncher = registerForActivityResult(
-		new ActivityResultContracts.StartActivityForResult(),
-		result -> {
-			if (result.getResultCode() == Activity.RESULT_OK) {
-				Task<GoogleSignInAccount> task = GoogleSignIn
-					.getSignedInAccountFromIntent(result.getData());
-				try {
-					// Google Sign In was successful, authenticate with Firebase
-					GoogleSignInAccount account = task.getResult(ApiException.class);
-					Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-					checkExistanceUserByEmail(account.getEmail(), account.getIdToken());
-				} catch (ApiException e) {
-					Log.e(TAG, "Google sign in failed", e);
-					snackbarHelper.show("Gagal mendapatkan info Email pada perangkat",
-						Snackbar.LENGTH_LONG);
-				}
-			}
-		}
-	);
 	private DocumentReference currentUserRef;
 	private GoogleSignInClient mGoogleSignInClient;
 
@@ -124,6 +105,26 @@ public class AuthActivity extends BaseActivity {
 		});
 	}
 
+	ActivityResultLauncher<Intent> signInGoogleLauncher = registerForActivityResult(
+		new ActivityResultContracts.StartActivityForResult(),
+		result -> {
+			if (result.getResultCode() == Activity.RESULT_OK) {
+				Task<GoogleSignInAccount> task = GoogleSignIn
+					.getSignedInAccountFromIntent(result.getData());
+				try {
+					// Google Sign In was successful, authenticate with Firebase
+					GoogleSignInAccount account = task.getResult(ApiException.class);
+					Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
+					checkExistanceUserByEmail(account.getEmail(), account.getIdToken());
+				} catch (ApiException e) {
+					Log.e(TAG, "Google sign in failed", e);
+					snackbarHelper.show("Gagal mendapatkan info Email pada perangkat",
+						Snackbar.LENGTH_LONG);
+				}
+			}
+		}
+	);
+
 	@Override
 	public void initListeners() {
 		binding.tvForgetPassword.setOnClickListener(view -> startActivity(new Intent(
@@ -150,19 +151,31 @@ public class AuthActivity extends BaseActivity {
 
 	private void checkExistanceUserByEmail(String email, String idToken) {
 		showProgress();
-		userColl.whereEqualTo("email", email).get().addOnCompleteListener(task -> {
+		firebaseAuth.signInAnonymously().addOnCompleteListener(t -> {
 			dismissProgress();
-			if (!task.isSuccessful()) {
-				showError(task.getException());
-				return;
-			}
-			if (task.getResult().isEmpty()) {
-				snackbarHelper.show("Email Anda tidak terdaftar dalam sistem aplikasi",
-					Snackbar.LENGTH_LONG);
+			if (!t.isSuccessful()) {
+				firebaseAuth.signOut();
+				showError(t.getException());
 				return;
 			}
 
-			firebaseAuthWithGoogle(idToken);
+			showProgress();
+			userColl.whereEqualTo("email", email).get().addOnCompleteListener(task -> {
+				dismissProgress();
+				if (!task.isSuccessful()) {
+					firebaseAuth.signOut();
+					showError(task.getException());
+					return;
+				}
+				if (task.getResult().isEmpty()) {
+					firebaseAuth.signOut();
+					snackbarHelper.show("Email Anda tidak terdaftar dalam sistem aplikasi",
+						Snackbar.LENGTH_LONG);
+					return;
+				}
+
+				firebaseAuthWithGoogle(idToken);
+			});
 		});
 	}
 

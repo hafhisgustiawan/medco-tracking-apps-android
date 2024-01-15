@@ -163,10 +163,11 @@ public class GlobalBindAdapter {
 
 	@BindingAdapter("listImageSource")
 	public static void loadImageList(ShapeableImageView imageView, ImageItem item) {
-		if (!(new GlideHelper().isValidCtx(imageView.getContext()))) return;
+		Context ctx = imageView.getContext();
+		if (!(new GlideHelper().isValidCtx(ctx))) return;
 		if (item == null) {
-			Glide.with(imageView.getContext())
-				.load(R.drawable.baseline_add_circle_outline_48)
+			Glide.with(ctx)
+				.load(R.drawable.baseline_add_circle_gray_48)
 				.centerInside()
 				.into(imageView);
 			return;
@@ -174,8 +175,9 @@ public class GlobalBindAdapter {
 
 		if (item.getUri() != null) {
 			Log.d("TAG", "loadImageList: DARI URI");
-			Glide.with(imageView.getContext())
-				.load(item.getUri()).into(imageView);
+			Glide.with(imageView.getContext()).load(item.getUri()).
+				fitCenter().centerCrop().into(imageView);
+
 			return;
 		}
 
@@ -186,8 +188,7 @@ public class GlobalBindAdapter {
 			.getString(R.string.collection_well)).child(item.getImage());
 		fileRef.getDownloadUrl().addOnCompleteListener(task -> {
 			if (!task.isSuccessful()) return;
-			if (!(new GlideHelper().isValidCtx(imageView.getContext()))) return;
-			Glide.with(imageView.getContext()).load(task.getResult()).fitCenter().centerCrop()
+			Glide.with(ctx).load(task.getResult()).fitCenter().centerCrop()
 				.into(imageView);
 		});
 	}
@@ -220,6 +221,24 @@ public class GlobalBindAdapter {
 			}
 			navMenu.setItemSelected(R.id.nav_home, true);
 		});
+	}
+
+	@SuppressLint("SetTextI18n")
+	@BindingAdapter("initCategoriesWellIntoTv")
+	public static void initCategoriesWellIntoTv(TextView et, String cat) {
+		if (cat == null) return;
+
+		if (cat.equals("as")) {
+			et.setText("AS (Alur Siwah)");
+			return;
+		}
+
+		if (cat.equals("jr")) {
+			et.setText("JR (Julok Rayeuk)");
+			return;
+		}
+
+		et.setText("Other Well (Sumur Tua)");
 	}
 
 }

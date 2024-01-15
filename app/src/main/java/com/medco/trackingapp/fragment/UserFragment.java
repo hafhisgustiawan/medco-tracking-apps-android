@@ -1,5 +1,6 @@
 package com.medco.trackingapp.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -27,6 +30,9 @@ import com.medco.trackingapp.adapter.UserAdapter;
 import com.medco.trackingapp.databinding.FragmentUserBinding;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.UserItem;
+import com.medco.trackingapp.model.viewmodel.StringViewModel;
+
+import java.util.Objects;
 
 public class UserFragment extends BaseFragment {
 	public static final String TAG = "UserFragment";
@@ -38,6 +44,7 @@ public class UserFragment extends BaseFragment {
 	private CollectionReference userColl;
 	private DocumentReference currentUserRef;
 	private UserAdapter adapter;
+	private StringViewModel mViewModel;
 
 	public UserFragment() {
 		// Required empty public constructor
@@ -68,6 +75,8 @@ public class UserFragment extends BaseFragment {
 		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
 			.document(firebaseUser.getUid());
 
+		mViewModel = new ViewModelProvider(this).get(StringViewModel.class);
+
 		initViews();
 		initListeners();
 		return binding.getRoot();
@@ -76,9 +85,15 @@ public class UserFragment extends BaseFragment {
 	@Override
 	public void initViews() {
 		binding.setUserRef(currentUserRef);
-		initRecyclerView();
+
+		mViewModel.getStringState().observe(getViewLifecycleOwner(), s -> {
+			binding.tvFilter.setText(Objects.equals(s, "") ? "Semua" : s != null ?
+				"Aktif" : "Non-Aktif");
+			initRecyclerView();
+		});
 	}
 
+	@SuppressLint("NonConstantResourceId")
 	@Override
 	public void initListeners() {
 		binding.btnAdd.setOnClickListener(v -> {
@@ -91,30 +106,40 @@ public class UserFragment extends BaseFragment {
 			});
 			fragment.show(fragmentManager, TAG);
 		});
-	}
 
-	private void showError(Exception e) {
-		if (e == null) return;
-		snackbarHelper.show(e.getMessage(), Snackbar.LENGTH_INDEFINITE);
-		Log.e(TAG, "showError: ", e);
+		binding.tvFilter.setOnClickListener(view -> {
+			PopupMenu popupMenu = new PopupMenu(mContext, binding.tvFilter);
+			popupMenu.inflate(R.menu.filter_user_menu);
+			popupMenu.setOnMenuItemClickListener(item -> {
+				switch (item.getItemId()) {
+					case R.id.action_all:
+						mViewModel.setStringState("");
+						break;
+					case R.id.action_active:
+						mViewModel.setStringState("user");
+						break;
+					case R.id.action_non_active:
+						mViewModel.setStringState(null);
+						break;
+				}
+				return false;
+			});
+			popupMenu.show();
+		});
 	}
 
 	private void initRecyclerView() {
 		showProgress();
-
 		PagedList.Config config = new PagedList.Config.Builder()
 			.setInitialLoadSizeHint(1)
 			.setPageSize(100)
 			.build();
 
-		Query query = userColl.whereEqualTo("role", "user").orderBy
-			("timeRegister", Query.Direction.DESCENDING);
-
 		FirestorePagingOptions<UserItem> options = new FirestorePagingOptions.Builder<UserItem>()
 			.setLifecycleOwner(this)
-			.setQuery(query, config, UserItem.class).build();
+			.setQuery(getQuery(), config, UserItem.class).build();
 
-		adapter = new UserAdapter(options, mContext);
+		adapter = new UserAdapter(options, mContext, currentUserRef);
 		binding.rvUser.setLayoutManager(new LinearLayoutManager(mContext));
 		binding.rvUser.setAdapter(adapter);
 
@@ -130,6 +155,36 @@ public class UserFragment extends BaseFragment {
 			}
 			binding.tvNotFound.setVisibility(View.VISIBLE);
 		});
+	}
+
+	private Query getQuery() {
+
+		String filter = mViewModel.getStringState().getValue();
+
+		if (filter == null) {
+			return userColl.whereEqualTo("role", null).orderBy
+				("timeRegister", Query.Direction.DESCENDING);
+		}
+
+		if (filter.equals("user")) {
+			return userColl.whereEqualTo("role", "user").orderBy
+				("timeRegister", Query.Direction.DESCENDING);
+		}
+
+//		List<String> roleList = new ArrayList<>();
+//		roleList.add("user");
+////		roleList.add(null);
+//		roleList.add("admin");
+//
+//		return userColl.whereIn("role", roleList).orderBy
+//			("timeRegister", Query.Direction.DESCENDING);
+		return userColl.orderBy("timeRegister", Query.Direction.DESCENDING);
+	}
+
+	private void showError(Exception e) {
+		if (e == null) return;
+		snackbarHelper.show(e.getMessage(), Snackbar.LENGTH_INDEFINITE);
+		Log.e(TAG, "showError: ", e);
 	}
 
 	private void showProgress() {
