@@ -243,7 +243,8 @@
 					android:layout_marginTop="16sp"
 					android:layout_marginEnd="8sp"
 					android:elevation="4dp"
-					android:hint="Latitude"
+					android:enabled="false"
+					android:hint="@string/txt_latitude"
 					app:boxBackgroundColor="@color/softPrimaryDark"
 					app:endIconMode="clear_text"
 					app:errorEnabled="true"
@@ -251,15 +252,13 @@
 					app:layout_constraintEnd_toStartOf="@id/gl_center"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@id/tv_label_location"
-					tools:ignore="HardcodedText,VisualLintBounds">
+					tools:ignore="VisualLintBounds">
 
 					<com.google.android.material.textfield.TextInputEditText
 						android:id="@+id/et_latitude"
 						text='@{wellItem.location != null ? String.valueOf(wellItem.location.latitude) : ""}'
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:focusable="false"
-						android:focusableInTouchMode="false"
 						android:inputType="numberDecimal"
 						android:paddingHorizontal="16dp"
 						android:paddingVertical="16dp"
@@ -279,7 +278,8 @@
 					android:layout_marginTop="16sp"
 					android:layout_marginEnd="16dp"
 					android:elevation="4dp"
-					android:hint="Longitude"
+					android:enabled="false"
+					android:hint="@string/txt_longitude"
 					app:boxBackgroundColor="@color/softPrimaryDark"
 					app:endIconMode="clear_text"
 					app:errorEnabled="true"
@@ -287,15 +287,13 @@
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toEndOf="@id/gl_center"
 					app:layout_constraintTop_toBottomOf="@id/tv_label_location"
-					tools:ignore="HardcodedText,VisualLintBounds">
+					tools:ignore="VisualLintBounds">
 
 					<com.google.android.material.textfield.TextInputEditText
 						android:id="@+id/et_longitude"
 						text='@{wellItem.location != null ? String.valueOf(wellItem.location.longitude) : ""}'
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:focusable="false"
-						android:focusableInTouchMode="false"
 						android:inputType="numberDecimal"
 						android:paddingHorizontal="16dp"
 						android:paddingVertical="16dp"
@@ -314,6 +312,7 @@
 					android:layout_marginHorizontal="16dp"
 					android:layout_marginTop="8sp"
 					android:elevation="4dp"
+					android:enabled="false"
 					android:hint="@string/txt_address"
 					app:boxBackgroundColor="@color/softPrimaryDark"
 					app:endIconMode="clear_text"
@@ -346,10 +345,10 @@
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16sp"
 					android:layout_marginTop="20sp"
+					android:hint="@string/txt_add"
 					android:paddingVertical="16sp"
 					android:progressVisible="@{loading}"
 					android:text='@{currentWellRef == null ? "tambah" : "simpan"}'
-					android:hint="@string/txt_add"
 					android:textColor="@color/white"
 					android:textSize="14sp"
 					app:cornerRadius="8sp"

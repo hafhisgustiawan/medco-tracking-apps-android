@@ -83,30 +83,42 @@ public class ManageWellBindAdapter {
 		til.setError("Minimal 10 karakter");
 	}
 
+	public static boolean validateLatitude(Double num) {
+		if (num == null) return false;
+		return num >= -90 && num <= 90;
+	}
+
 	public static boolean validateLatitudeManageWell(WellItem item) {
 		if (item == null) return true;
 		if (item.getLocation() == null) return true;
-		return item.getLocation().getLatitude() != 0;
+		if (item.getLocation().getLatitude() == 0) return true;
+		return validateLatitude(item.getLocation().getLatitude());
 	}
 
 	@BindingAdapter("validateTilLatitudeManageWell")
 	public static void validateTilLatitudeManageWell(TextInputLayout til, WellItem item) {
 		til.setError(null);
 		if (validateLatitudeManageWell(item)) return;
-		til.setError("Latitude kosong");
+		til.setError("Latitude tidak valid");
+	}
+
+	public static boolean validateLongitude(Double num) {
+		if (num == null) return false;
+		return num >= -180 && num <= 180;
 	}
 
 	public static boolean validateLongitudeManageWell(WellItem item) {
 		if (item == null) return true;
 		if (item.getLocation() == null) return true;
-		return item.getLocation().getLatitude() != 0;
+		if (item.getLocation().getLongitude() == 0) return true;
+		return validateLongitude(item.getLocation().getLongitude());
 	}
 
 	@BindingAdapter("validateTilLongitudeManageWell")
 	public static void validateTilLongitudeManageWell(TextInputLayout til, WellItem item) {
 		til.setError(null);
 		if (validateLongitudeManageWell(item)) return;
-		til.setError("Longitude kosong");
+		til.setError("Longitude tidak valid");
 	}
 
 	@BindingAdapter("validateBtnManageWell")
@@ -125,6 +137,8 @@ public class ManageWellBindAdapter {
 			return;
 		}
 
+		if (item.getLocation().getLongitude() == 0 || item.getLocation().getLatitude() == 0) return;
+
 		if (!validateNameManageWell(item)) return;
 		if (!validateCategoriesManageWell(item)) return;
 		if (!validateDescriptionManageWell(item)) return;
@@ -133,6 +147,5 @@ public class ManageWellBindAdapter {
 		if (!validateLongitudeManageWell(item)) return;
 
 		btn.setEnabled(true);
-
 	}
 }

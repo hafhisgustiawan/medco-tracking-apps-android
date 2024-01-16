@@ -1,4 +1,4 @@
-package com.medco.trackingapp.model.viewmodel;
+package com.medco.trackingapp.model;
 
 public class ManageUserItem {
 	private String name;

@@ -15,7 +15,7 @@
 
 		<variable
 			name="manageUserItem"
-			type="com.medco.trackingapp.model.viewmodel.ManageUserItem" />
+			type="com.medco.trackingapp.model.ManageUserItem" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout

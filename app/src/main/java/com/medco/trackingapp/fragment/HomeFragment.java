@@ -134,7 +134,7 @@ public class HomeFragment extends BaseFragment {
 			.setLifecycleOwner(this)
 			.setQuery(query, config, WellItem.class).build();
 
-		adapter = new WellAdapter(options, mContext, "vertical");
+		adapter = new WellAdapter(options, mContext, "horizontal");
 		binding.rvWell.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
 			.HORIZONTAL, false));
 		binding.rvWell.setAdapter(adapter);

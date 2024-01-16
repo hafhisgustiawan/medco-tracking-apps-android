@@ -1,16 +1,12 @@
 package com.medco.trackingapp.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,40 +15,20 @@ import android.view.animation.AnimationUtils;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.medco.trackingapp.BuildConfig;
 import com.medco.trackingapp.R;
 import com.medco.trackingapp.databinding.ActivityWellBinding;
 import com.medco.trackingapp.fragment.CautionFragment;
-import com.medco.trackingapp.helper.CustomException;
 import com.medco.trackingapp.helper.SnackbarHelper;
-import com.medco.trackingapp.model.ResultMapsDistanceItem;
 import com.medco.trackingapp.model.WellItem;
-import com.medco.trackingapp.service.MapsApiClient;
-import com.medco.trackingapp.service.MapsApiInterface;
-
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class WellActivity extends BaseActivity {
 
@@ -67,14 +43,12 @@ public class WellActivity extends BaseActivity {
 	private DocumentReference currentWellRef;
 	private WellItem mWellItem;
 
-	//api
-	private MapsApiInterface mapsApiInterface;
-
 	//location
+	/*private MapsApiInterface mapsApiInterface;
 	private Location mLocation;
 	private FusedLocationProviderClient fusedLocationProviderClient;
 	private LocationRequest locationRequest;
-	private LocationCallback locationCallback;
+	private LocationCallback locationCallback;*/
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,10 +74,11 @@ public class WellActivity extends BaseActivity {
 		String path = intent.getStringExtra("path");
 		if (path == null) return;
 		currentWellRef = firebaseFirestore.document(path);
+		binding.setCurrentWellRef(currentWellRef);
 
-		mapsApiInterface = MapsApiClient.getClient().create(MapsApiInterface.class);
+//		mapsApiInterface = MapsApiClient.getClient().create(MapsApiInterface.class);
 
-		fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
+		/*fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
 		locationRequest = new LocationRequest.Builder(Priority
 			.PRIORITY_HIGH_ACCURACY, 30000)
 			.setWaitForAccurateLocation(false)
@@ -124,13 +99,13 @@ public class WellActivity extends BaseActivity {
 				new Handler().postDelayed(() -> stopLocationUpdate(), 500);
 			}
 		};
+		checkPermission();*/
 
 		initViews();
 		initListeners();
-		checkPermission();
 	}
 
-	private void checkPermission() {
+	/*private void checkPermission() {
 		if (isPermissionGranted()) {
 			startLocationUpdate();
 			return;
@@ -139,7 +114,7 @@ public class WellActivity extends BaseActivity {
 		String[] permitStr = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
 			Manifest.permission.ACCESS_COARSE_LOCATION};
 		permissionLauncher.launch(permitStr);
-	}
+	}*/
 
 	@Override
 	public void initViews() {
@@ -210,6 +185,13 @@ public class WellActivity extends BaseActivity {
 			});
 			popupMenu.show();
 		});
+
+		binding.btnRoute.setOnClickListener(view -> {
+			if (currentWellRef == null) return;
+			Intent intent = new Intent(mContext, DirectionActivity.class);
+			intent.putExtra("path", currentWellRef.getPath());
+			mContext.startActivity(intent);
+		});
 	}
 
 	private void deleteWellData() {
@@ -249,13 +231,13 @@ public class WellActivity extends BaseActivity {
 		}
 
 		CautionFragment fragment = new CautionFragment(R.raw.delete,
-			"Paket wisata sudah dihapus!");
+			"Data sumur sudah dihapus!");
 		fragment.setCancelable(false);
 		fragment.ListenerApiClose(() -> getOnBackPressedDispatcher().onBackPressed());
 		fragment.show(fragmentManager, TAG);
 	}
 
-	private void getDistance(Location location) {
+	/*private void getDistance(Location location) {
 		if (mWellItem == null) return;
 		if (mWellItem.getLocation() == null) return;
 		mapsApiInterface.getDistance(BuildConfig.MAPS_API_KEY, location.getLatitude() + ","
@@ -281,8 +263,13 @@ public class WellActivity extends BaseActivity {
 
 					if (distance == null || duration == null) return;
 
-					binding.tvDistance.setText(distance.getText());
-					binding.tvTravelingTime.setText(duration.getText());
+					DistanceDurationItem item = new DistanceDurationItem();
+					item.setDistance(distance.getText());
+					item.setDuration(duration.getText());
+					binding.setDistanceDurationItem(item);
+
+//					binding.tvDistance.setText(distance.getText());
+//					binding.tvTravelingTime.setText(duration.getText());
 				}
 
 				@Override
@@ -290,7 +277,7 @@ public class WellActivity extends BaseActivity {
 					showErrorThrowable(e);
 				}
 			});
-	}
+	}*/
 
 	private void showError(Exception e) {
 		if (e == null) return;
@@ -298,11 +285,11 @@ public class WellActivity extends BaseActivity {
 		Log.e(TAG, "showError: ", e);
 	}
 
-	private void showErrorThrowable(Throwable e) {
+	/*private void showErrorThrowable(Throwable e) {
 		if (e == null) return;
 		snackbarHelper.show(e.getMessage(), Snackbar.LENGTH_INDEFINITE);
 		Log.e(TAG, "showError: ", e);
-	}
+	}*/
 
 	private void showProgress() {
 		binding.progressbar.setVisibility(View.VISIBLE);
@@ -319,7 +306,7 @@ public class WellActivity extends BaseActivity {
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 	}
 
-	@SuppressLint("MissingPermission")
+	/*@SuppressLint("MissingPermission")
 	private void startLocationUpdate() {
 		if (fusedLocationProviderClient == null) return;
 		fusedLocationProviderClient.requestLocationUpdates(locationRequest,
@@ -346,7 +333,5 @@ public class WellActivity extends BaseActivity {
 			} else {
 				checkPermission();
 			}
-		});
-
-
+		});*/
 }

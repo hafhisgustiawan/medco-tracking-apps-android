@@ -66,20 +66,6 @@
 							app:layout_constraintStart_toStartOf="parent"
 							app:layout_constraintTop_toTopOf="parent" />
 
-						<!--<ImageButton
-							android:id="@+id/btn_add"
-							imgBtnVisibleForAdmin="@{userRef}"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:layout_marginEnd="14sp"
-							android:background="@android:color/transparent"
-							android:contentDescription="@string/img_btn_desc"
-							android:src="@drawable/baseline_add_24"
-							app:layout_constraintBottom_toBottomOf="@id/tv_title"
-							app:layout_constraintEnd_toEndOf="parent"
-							app:layout_constraintTop_toTopOf="@id/tv_title"
-							tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />-->
-
 					</androidx.constraintlayout.widget.ConstraintLayout>
 
 				</com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -153,7 +139,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:background="@drawable/bg_btn_soft_primary_dark"
-			android:padding="8sp"
+			android:padding="6sp"
 			android:visibility="gone"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"

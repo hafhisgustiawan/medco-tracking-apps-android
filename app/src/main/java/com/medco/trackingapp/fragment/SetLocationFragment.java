@@ -222,6 +222,7 @@ public class SetLocationFragment extends BottomSheetDialogFragment
 					List<Address> addressList;
 					try {
 						addressList = geocoder.getFromLocationName(query, 1);
+						if (addressList == null) return false;
 						LatLng myLocation = new LatLng(addressList.get(0).getLatitude(),
 							addressList.get(0).getLongitude());
 						if (myLocationMarker != null) {
@@ -299,14 +300,17 @@ public class SetLocationFragment extends BottomSheetDialogFragment
 
 	@SuppressLint("SetTextI18n")
 	private void updateUI() {
-		binding.etLatitude.setText("" + myLocationMarker.getPosition().latitude);
-		binding.etLongitude.setText("" + myLocationMarker.getPosition().longitude);
+		if (myLocationMarker == null) return;
+
+		binding.etLatitude.setText(String.valueOf(myLocationMarker.getPosition().latitude));
+		binding.etLongitude.setText(String.valueOf(myLocationMarker.getPosition().longitude));
 
 		Geocoder geocoder = new Geocoder(mContext);
 		try {
 			List<Address> addressList = geocoder.getFromLocation(myLocationMarker.getPosition()
 				.latitude, myLocationMarker.getPosition().longitude, 1);
-			binding.etAddress.setText("" + addressList.get(0).getAddressLine(0));
+			if (addressList == null) return;
+			binding.etAddress.setText(addressList.get(0).getAddressLine(0));
 		} catch (Exception e) {
 			showError(e);
 			binding.etAddress.setText("");
@@ -355,7 +359,9 @@ public class SetLocationFragment extends BottomSheetDialogFragment
 		super.onResume();
 		binding.mapView.onResume();
 		startLocationUpdate();
-	}	ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
+	}
+
+	ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
 		new ActivityResultContracts.RequestMultiplePermissions(), result -> {
 			if (result.containsValue(false)) {
 				//permission denied
@@ -405,8 +411,4 @@ public class SetLocationFragment extends BottomSheetDialogFragment
 	public interface ListenerClose {
 		void listenerClose();
 	}
-
-
-
-
 }

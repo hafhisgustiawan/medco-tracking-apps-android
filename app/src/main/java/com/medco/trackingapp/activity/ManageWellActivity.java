@@ -166,6 +166,53 @@ public class ManageWellActivity extends BaseActivity {
 			if (!fragmentManager.isDestroyed()) fragment.show(fragmentManager, TAG);
 		});
 
+		/*binding.etLatitude.addTextChangedListener(new EtWatcher(str -> {
+			WellItem item = mViewModel.getManageWellState().getValue();
+
+			if (str == null || str.equals("")) return;
+
+			if (item == null || !TextUtils.isDigitsOnly(str.trim())) return;
+
+			GeoPoint geoPoint = item.getLocation();
+
+			if (geoPoint == null) {
+				geoPoint = new GeoPoint(Double.parseDouble(str.trim()), 0);
+			} else {
+				double longitude = geoPoint.getLongitude();
+				geoPoint = new GeoPoint(Double.parseDouble(str.trim()), longitude);
+			}
+
+			item.setLocation(geoPoint);
+			mViewModel.setManageWellState(item);
+		}));
+
+		binding.etLongitude.addTextChangedListener(new EtWatcher(str -> {
+			WellItem item = mViewModel.getManageWellState().getValue();
+
+			if (str == null || str.equals("")) return;
+			if (item == null || !TextUtils.isDigitsOnly(str.trim())) return;
+
+			if (item.getLocation().getLongitude() < -90) {
+				str = "-90";
+			}
+
+			if (item.getLocation().getLongitude() > 90) {
+				str = "90";
+			}
+
+			GeoPoint geoPoint = item.getLocation();
+
+			if (geoPoint == null) {
+				geoPoint = new GeoPoint(0, Double.parseDouble(str.trim()));
+			} else {
+				double latitude = geoPoint.getLatitude();
+				geoPoint = new GeoPoint(latitude, Double.parseDouble(str.trim()));
+			}
+
+			item.setLocation(geoPoint);
+			mViewModel.setManageWellState(item);
+		}));*/
+
 		binding.etAddress.addTextChangedListener(new EtWatcher(str -> {
 			WellItem item = mViewModel.getManageWellState().getValue();
 			if (item == null) return;

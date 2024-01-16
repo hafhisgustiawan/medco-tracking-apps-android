@@ -6,7 +6,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 import com.medco.trackingapp.helper.ValidationEmail;
 import com.medco.trackingapp.helper.ValidationPhone;
-import com.medco.trackingapp.model.viewmodel.ManageUserItem;
+import com.medco.trackingapp.model.ManageUserItem;
 
 import java.util.Objects;
 

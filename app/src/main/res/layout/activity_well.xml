@@ -5,6 +5,8 @@
 
 	<data>
 
+		<import type="android.view.View" />
+
 		<variable
 			name="wellItem"
 			type="com.medco.trackingapp.model.WellItem" />
@@ -16,6 +18,10 @@
 		<variable
 			name="currentWellRef"
 			type="com.google.firebase.firestore.DocumentReference" />
+
+		<!--<variable
+			name="distanceDurationItem"
+			type="com.medco.trackingapp.model.DistanceDurationItem" />-->
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +34,7 @@
 			android:id="@+id/layout_main"
 			android:layout_width="match_parent"
 			android:layout_height="0sp"
-			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintBottom_toTopOf="@id/layout_bottom"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent">
@@ -276,13 +282,15 @@
 
 						</androidx.constraintlayout.widget.ConstraintLayout>
 
-						<androidx.constraintlayout.widget.ConstraintLayout
+						<!--<androidx.constraintlayout.widget.ConstraintLayout
+							android:id="@+id/distance_duration_layout"
 							android:layout_width="match_parent"
 							android:layout_height="wrap_content"
 							android:layout_marginHorizontal="16sp"
-							android:layout_marginTop="8sp"
+							android:layout_marginTop="16sp"
 							android:background="@drawable/bg_btn_white"
 							android:padding="16sp"
+							android:visibility='@{distanceDurationItem == null ? View.GONE : View.VISIBLE}'
 							app:layout_constraintEnd_toEndOf="parent"
 							app:layout_constraintStart_toStartOf="parent"
 							app:layout_constraintTop_toBottomOf="@id/layout_description">
@@ -324,6 +332,7 @@
 								android:ellipsize="start"
 								android:hint="@string/txt_min"
 								android:maxLines="1"
+								android:text="@{distanceDurationItem.distance}"
 								android:textAlignment="textEnd"
 								android:textColor="@color/black"
 								android:textSize="14sp"
@@ -340,6 +349,7 @@
 								android:ellipsize="start"
 								android:hint="@string/txt_min"
 								android:maxLines="1"
+								android:text="@{distanceDurationItem.duration}"
 								android:textAlignment="textEnd"
 								android:textColor="@color/black"
 								android:textSize="14sp"
@@ -350,6 +360,19 @@
 								app:layout_constraintTop_toTopOf="@id/tv_title_traveling_time" />
 
 						</androidx.constraintlayout.widget.ConstraintLayout>
+
+						<TextView
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:layout_margin="16sp"
+							android:background="@drawable/bg_btn_white"
+							android:padding="16sp"
+							android:text="@string/txt_route_not_available"
+							android:textAlignment="center"
+							android:visibility='@{distanceDurationItem != null ? View.GONE : View.VISIBLE}'
+							app:layout_constraintEnd_toEndOf="parent"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toBottomOf="@id/distance_duration_layout" />-->
 
 					</androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -379,11 +402,12 @@
 					<TextView
 						android:id="@+id/tv_total_report"
 						setTotalReportTv="@{currentWellRef}"
-						android:layout_width="wrap_content"
+						android:layout_width="0sp"
 						android:layout_height="wrap_content"
 						android:layout_marginTop="8sp"
 						android:layout_marginEnd="4sp"
 						android:text="@string/txt_total"
+						app:layout_constraintEnd_toStartOf="@id/btn_add_report"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toBottomOf="@id/tv_title_report" />
 
@@ -399,7 +423,7 @@
 						app:layout_constraintEnd_toEndOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
 						app:tint="@color/text_transparent"
-						tools:ignore="TouchTargetSizeCheck" />
+						tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
 				</androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -443,13 +467,54 @@
 
 		</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:id="@+id/layout_bottom"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/white"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent">
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1.5sp"
+				android:background="@color/soft_white"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:ignore="SmallSp" />
+
+			<com.google.android.material.button.MaterialButton
+				android:id="@+id/btn_route"
+				android:layout_width="0sp"
+				android:layout_height="wrap_content"
+				android:layout_margin="16sp"
+				android:includeFontPadding="false"
+				android:paddingVertical="16sp"
+				android:text="@string/txt_get_route"
+				android:textColor="@color/white"
+				android:textSize="12sp"
+				app:cornerRadius="8sp"
+				app:icon="@drawable/baseline_directions_24"
+				app:iconGravity="textEnd"
+				app:iconSize="18sp"
+				btnEnableIfThereLocation="@{wellItem}"
+				app:layout_constraintBottom_toBottomOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				tools:ignore="TextContrastCheck,VisualLintButtonSize" />
+
+		</androidx.constraintlayout.widget.ConstraintLayout>
+
 		<ProgressBar
 			android:id="@+id/progressbar"
 			style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:background="@drawable/bg_btn_soft_primary_dark"
-			android:padding="8sp"
+			android:padding="6sp"
 			android:visibility="gone"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"

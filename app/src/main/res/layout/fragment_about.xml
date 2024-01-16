@@ -101,7 +101,7 @@
 		android:includeFontPadding="false"
 		android:paddingHorizontal="16sp"
 		android:paddingVertical="12sp"
-		android:text="Created by Sultan Misbahul Farya"
+		android:text="Created by Sultan Misbahul Fayra"
 		android:textColor="@color/text_transparent"
 		android:textSize="16sp"
 		app:drawableStartCompat="@drawable/baseline_do_not_disturb_on_total_silence_24"

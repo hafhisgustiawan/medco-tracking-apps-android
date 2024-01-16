@@ -25,8 +25,8 @@ import com.medco.trackingapp.R;
 import com.medco.trackingapp.databinding.FragmentManageUserBinding;
 import com.medco.trackingapp.helper.EtWatcher;
 import com.medco.trackingapp.helper.SnackbarHelper;
+import com.medco.trackingapp.model.ManageUserItem;
 import com.medco.trackingapp.model.UserItem;
-import com.medco.trackingapp.model.viewmodel.ManageUserItem;
 import com.medco.trackingapp.model.viewmodel.ManageUserViewModel;
 
 import java.util.ArrayList;

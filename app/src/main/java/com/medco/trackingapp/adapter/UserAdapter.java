@@ -1,6 +1,7 @@
 package com.medco.trackingapp.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.firebase.ui.firestore.paging.LoadingState;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.medco.trackingapp.R;
@@ -26,6 +28,7 @@ import com.medco.trackingapp.fragment.ManageUserFragment;
 import com.medco.trackingapp.helper.CustomException;
 import com.medco.trackingapp.model.UserItem;
 
+import java.util.List;
 import java.util.Objects;
 
 public class UserAdapter extends FirestorePagingAdapter<UserItem,
@@ -41,6 +44,7 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 	public FragmentManager mFragmentManager;
 	private OnItemClickListener listener;
 	private StateChangeListener stateListener;
+	public FirebaseAuth firebaseAuth;
 
 	public UserAdapter(@NonNull FirestorePagingOptions<UserItem> options,
 										 Context context, DocumentReference userRef,
@@ -50,6 +54,7 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 		this.mUserRef = userRef;
 		this.mFragmentManager = fragmentManager;
 		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
+		firebaseAuth = FirebaseAuth.getInstance();
 	}
 
 	public void setOnItemClickListener(OnItemClickListener listener) {
@@ -75,7 +80,10 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 		if (Objects.equals(model.getRole(), "admin")) return;
 
 		holder.binding.btnMoreOption.setOnClickListener(view -> {
-			if (listener == null || position == RecyclerView.NO_POSITION) return;
+			if (listener == null || position == RecyclerView.NO_POSITION
+				|| stateListener == null) {
+				return;
+			}
 			PopupMenu popupMenu = new PopupMenu(mContext, holder.binding.btnMoreOption);
 			if (model.getRole() == null) {
 				popupMenu.inflate(R.menu.active_user_menu);
@@ -84,19 +92,64 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 			}
 			popupMenu.setOnMenuItemClickListener(item -> {
 				if (item.getItemId() == R.id.action_block) {
-					listener.onItemClick(View.VISIBLE);
-					String status = model.getRole() != null ? null : "user";
-					snapshot.getReference().update("role", status)
-						.addOnCompleteListener(task -> {
-							listener.onItemClick(View.GONE);
-							if (!task.isSuccessful()) {
-								stateListener.stateChange(task.getException());
-								return;
-							}
-							Toast.makeText(mContext, "Berhasil update status pengguna!",
-								Toast.LENGTH_SHORT).show();
-							refresh();
-						});
+					new AlertDialog.Builder(mContext)
+						.setMessage("Anda yakin ingin mengubah status pengguna ini? Tindakan ini bisa " +
+							"mengakibatkan pengguna ter-logout secara otomatis!")
+						.setNegativeButton("Tidak", null)
+						.setPositiveButton("Ya", (dialogInterface, i) -> {
+							listener.onItemClick(View.VISIBLE);
+							String status = model.getRole() != null ? null : "user";
+							snapshot.getReference().update("role", status)
+								.addOnCompleteListener(task -> {
+									listener.onItemClick(View.GONE);
+									if (!task.isSuccessful()) {
+										stateListener.stateChange(task.getException());
+										return;
+									}
+									Toast.makeText(mContext, "Berhasil update status pengguna!",
+										Toast.LENGTH_SHORT).show();
+									refresh();
+								});
+						}).create().show();
+				} else if (item.getItemId() == R.id.action_delete) {
+					new AlertDialog.Builder(mContext)
+						.setMessage("Tindakan ini hanya akan berhasil jika pengguna belum pernah " +
+							"masuk ke dalam aplikasi!")
+						.setNegativeButton("Tutup", null)
+						.setPositiveButton("Lanjutkan", (dialogInterface, i) -> {
+
+							listener.onItemClick(View.VISIBLE);
+
+							firebaseAuth.fetchSignInMethodsForEmail(model.getEmail())
+								.addOnCompleteListener(t -> {
+									listener.onItemClick(View.GONE);
+									if (!t.isSuccessful()) {
+										stateListener.stateChange(t.getException());
+										return;
+									}
+
+									List<String> methods = t.getResult().getSignInMethods();
+									if (methods == null || methods.isEmpty()) {
+										Toast.makeText(mContext, model.getEmail() + " Bisa hapus", Toast.LENGTH_SHORT).show();
+										/*snapshot.getReference().delete()
+											.addOnCompleteListener(task -> {
+												listener.onItemClick(View.GONE);
+												if (!task.isSuccessful()) {
+													stateListener.stateChange(task.getException());
+													return;
+												}
+												Toast.makeText(mContext, "Berhasil hapus data pengguna pengguna!",
+													Toast.LENGTH_SHORT).show();
+												refresh();
+											});*/
+									} else {
+										Toast.makeText(mContext, "Gabisa hapus", Toast.LENGTH_SHORT).show();
+										/*stateListener.stateChange(new CustomException("Pengguna ini tidak dapat " +
+											"dihapus dari sistem dikarenakan bisa menyebabkan crash!",
+											new Throwable()));*/
+									}
+								});
+						}).create().show();
 				} else {
 					if (mFragmentManager.isDestroyed()) return false;
 					ManageUserFragment fragment = new ManageUserFragment(snapshot);

@@ -32,6 +32,7 @@ import com.medco.trackingapp.R;
 import com.medco.trackingapp.helper.GlideHelper;
 import com.medco.trackingapp.model.ImageItem;
 import com.medco.trackingapp.model.UserItem;
+import com.medco.trackingapp.model.WellItem;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -239,6 +240,15 @@ public class GlobalBindAdapter {
 		}
 
 		et.setText("Other Well (Sumur Tua)");
+	}
+
+	@BindingAdapter("btnEnableIfThereLocation")
+	public static void btnEnableIfThereLocation(MaterialButton btn, WellItem item) {
+		if (item == null || item.getLocation() == null) {
+			btn.setEnabled(false);
+			return;
+		}
+		btn.setEnabled(true);
 	}
 
 }

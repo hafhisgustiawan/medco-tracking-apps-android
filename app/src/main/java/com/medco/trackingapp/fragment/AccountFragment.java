@@ -61,25 +61,6 @@ public class AccountFragment extends BaseFragment {
 	private Animation animation;
 	private UserItem mUserItem;
 	private Uri imageUri;
-	ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(
-		new ActivityResultContracts.StartActivityForResult(),
-		result -> {
-			if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null &&
-				result.getData().getData() != null) {
-				imageUri = result.getData().getData();
-				uploadFile();
-			}
-		}
-	);
-	ActivityResultLauncher<String> permissionLauncher =
-		registerForActivityResult(
-			new ActivityResultContracts.RequestPermission(), isGranted -> {
-				if (isGranted) {
-					openFileChooser();
-					return;
-				}
-				snackbarHelper.show("Izinkan akses!", Snackbar.LENGTH_INDEFINITE);
-			});
 
 	public AccountFragment() {
 		// Required empty public constructor
@@ -367,4 +348,24 @@ public class AccountFragment extends BaseFragment {
 				.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
 		}
 	}
+
+	ActivityResultLauncher<Intent> pickPhotoLauncher = registerForActivityResult(
+		new ActivityResultContracts.StartActivityForResult(),
+		result -> {
+			if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null &&
+				result.getData().getData() != null) {
+				imageUri = result.getData().getData();
+				uploadFile();
+			}
+		}
+	);
+	ActivityResultLauncher<String> permissionLauncher =
+		registerForActivityResult(
+			new ActivityResultContracts.RequestPermission(), isGranted -> {
+				if (isGranted) {
+					openFileChooser();
+					return;
+				}
+				snackbarHelper.show("Izinkan akses!", Snackbar.LENGTH_INDEFINITE);
+			});
 }

@@ -91,4 +91,10 @@
 	<string name="txt_non_active">Non-Aktif</string>
 	<string name="txt_set_to_active">Set ke aktif</string>
 	<string name="txt_set_to_non_active">Set ke non aktif</string>
+	<string name="txt_longitude">Longitude</string>
+	<string name="txt_latitude">Latitude</string>
+	<string name="txt_get_route">dapatkan arah</string>
+	<string name="txt_closest_route">Rute Terdekat</string>
+	<string name="txt_date">Tanggal</string>
+	<string name="txt_route_not_available">Rute tidak ditemukan</string>
 </resources>
