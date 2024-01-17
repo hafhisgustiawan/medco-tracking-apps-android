@@ -3,11 +3,15 @@ package com.medco.trackingapp.model;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
+import java.util.List;
+
 public class ReportItem {
+	private DocumentReference userRef;
 	private DocumentReference wellRef;
 	private String report;
 	private String condition;
-	private String photo;
+	private String note;
+	private List<String> images;
 	private Timestamp createdAt;
 
 	public DocumentReference getWellRef() {
@@ -34,19 +38,35 @@ public class ReportItem {
 		this.condition = condition;
 	}
 
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
-
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
 
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public DocumentReference getUserRef() {
+		return userRef;
+	}
+
+	public void setUserRef(DocumentReference userRef) {
+		this.userRef = userRef;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
 	}
 }

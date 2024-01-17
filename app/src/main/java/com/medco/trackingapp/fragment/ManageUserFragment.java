@@ -37,13 +37,14 @@ public class ManageUserFragment extends BottomSheetDialogFragment {
 
 	public static final String TAG = "ManageUserFragment";
 	private final DocumentSnapshot mUserSnapshot;
-	//callback
-	public ListenerClose listenerClose;
 	private Context mContext;
 	private SnackbarHelper snackbarHelper;
 	private FragmentManageUserBinding binding;
 	private CollectionReference userColl;
 	private ManageUserViewModel mViewModel;
+
+	//callback
+	public ListenerClose listenerClose;
 
 	public ManageUserFragment(DocumentSnapshot userSnapshot) {
 		// Required empty public constructor

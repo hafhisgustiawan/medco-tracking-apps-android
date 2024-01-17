@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -30,6 +31,9 @@ import com.medco.trackingapp.adapter.WellAdapter;
 import com.medco.trackingapp.databinding.FragmentWellBinding;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.WellItem;
+import com.medco.trackingapp.model.viewmodel.StringViewModel;
+
+import java.util.Objects;
 
 public class WellFragment extends BaseFragment {
 	public static final String TAG = "WellFragment";
@@ -40,7 +44,8 @@ public class WellFragment extends BaseFragment {
 	private CollectionReference wellColl;
 	private DocumentReference currentUserRef;
 	private WellAdapter adapter;
-	private String catStr;
+	private StringViewModel mViewModel;
+//	private String catStr;
 
 	public WellFragment() {
 		// Required empty public constructor
@@ -70,6 +75,8 @@ public class WellFragment extends BaseFragment {
 		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
 			.document(firebaseUser.getUid());
 
+		mViewModel = new ViewModelProvider(this).get(StringViewModel.class);
+
 		initViews();
 		initListeners();
 		return binding.getRoot();
@@ -78,7 +85,13 @@ public class WellFragment extends BaseFragment {
 	@Override
 	public void initViews() {
 		binding.setUserRef(currentUserRef);
-		initRecyclerView();
+
+		mViewModel.getStringState().observe(getViewLifecycleOwner(), s -> {
+			binding.tvFilter.setText(Objects.equals(s, "") ? "Semua" : Objects
+				.equals(s, "as") ? "AS (Alur Siwah)" : Objects
+				.equals(s, "jr") ? "JR (Julok Rayeuk)" : "Other Well (Sumur Tua)");
+			initRecyclerView();
+		});
 	}
 
 	@SuppressLint("NonConstantResourceId")
@@ -93,20 +106,18 @@ public class WellFragment extends BaseFragment {
 			popupMenu.setOnMenuItemClickListener(item -> {
 				switch (item.getItemId()) {
 					case R.id.action_all:
-						catStr = null;
+						mViewModel.setStringState("");
 						break;
 					case R.id.action_as:
-						catStr = "as";
+						mViewModel.setStringState("as");
 						break;
 					case R.id.action_jr:
-						catStr = "jr";
+						mViewModel.setStringState("jr");
 						break;
 					case R.id.action_other_well:
-						catStr = "otherwell";
+						mViewModel.setStringState("otherwell");
 						break;
 				}
-				binding.tvFilter.setText(item.getTitle());
-				initRecyclerView();
 				return false;
 			});
 			popupMenu.show();
@@ -142,7 +153,8 @@ public class WellFragment extends BaseFragment {
 	}
 
 	private Query getQuery() {
-		if (catStr != null) {
+		String catStr = mViewModel.getStringState().getValue();
+		if (!Objects.equals(catStr, "")) {
 			return wellColl.whereEqualTo("category", catStr).orderBy("createdAt",
 				Query.Direction.DESCENDING);
 		}

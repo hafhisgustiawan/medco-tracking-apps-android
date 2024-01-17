@@ -17,17 +17,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentManager;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.medco.trackingapp.R;
+import com.medco.trackingapp.adapter.ReportAdapter;
 import com.medco.trackingapp.databinding.ActivityWellBinding;
 import com.medco.trackingapp.fragment.CautionFragment;
 import com.medco.trackingapp.helper.SnackbarHelper;
+import com.medco.trackingapp.model.ReportItem;
 import com.medco.trackingapp.model.WellItem;
 
 public class WellActivity extends BaseActivity {
@@ -42,13 +48,7 @@ public class WellActivity extends BaseActivity {
 	private DocumentReference currentUserRef;
 	private DocumentReference currentWellRef;
 	private WellItem mWellItem;
-
-	//location
-	/*private MapsApiInterface mapsApiInterface;
-	private Location mLocation;
-	private FusedLocationProviderClient fusedLocationProviderClient;
-	private LocationRequest locationRequest;
-	private LocationCallback locationCallback;*/
+	private ReportAdapter reportAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,45 +76,9 @@ public class WellActivity extends BaseActivity {
 		currentWellRef = firebaseFirestore.document(path);
 		binding.setCurrentWellRef(currentWellRef);
 
-//		mapsApiInterface = MapsApiClient.getClient().create(MapsApiInterface.class);
-
-		/*fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mContext);
-		locationRequest = new LocationRequest.Builder(Priority
-			.PRIORITY_HIGH_ACCURACY, 30000)
-			.setWaitForAccurateLocation(false)
-			.setMinUpdateIntervalMillis(5000)
-			.setMaxUpdateDelayMillis(100)
-			.build();
-
-		locationCallback = new LocationCallback() {
-			@Override
-			public void onLocationResult(@NonNull LocationResult locationResult) {
-				super.onLocationResult(locationResult);
-				//save the location
-				mLocation = locationResult.getLastLocation();
-				if (mLocation != null) {
-					getDistance(mLocation);
-				}
-
-				new Handler().postDelayed(() -> stopLocationUpdate(), 500);
-			}
-		};
-		checkPermission();*/
-
 		initViews();
 		initListeners();
 	}
-
-	/*private void checkPermission() {
-		if (isPermissionGranted()) {
-			startLocationUpdate();
-			return;
-		}
-
-		String[] permitStr = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-			Manifest.permission.ACCESS_COARSE_LOCATION};
-		permissionLauncher.launch(permitStr);
-	}*/
 
 	@Override
 	public void initViews() {
@@ -136,7 +100,7 @@ public class WellActivity extends BaseActivity {
 			mWellItem = tsk.getResult().toObject(WellItem.class);
 			binding.setWellItem(mWellItem);
 
-//			initRecyclerReport();
+			initRecyclerReport();
 		});
 	}
 
@@ -194,6 +158,35 @@ public class WellActivity extends BaseActivity {
 		});
 	}
 
+	private void initRecyclerReport() {
+		if (currentWellRef == null) return;
+		PagedList.Config config = new PagedList.Config.Builder()
+			.setInitialLoadSizeHint(1)
+			.setPageSize(100)
+			.build();
+
+		Query query = reportColl.orderBy("createdAt", Query.Direction.DESCENDING);
+
+		FirestorePagingOptions<ReportItem> options = new FirestorePagingOptions.Builder
+			<ReportItem>().setLifecycleOwner(this).setQuery(query, config, ReportItem.class)
+			.build();
+
+		reportAdapter = new ReportAdapter(options, mContext);
+		binding.rvReport.setLayoutManager(new LinearLayoutManager(mContext));
+		binding.rvReport.setAdapter(reportAdapter);
+
+		reportAdapter.setOnStateChangeListener(e -> {
+			if (e != null) showError(e);
+			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
+
+			if (reportAdapter.getItemCount() > 0) {
+				binding.tvNotFound.setVisibility(View.GONE);
+				return;
+			}
+			binding.tvNotFound.setVisibility(View.VISIBLE);
+		});
+	}
+
 	private void deleteWellData() {
 		if (currentWellRef == null) return;
 		showProgress();
@@ -237,59 +230,12 @@ public class WellActivity extends BaseActivity {
 		fragment.show(fragmentManager, TAG);
 	}
 
-	/*private void getDistance(Location location) {
-		if (mWellItem == null) return;
-		if (mWellItem.getLocation() == null) return;
-		mapsApiInterface.getDistance(BuildConfig.MAPS_API_KEY, location.getLatitude() + ","
-				+ location.getLongitude(), mWellItem.getLocation()
-				.getLatitude() + "," + mWellItem.getLocation()
-				.getLongitude())
-			.subscribeOn(Schedulers.io())
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(new SingleObserver<ResultMapsDistanceItem>() {
-				@Override
-				public void onSubscribe(@NonNull Disposable d) {
-
-				}
-
-				@SuppressLint("SetTextI18n")
-				@Override
-				public void onSuccess(@NonNull ResultMapsDistanceItem resultMapsDistanceItem) {
-
-					ResultMapsDistanceItem.Distance distance = resultMapsDistanceItem.getRows()
-						.get(0).getElements().get(0).getDistance();
-					ResultMapsDistanceItem.Duration duration = resultMapsDistanceItem.getRows()
-						.get(0).getElements().get(0).getDuration();
-
-					if (distance == null || duration == null) return;
-
-					DistanceDurationItem item = new DistanceDurationItem();
-					item.setDistance(distance.getText());
-					item.setDuration(duration.getText());
-					binding.setDistanceDurationItem(item);
-
-//					binding.tvDistance.setText(distance.getText());
-//					binding.tvTravelingTime.setText(duration.getText());
-				}
-
-				@Override
-				public void onError(@NonNull Throwable e) {
-					showErrorThrowable(e);
-				}
-			});
-	}*/
 
 	private void showError(Exception e) {
 		if (e == null) return;
 		snackbarHelper.show(e.getMessage(), Snackbar.LENGTH_INDEFINITE);
 		Log.e(TAG, "showError: ", e);
 	}
-
-	/*private void showErrorThrowable(Throwable e) {
-		if (e == null) return;
-		snackbarHelper.show(e.getMessage(), Snackbar.LENGTH_INDEFINITE);
-		Log.e(TAG, "showError: ", e);
-	}*/
 
 	private void showProgress() {
 		binding.progressbar.setVisibility(View.VISIBLE);
@@ -305,33 +251,4 @@ public class WellActivity extends BaseActivity {
 		binding.layoutMain.setVisibility(View.VISIBLE);
 		getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 	}
-
-	/*@SuppressLint("MissingPermission")
-	private void startLocationUpdate() {
-		if (fusedLocationProviderClient == null) return;
-		fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-			locationCallback, null);
-	}
-
-	private void stopLocationUpdate() {
-		if (fusedLocationProviderClient == null) return;
-		fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-	}
-
-	@SuppressLint("InlinedApi")
-	private boolean isPermissionGranted() {
-		return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
-			== PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext,
-			Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-	}
-
-	ActivityResultLauncher<String[]> permissionLauncher = registerForActivityResult(
-		new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-			Log.d(TAG, ": " + result.toString());
-			if (result.containsValue(false)) {
-				showError(new CustomException("Izinkan akses!", new Throwable()));
-			} else {
-				checkPermission();
-			}
-		});*/
 }

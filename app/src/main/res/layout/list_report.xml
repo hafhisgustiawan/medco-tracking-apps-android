@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<data>
 
+		<variable
+			name="reportItem"
+			type="com.medco.trackingapp.model.ReportItem" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_marginHorizontal="16sp"
 		android:layout_marginBottom="16sp"
-		android:background="@drawable/state_select_soft_primary_dark"
-		android:padding="12sp">
+		android:background="@drawable/state_select_soft_primary_dark">
 
-		<!--<com.google.android.material.imageview.ShapeableImageView
-			android:id="@+id/img_complaint"
-			complaintImgSource="@{item}"
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/img_report"
+			reportImageSource="@{reportItem}"
 			android:layout_width="0sp"
 			android:layout_height="0sp"
-			android:layout_marginTop="8sp"
+			android:layout_margin="12sp"
 			android:background="@color/dark_white"
-			app:layout_constraintBottom_toBottomOf="@id/tv_date"
+			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintDimensionRatio="1:1"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/separator_1"
+			app:layout_constraintTop_toTopOf="parent"
 			app:shapeAppearanceOverlay="@style/ShapeNormalCorner"
 			tools:ignore="ImageContrastCheck" />
 
@@ -31,138 +35,118 @@
 			android:id="@+id/tv_title"
 			android:layout_width="0sp"
 			android:layout_height="wrap_content"
-			android:layout_marginVertical="8sp"
-			android:layout_marginStart="12sp"
-			android:layout_marginEnd="3sp"
+			android:layout_margin="12sp"
 			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_title_complaint"
+			android:hint="@string/txt_placeholder_title_report"
 			android:maxLines="1"
-			android:text='@{item.title}'
+			android:text='@{reportItem.report}'
 			android:textColor="@color/black"
-			android:textSize="12sp"
+			android:textSize="14sp"
 			android:textStyle="bold"
-			app:layout_constraintEnd_toStartOf="@id/tv_status"
-			app:layout_constraintStart_toEndOf="@id/img_complaint"
-			app:layout_constraintTop_toBottomOf="@id/separator_1" />
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/img_report"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<com.google.android.material.imageview.ShapeableImageView
+			android:id="@+id/img_user"
+			initUserPhotoFromRef="@{reportItem.userRef}"
+			android:layout_width="18sp"
+			android:layout_height="0sp"
+			android:layout_marginHorizontal="12sp"
+			android:layout_marginVertical="4sp"
+			android:background="@color/dark_white"
+			app:layout_constraintDimensionRatio="1:1"
+			app:layout_constraintStart_toEndOf="@id/img_report"
+			app:layout_constraintTop_toBottomOf="@id/tv_title"
+			app:shapeAppearanceOverlay="@style/ShapeCircle"
+			tools:ignore="ImageContrastCheck" />
 
 		<TextView
-			android:id="@+id/tv_description"
-			setComplainDescription="@{item}"
+			android:id="@+id/tv_name_user"
 			android:layout_width="0sp"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="12sp"
-			android:layout_marginTop="4sp"
 			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_desc_complaint"
 			android:maxLines="1"
-			android:textColor="@color/text_transparent"
+			android:textColor="@color/black"
 			android:textSize="10sp"
+			initUserNameFromRef="@{reportItem.userRef}"
+			android:hint="@string/txt_placeholder_name"
+			android:layout_marginStart="6sp"
+			android:layout_marginEnd="12sp"
+			app:layout_constraintTop_toTopOf="@id/img_user"
+			app:layout_constraintBottom_toBottomOf="@id/img_user"
+			app:layout_constraintStart_toEndOf="@id/img_user"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_complaint"
-			app:layout_constraintTop_toBottomOf="@id/tv_title"
 			tools:ignore="SmallSp" />
 
 		<TextView
-			android:id="@+id/tv_status"
-			initComplaintStatus="@{item}"
+			android:id="@+id/tv_well_name"
+			initWellNameFromRef="@{reportItem.wellRef}"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:background="@drawable/bg_btn_red"
-			android:drawablePadding="3sp"
+			android:layout_marginStart="12sp"
+			android:layout_marginTop="4sp"
+			android:background="@drawable/bg_btn_soft_primary_dark"
+			android:drawablePadding="4sp"
 			android:gravity="center_vertical"
-			android:hint="@string/text_placeholder_complaint_status"
+			android:hint="@string/well"
 			android:paddingHorizontal="6sp"
-			android:paddingVertical="3sp"
-			android:textColor="@color/white"
-			android:textSize="8sp"
-			app:drawableStartCompat="@drawable/verified_user_black_12dp"
-			app:drawableTint="@color/white"
-			app:layout_constraintBottom_toBottomOf="@id/tv_title"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintTop_toTopOf="@id/tv_title"
+			android:paddingVertical="0sp"
+			android:textColor="@color/colorPrimaryDark"
+			android:textColorHint="@color/colorPrimaryDark"
+			android:textSize="10sp"
+			app:drawableStartCompat="@drawable/baseline_all_out_18"
+			app:drawableTint="@color/colorPrimaryDark"
+			app:layout_constraintStart_toEndOf="@id/img_report"
+			app:layout_constraintTop_toBottomOf="@id/img_user"
 			tools:ignore="SmallSp,TextContrastCheck" />
 
 		<TextView
-			android:id="@+id/tv_address"
-			android:layout_width="0sp"
+			android:id="@+id/tv_category"
+			initWellCategoriesFromRef="@{reportItem.wellRef}"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginStart="10sp"
-			android:layout_marginTop="8sp"
+			android:layout_marginStart="6sp"
+			android:background="@drawable/bg_btn_soft_primary_dark"
 			android:drawablePadding="4sp"
-			android:ellipsize="end"
 			android:gravity="center_vertical"
-			android:hint="@string/txt_placeholder_address_complaint"
-			android:maxLines="1"
-			android:text='@{item.address}'
-			android:textColor="@color/text_transparent"
+			android:hint="@string/txt_placeholder_category"
+			android:paddingHorizontal="6sp"
+			android:paddingVertical="2sp"
+			android:textColor="@color/colorPrimaryDark"
+			android:textColorHint="@color/colorPrimaryDark"
 			android:textSize="10sp"
-			app:drawableStartCompat="@drawable/place_black_16dp"
-			app:drawableTint="@color/text_transparent"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_complaint"
-			app:layout_constraintTop_toBottomOf="@id/tv_description"
-			tools:ignore="SmallSp" />
+			app:drawableStartCompat="@drawable/baseline_category_16"
+			app:drawableTint="@color/colorPrimaryDark"
+			app:layout_constraintBottom_toBottomOf="@id/tv_well_name"
+			app:layout_constraintStart_toEndOf="@id/tv_well_name"
+			app:layout_constraintTop_toTopOf="@id/tv_well_name"
+			tools:ignore="SmallSp,TextContrastCheck" />
 
 		<TextView
 			android:id="@+id/tv_date"
+			formatTimestampTv="@{reportItem.createdAt}"
 			android:layout_width="0sp"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="10sp"
 			android:layout_marginTop="4sp"
+			android:layout_marginEnd="12sp"
+			android:layout_marginBottom="12sp"
 			android:drawablePadding="4sp"
 			android:ellipsize="end"
 			android:gravity="center_vertical"
 			android:hint="@string/txt_placeholder_date"
 			android:maxLines="1"
-			android:text='@{item.timeCreated != null ? formatter.format(item.timeCreated.toDate) : "-"}'
+			android:paddingStart="2sp"
 			android:textColor="@color/text_transparent"
 			android:textSize="10sp"
-			app:drawableStartCompat="@drawable/event_black_18dp"
+			app:drawableStartCompat="@drawable/baseline_event_18"
 			app:drawableTint="@color/text_transparent"
+			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/img_complaint"
-			app:layout_constraintTop_toBottomOf="@id/tv_address"
-			tools:ignore="SmallSp" />
-
-		<View
-			android:id="@+id/separator_2"
-			android:layout_width="match_parent"
-			android:layout_height="1.5sp"
-			android:layout_marginTop="8sp"
-			android:background="@color/soft_white"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/tv_date"
-			tools:ignore="SmallSp" />
-
-		<TextView
-			android:id="@+id/tv_label_date"
-			android:layout_width="0sp"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="6sp"
-			android:ellipsize="end"
-			android:maxLines="1"
-			android:text="@string/txt_date"
-			android:textColor="@color/text_transparent"
-			android:textSize="12sp"
-			app:layout_constraintEnd_toStartOf="@id/gl_center"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/separator_2" />
-
-		<TextView
-			android:id="@+id/tv_date_report"
-			android:layout_width="0sp"
-			android:layout_height="wrap_content"
-			android:ellipsize="end"
-			android:hint="@string/txt_placeholder_date"
-			android:maxLines="1"
-			android:textAlignment="textEnd"
-			android:textColor="@color/black"
-			android:textSize="12sp"
-			app:layout_constraintBottom_toBottomOf="@id/tv_label_date"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toEndOf="@id/gl_center"
-			app:layout_constraintTop_toTopOf="@id/tv_label_date" />-->
+			app:layout_constraintStart_toEndOf="@id/img_report"
+			app:layout_constraintTop_toBottomOf="@id/tv_well_name"
+			tools:ignore="RtlSymmetry,SmallSp" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

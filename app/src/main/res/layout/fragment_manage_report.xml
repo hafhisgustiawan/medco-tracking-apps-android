@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<data>
+
+		<variable
+			name="loading"
+			type="Boolean" />
+
+		<variable
+			name="currentReportRef"
+			type="com.google.firebase.firestore.DocumentReference" />
+
+		<variable
+			name="reportItem"
+			type="com.medco.trackingapp.model.ReportItem" />
+	</data>
+
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+		android:id="@+id/layout_main"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".fragment.ManageReportFragment">
+
+		<com.google.android.material.appbar.AppBarLayout
+			android:id="@+id/app_bar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/white"
+			android:elevation="0sp"
+			android:fitsSystemWindows="true"
+			app:elevation="0sp">
+
+			<com.google.android.material.appbar.CollapsingToolbarLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:elevation="0sp"
+				android:fitsSystemWindows="true"
+				app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+				<androidx.constraintlayout.widget.ConstraintLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content">
+
+					<View
+						android:id="@+id/line_top"
+						android:layout_width="100dp"
+						android:layout_height="5dp"
+						android:layout_gravity="center_horizontal"
+						android:layout_marginTop="6dp"
+						android:background="@drawable/line_bg"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent" />
+
+					<TextView
+						android:id="@+id/tv_title"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="16sp"
+						android:hint="@string/txt_title_manage_report"
+						android:text='@{currentReportRef == null ? "Tambah Pengguna" : "Perbarui Data Pengguna"}'
+						android:textColor="@color/black"
+						android:textSize="20sp"
+						android:textStyle="bold"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@id/line_top" />
+
+					<androidx.recyclerview.widget.RecyclerView
+						android:id="@+id/rv_image"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="24sp"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+				</androidx.constraintlayout.widget.ConstraintLayout>
+
+			</com.google.android.material.appbar.CollapsingToolbarLayout>
+
+		</com.google.android.material.appbar.AppBarLayout>
+
+		<androidx.core.widget.NestedScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/til_report"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilReportManageReport="@{reportItem}"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16dp"
+					android:layout_marginTop="24sp"
+					android:hint="@string/txt_label_til_report"
+					app:boxBackgroundColor="@color/softPrimaryDark"
+					app:endIconMode="clear_text"
+					app:errorEnabled="true"
+					app:errorTextAppearance="@style/error_appearance"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent"
+					tools:ignore="VisualLintBounds">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_report"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="textMultiLine"
+						android:paddingHorizontal="16dp"
+						android:paddingVertical="16dp"
+						android:textColor="@color/black"
+						android:textSize="14sp"
+						tools:ignore="TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/til_condition"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilConditionManageReport="@{reportItem}"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16dp"
+					android:hint="@string/txt_label_til_condition"
+					app:boxBackgroundColor="@color/softPrimaryDark"
+					app:endIconMode="clear_text"
+					app:errorEnabled="true"
+					app:errorTextAppearance="@style/error_appearance"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/til_report"
+					tools:ignore="VisualLintBounds">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_condition"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="textMultiLine"
+						android:paddingHorizontal="16dp"
+						android:paddingVertical="16dp"
+						android:textColor="@color/black"
+						android:textSize="14sp"
+						tools:ignore="TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:id="@+id/til_note"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					validateTilNoteManageReport="@{reportItem}"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16dp"
+					android:hint="@string/txt_label_note"
+					app:boxBackgroundColor="@color/softPrimaryDark"
+					app:endIconMode="clear_text"
+					app:errorEnabled="true"
+					app:errorTextAppearance="@style/error_appearance"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/til_condition"
+					tools:ignore="VisualLintBounds">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_note"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:inputType="textMultiLine"
+						android:paddingHorizontal="16dp"
+						android:paddingVertical="16dp"
+						android:textColor="@color/black"
+						android:textSize="14dp"
+						tools:ignore="SpUsage,TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<com.google.android.material.button.MaterialButton
+					android:id="@+id/btn_save"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="16sp"
+					android:layout_marginTop="16sp"
+					android:backgroundTint="@color/colorPrimaryDark"
+					android:hint="@string/txt_save"
+					android:paddingVertical="16sp"
+					android:text='@{currentReportRef == null ? "tambah" : "simpan"}'
+					android:textColor="@color/white"
+					android:textSize="14sp"
+					app:cornerRadius="8sp"
+					validateBtnManageReport="@{reportItem}"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/til_note"
+					tools:ignore="VisualLintOverlap,VisualLintBounds,VisualLintButtonSize" />
+
+				<TextView
+					android:id="@+id/tv_close"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_margin="16sp"
+					android:text="@string/txt_close"
+					android:textColor="@color/red"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/btn_save" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
+
+		</androidx.core.widget.NestedScrollView>
+
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

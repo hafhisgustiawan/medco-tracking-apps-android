@@ -112,6 +112,7 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 								});
 						}).create().show();
 				} else if (item.getItemId() == R.id.action_delete) {
+					//todo : INI BELUM ADA MENU ITEM NYA
 					new AlertDialog.Builder(mContext)
 						.setMessage("Tindakan ini hanya akan berhasil jika pengguna belum pernah " +
 							"masuk ke dalam aplikasi!")
@@ -130,7 +131,8 @@ public class UserAdapter extends FirestorePagingAdapter<UserItem,
 
 									List<String> methods = t.getResult().getSignInMethods();
 									if (methods == null || methods.isEmpty()) {
-										Toast.makeText(mContext, model.getEmail() + " Bisa hapus", Toast.LENGTH_SHORT).show();
+										Toast.makeText(mContext, model.getEmail() + " Bisa hapus", Toast
+											.LENGTH_SHORT).show();
 										/*snapshot.getReference().delete()
 											.addOnCompleteListener(task -> {
 												listener.onItemClick(View.GONE);

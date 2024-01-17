@@ -23,10 +23,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.medco.trackingapp.R;
+import com.medco.trackingapp.adapter.ReportAdapter;
 import com.medco.trackingapp.adapter.WellAdapter;
 import com.medco.trackingapp.databinding.FragmentHomeBinding;
 import com.medco.trackingapp.helper.CustomException;
 import com.medco.trackingapp.helper.SnackbarHelper;
+import com.medco.trackingapp.model.ReportItem;
 import com.medco.trackingapp.model.UserItem;
 import com.medco.trackingapp.model.WellItem;
 
@@ -36,7 +38,6 @@ public class HomeFragment extends BaseFragment {
 	//callback
 	public ListenerChange listenerChange;
 	private Context mContext;
-	private FragmentActivity mActivity;
 	private FragmentHomeBinding binding;
 	private Animation animation;
 	private SnackbarHelper snackbarHelper;
@@ -47,7 +48,8 @@ public class HomeFragment extends BaseFragment {
 	private DocumentReference currentUserRef;
 
 	//adapter
-	private WellAdapter adapter;
+	private WellAdapter wellAdapter;
+	private ReportAdapter reportAdapter;
 
 	public HomeFragment() {
 		// Required empty public constructor
@@ -66,7 +68,7 @@ public class HomeFragment extends BaseFragment {
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
 													 Bundle savedInstanceState) {
 		mContext = requireContext();
-		mActivity = requireActivity();
+		FragmentActivity mActivity = requireActivity();
 		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
 		binding = FragmentHomeBinding.inflate(inflater, container, false);
 		snackbarHelper = new SnackbarHelper(mActivity.findViewById(android.R.id
@@ -95,6 +97,7 @@ public class HomeFragment extends BaseFragment {
 	public void initViews() {
 		initUserLogin();
 		initRecyclerWell();
+		initRecyclerReport();
 	}
 
 	@Override
@@ -121,8 +124,6 @@ public class HomeFragment extends BaseFragment {
 	}
 
 	private void initRecyclerWell() {
-		showProgress();
-
 		PagedList.Config config = new PagedList.Config.Builder()
 			.setInitialLoadSizeHint(1)
 			.setPageSize(100)
@@ -134,20 +135,46 @@ public class HomeFragment extends BaseFragment {
 			.setLifecycleOwner(this)
 			.setQuery(query, config, WellItem.class).build();
 
-		adapter = new WellAdapter(options, mContext, "horizontal");
+		wellAdapter = new WellAdapter(options, mContext, "horizontal");
 		binding.rvWell.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager
 			.HORIZONTAL, false));
-		binding.rvWell.setAdapter(adapter);
+		binding.rvWell.setAdapter(wellAdapter);
 
-		adapter.setOnStateChangeListener(e -> {
+		wellAdapter.setOnStateChangeListener(e -> {
 			if (e != null) showError(e);
-			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
-
-			if (adapter.getItemCount() > 0) {
+			if (wellAdapter.getItemCount() > 0) {
 				binding.tvNotFoundWell.setVisibility(View.GONE);
 				return;
 			}
 			binding.tvNotFoundWell.setVisibility(View.VISIBLE);
+		});
+	}
+
+	private void initRecyclerReport() {
+		PagedList.Config config = new PagedList.Config.Builder()
+			.setInitialLoadSizeHint(1)
+			.setPageSize(100)
+			.build();
+
+		Query query = reportColl.orderBy("createdAt", Query.Direction.DESCENDING);
+
+		FirestorePagingOptions<ReportItem> options = new FirestorePagingOptions.Builder
+			<ReportItem>().setLifecycleOwner(this).setQuery(query, config, ReportItem.class)
+			.build();
+
+		reportAdapter = new ReportAdapter(options, mContext);
+		binding.rvReport.setLayoutManager(new LinearLayoutManager(mContext));
+		binding.rvReport.setAdapter(reportAdapter);
+
+		reportAdapter.setOnStateChangeListener(e -> {
+			if (e != null) showError(e);
+			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
+
+			if (reportAdapter.getItemCount() > 0) {
+				binding.tvNotFoundReport.setVisibility(View.GONE);
+				return;
+			}
+			binding.tvNotFoundReport.setVisibility(View.VISIBLE);
 		});
 	}
 

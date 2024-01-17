@@ -63,7 +63,7 @@
 	<string name="text_title_detail_well">Detail Sumur</string>
 	<string name="txt_placeholder_title_well">Judul atau Nama Sumur</string>
 	<string name="placeholder_address">Jl. Malikussaleh, Beuringen, Kab. Aceh Utara</string>
-	<string name="txt_placeholder_category">Kategori sumur</string>
+	<string name="txt_placeholder_category">Kategori</string>
 	<string name="txt_description">Deskripsi Sumur</string>
 	<string name="distance">Jarak tempuh</string>
 	<string name="traveling_time">Waktu tempuh</string>
@@ -97,4 +97,13 @@
 	<string name="txt_closest_route">Rute Terdekat</string>
 	<string name="txt_date">Tanggal</string>
 	<string name="txt_route_not_available">Rute tidak ditemukan</string>
+	<string name="txt_placeholder_title_report">Ini adalah report utama</string>
+	<string name="txt_mine">Milik saya</string>
+	<string name="txt_title_manage_report">Tambah Laporan</string>
+	<string name="txt_label_til_report">Isi judul laporan</string>
+	<string name="txt_label_til_condition">Isi kondisi sumur</string>
+	<string name="txt_label_note">Isi catatan atau nama personil</string>
+	<string name="text_title_detail_report">Detail Laporan</string>
+	<string name="txt_title_condition">Kondisi Sumur</string>
+	<string name="txt_title_note">Catatan atau Personil</string>
 </resources>
