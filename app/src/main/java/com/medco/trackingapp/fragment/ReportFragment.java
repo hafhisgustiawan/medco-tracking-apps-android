@@ -12,12 +12,15 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -28,9 +31,15 @@ import com.medco.trackingapp.R;
 import com.medco.trackingapp.adapter.ReportAdapter;
 import com.medco.trackingapp.databinding.FragmentReportBinding;
 import com.medco.trackingapp.helper.SnackbarHelper;
+import com.medco.trackingapp.model.FilterItem;
 import com.medco.trackingapp.model.ReportItem;
-import com.medco.trackingapp.model.viewmodel.StringViewModel;
+import com.medco.trackingapp.model.UserItem;
+import com.medco.trackingapp.model.viewmodel.FilterViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 public class ReportFragment extends BaseFragment {
@@ -43,7 +52,10 @@ public class ReportFragment extends BaseFragment {
 	private DocumentReference currentUserRef;
 	private CollectionReference reportColl;
 	private ReportAdapter adapter;
-	private StringViewModel mViewModel;
+	private UserItem mUserItem;
+	private FilterViewModel mViewModel;
+	private Locale localeID;
+	private SimpleDateFormat dateFormat;
 
 	public ReportFragment() {
 		// Required empty public constructor
@@ -72,20 +84,41 @@ public class ReportFragment extends BaseFragment {
 		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
 			.document(firebaseUser.getUid());
 
+		mViewModel = new ViewModelProvider(this).get(FilterViewModel.class);
 
-		mViewModel = new ViewModelProvider(this).get(StringViewModel.class);
+		localeID = new Locale("in", "ID");
+		dateFormat = new SimpleDateFormat("dd/MM/yy", localeID);
 
 		initViews();
 		initListeners();
 		return binding.getRoot();
 	}
 
+	@SuppressLint("SetTextI18n")
 	@Override
 	public void initViews() {
-		binding.setUserRef(currentUserRef);
+//		binding.setUserRef(currentUserRef);
+		showProgress();
+		currentUserRef.get().addOnCompleteListener(task -> {
+			dismissProgress();
+			if (!task.isSuccessful()) {
+				showError(task.getException());
+				return;
+			}
+			mUserItem = task.getResult().toObject(UserItem.class);
+		});
 
-		mViewModel.getStringState().observe(getViewLifecycleOwner(), s -> {
-			binding.tvFilter.setText(Objects.equals(s, "") ? "Semua" : "Milik saya");
+		mViewModel.getFilterState().observe(getViewLifecycleOwner(), filterItem -> {
+			if (filterItem == null) return;
+			if (filterItem.getPair() != null) {
+				binding.tvResult.setText("Hasil " + dateFormat.format(new Date(filterItem.getPair()
+					.first)) + " - " + dateFormat.format(new Date(filterItem.getPair().second)));
+			} else {
+				binding.tvResult.setText(getString(R.string.txt_placeholder_result));
+			}
+
+			binding.tvFilter.setText(filterItem.getPair() != null ? "Rentang tanggal" : Objects
+				.equals(filterItem.getLabel(), "mine") ? "Milik saya" : "Semua");
 			initRecyclerView();
 		});
 	}
@@ -104,15 +137,31 @@ public class ReportFragment extends BaseFragment {
 	@Override
 	public void initListeners() {
 		binding.tvFilter.setOnClickListener(view -> {
+			if (mUserItem == null || mUserItem.getRole() == null) return;
 			PopupMenu popupMenu = new PopupMenu(mContext, binding.tvFilter);
-			popupMenu.inflate(R.menu.filter_report_menu);
+
+			if (Objects.equals(mUserItem.getRole(), "admin")) {
+				popupMenu.inflate(R.menu.filter_report_menu_admin);
+			} else {
+				popupMenu.inflate(R.menu.filter_report_menu);
+			}
+
 			popupMenu.setOnMenuItemClickListener(item -> {
+				FilterItem filterItem = mViewModel.getFilterState().getValue();
+				if (filterItem == null) return false;
 				switch (item.getItemId()) {
 					case R.id.action_all:
-						mViewModel.setStringState("");
+						filterItem.setPair(null);
+						filterItem.setLabel("");
+						mViewModel.setFilterState(filterItem);
 						break;
 					case R.id.action_mine:
-						mViewModel.setStringState("mine");
+						filterItem.setPair(null);
+						filterItem.setLabel("mine");
+						mViewModel.setFilterState(filterItem);
+						break;
+					case R.id.action_select_range:
+						showRangeDatePicker();
 						break;
 				}
 				return false;
@@ -121,9 +170,24 @@ public class ReportFragment extends BaseFragment {
 		});
 	}
 
-	private void initRecyclerView() {
-		showProgress();
+	private void showRangeDatePicker() {
+		MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder
+			.dateRangePicker()
+			.setTitleText("Pilih Rentang Tanggal")
+			.setSelection(Pair.create(MaterialDatePicker.thisMonthInUtcMilliseconds(),
+				MaterialDatePicker.todayInUtcMilliseconds())).build();
+		materialDatePicker.addOnPositiveButtonClickListener(selection -> {
+			FilterItem item = mViewModel.getFilterState().getValue();
+			if (item == null) return;
+			item.setPair(selection);
+			item.setLabel("");
+			mViewModel.setFilterState(item);
+		});
+		materialDatePicker.show(getChildFragmentManager(), TAG);
+	}
 
+	private void initRecyclerView() {
+		if (getQuery() == null) return;
 		PagedList.Config config = new PagedList.Config.Builder()
 			.setInitialLoadSizeHint(1)
 			.setPageSize(100)
@@ -139,7 +203,6 @@ public class ReportFragment extends BaseFragment {
 
 		adapter.setOnStateChangeListener(e -> {
 			if (e != null) showError(e);
-			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
 
 			if (adapter.getItemCount() > 0) {
 				binding.tvNotFound.setVisibility(View.GONE);
@@ -150,12 +213,44 @@ public class ReportFragment extends BaseFragment {
 	}
 
 	private Query getQuery() {
-		String catStr = mViewModel.getStringState().getValue();
-		if (!Objects.equals(catStr, "")) {
+		FilterItem item = mViewModel.getFilterState().getValue();
+		if (item == null || currentUserRef == null) return null;
+
+		if (item.getPair() != null) {
+			return reportColl
+				.whereGreaterThanOrEqualTo("createdAt", getTimestampDayStart(item.getPair().first))
+				.whereLessThanOrEqualTo("createdAt", getTimestampDayEnd(item.getPair().second))
+				.orderBy("createdAt", Query.Direction.DESCENDING);
+		}
+
+
+		if (Objects.equals(item.getLabel(), "mine")) {
 			return reportColl.whereEqualTo("userRef", currentUserRef).orderBy("createdAt",
 				Query.Direction.DESCENDING);
 		}
 		return reportColl.orderBy("createdAt", Query.Direction.DESCENDING);
+	}
+
+	private Timestamp getTimestampDayStart(Long timeFirst) {
+		Date date = new Date(timeFirst);
+		Calendar calendarStart = Calendar.getInstance(localeID);
+		calendarStart.setTime(date);
+		calendarStart.set(Calendar.HOUR_OF_DAY, 0);
+		calendarStart.set(Calendar.MINUTE, 0);
+		calendarStart.set(Calendar.SECOND, 0);
+
+		return new Timestamp(calendarStart.getTime());
+	}
+
+	private Timestamp getTimestampDayEnd(Long timeSecond) {
+		Date date = new Date(timeSecond);
+		Calendar calendarStart = Calendar.getInstance(localeID);
+		calendarStart.setTime(date);
+		calendarStart.set(Calendar.HOUR_OF_DAY, 23);
+		calendarStart.set(Calendar.MINUTE, 59);
+		calendarStart.set(Calendar.SECOND, 59);
+
+		return new Timestamp(calendarStart.getTime());
 	}
 
 	private void showError(Exception e) {

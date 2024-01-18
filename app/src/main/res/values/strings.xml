@@ -106,4 +106,5 @@
 	<string name="text_title_detail_report">Detail Laporan</string>
 	<string name="txt_title_condition">Kondisi Sumur</string>
 	<string name="txt_title_note">Catatan atau Personil</string>
+	<string name="txt_range_date">Rentang tanggal</string>
 </resources>

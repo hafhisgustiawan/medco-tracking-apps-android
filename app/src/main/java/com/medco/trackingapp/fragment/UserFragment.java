@@ -7,8 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
@@ -40,7 +38,7 @@ public class UserFragment extends BaseFragment {
 	private FragmentUserBinding binding;
 	private FragmentManager fragmentManager;
 	private SnackbarHelper snackbarHelper;
-	private Animation animation;
+	//	private Animation animation;
 	private CollectionReference userColl;
 	private DocumentReference currentUserRef;
 	private UserAdapter adapter;
@@ -62,7 +60,7 @@ public class UserFragment extends BaseFragment {
 		mContext = requireContext();
 		binding = FragmentUserBinding.inflate(inflater, container, false);
 		fragmentManager = requireActivity().getSupportFragmentManager();
-		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
+//		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
 		snackbarHelper = new SnackbarHelper(requireActivity().findViewById(android.R.id
 			.content), binding.anchorPoint);
 
@@ -139,7 +137,7 @@ public class UserFragment extends BaseFragment {
 	}
 
 	private void initRecyclerView() {
-		showProgress();
+//		showProgress();
 		PagedList.Config config = new PagedList.Config.Builder()
 			.setInitialLoadSizeHint(1)
 			.setPageSize(100)
@@ -157,7 +155,7 @@ public class UserFragment extends BaseFragment {
 			(visibility));
 		adapter.setOnStateChangeListener(e -> {
 			if (e != null) showError(e);
-			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
+//			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
 
 			if (adapter.getItemCount() > 0) {
 				binding.tvNotFound.setVisibility(View.GONE);
@@ -197,7 +195,7 @@ public class UserFragment extends BaseFragment {
 		Log.e(TAG, "showError: ", e);
 	}
 
-	private void showProgress() {
+	/*private void showProgress() {
 		binding.progressbar.setVisibility(View.VISIBLE);
 		binding.rvUser.setVisibility(View.INVISIBLE);
 		binding.tvNotFound.setVisibility(View.GONE);
@@ -207,5 +205,5 @@ public class UserFragment extends BaseFragment {
 		binding.progressbar.setVisibility(View.GONE);
 		binding.rvUser.setAnimation(animation);
 		binding.rvUser.setVisibility(View.VISIBLE);
-	}
+	}*/
 }

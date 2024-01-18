@@ -5,10 +5,6 @@
 		android:title="@string/txt_all" />
 
 	<item
-		android:id="@+id/action_mine"
-		android:title="@string/txt_mine"/>
-
-	<item
 		android:id="@+id/action_select_range"
 		android:title="@string/txt_range_date"/>
 </menu>

@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
@@ -40,7 +38,7 @@ public class WellFragment extends BaseFragment {
 	private Context mContext;
 	private FragmentWellBinding binding;
 	private SnackbarHelper snackbarHelper;
-	private Animation animation;
+	//	private Animation animation;
 	private CollectionReference wellColl;
 	private DocumentReference currentUserRef;
 	private WellAdapter adapter;
@@ -62,7 +60,7 @@ public class WellFragment extends BaseFragment {
 													 Bundle savedInstanceState) {
 		mContext = requireContext();
 		binding = FragmentWellBinding.inflate(inflater, container, false);
-		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
+//		animation = AnimationUtils.loadAnimation(mContext, R.anim.fadein);
 		snackbarHelper = new SnackbarHelper(requireActivity().findViewById(android.R.id
 			.content), binding.anchorPoint);
 
@@ -135,7 +133,7 @@ public class WellFragment extends BaseFragment {
 	}
 
 	private void initRecyclerView() {
-		showProgress();
+//		showProgress();
 
 		PagedList.Config config = new PagedList.Config.Builder()
 			.setInitialLoadSizeHint(1)
@@ -152,7 +150,7 @@ public class WellFragment extends BaseFragment {
 
 		adapter.setOnStateChangeListener(e -> {
 			if (e != null) showError(e);
-			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
+//			if (binding.progressbar.getVisibility() == View.VISIBLE) dismissProgress();
 
 			if (adapter.getItemCount() > 0) {
 				binding.tvNotFound.setVisibility(View.GONE);
@@ -177,7 +175,7 @@ public class WellFragment extends BaseFragment {
 		Log.e(TAG, "showError: ", e);
 	}
 
-	private void showProgress() {
+	/*private void showProgress() {
 		binding.progressbar.setVisibility(View.VISIBLE);
 		binding.rvWell.setVisibility(View.INVISIBLE);
 		binding.tvNotFound.setVisibility(View.GONE);
@@ -187,5 +185,5 @@ public class WellFragment extends BaseFragment {
 		binding.progressbar.setVisibility(View.GONE);
 		binding.rvWell.setAnimation(animation);
 		binding.rvWell.setVisibility(View.VISIBLE);
-	}
+	}*/
 }

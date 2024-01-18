@@ -5,11 +5,6 @@
 
 	<data>
 
-		<import type="android.view.View" />
-
-		<variable
-			name="userRef"
-			type="com.google.firebase.firestore.DocumentReference" />
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -70,8 +65,8 @@
 
 				</com.google.android.material.appbar.CollapsingToolbarLayout>
 
+				<!--constraintLayoutVisibleForUser="@{userRef}"-->
 				<androidx.constraintlayout.widget.ConstraintLayout
-					constraintLayoutVisibleForUser="@{userRef}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:paddingHorizontal="16sp">

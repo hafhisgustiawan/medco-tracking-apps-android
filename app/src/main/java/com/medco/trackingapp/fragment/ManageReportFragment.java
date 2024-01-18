@@ -255,7 +255,7 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 
 		binding.btnSave.setOnClickListener(view -> {
 			if (adapter == null || adapter.getData() == null || adapter.getData().size() == 1) {
-				showError(new CustomException("Anda belum menambahkan foto sumur", new Throwable()));
+				showError(new CustomException("Anda belum menambahkan foto laporan", new Throwable()));
 				return;
 			}
 
@@ -519,7 +519,7 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_PICK);
-		pickPhotoLauncher.launch(Intent.createChooser(intent, "Pilih foto sumur"));
+		pickPhotoLauncher.launch(Intent.createChooser(intent, "Pilih foto laporan"));
 	}
 
 	private void showProgress() {

@@ -96,6 +96,13 @@ public class ReportActivity extends BaseActivity {
 	public void initListeners() {
 		binding.btnBack.setOnClickListener(view -> getOnBackPressedDispatcher().onBackPressed());
 
+		binding.tvWellName.setOnClickListener(view -> {
+			if (mReportItem == null || mReportItem.getWellRef() == null) return;
+			Intent intent = new Intent(mContext, WellActivity.class);
+			intent.putExtra("path", mReportItem.getWellRef().getPath());
+			startActivity(intent);
+		});
+
 		binding.btnMoreOption.setOnClickListener(view -> {
 			if (currentReportRef == null) return;
 			PopupMenu popupMenu = new PopupMenu(mContext, binding.btnMoreOption);
