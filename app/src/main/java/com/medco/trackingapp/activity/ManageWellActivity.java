@@ -418,6 +418,7 @@ public class ManageWellActivity extends BaseActivity {
 			wellItem.getImages().forEach(s -> {
 				ImageItem item = new ImageItem();
 				item.setImage(s);
+				item.setType(getString(R.string.collection_well));
 				adapter.addData(item);
 			});
 			adapter.addData(null);
@@ -428,7 +429,7 @@ public class ManageWellActivity extends BaseActivity {
 		Intent intent = new Intent();
 		intent.setType("image/*");
 		intent.setAction(Intent.ACTION_PICK);
-		pickPhotoLauncher.launch(Intent.createChooser(intent, "Pilih foto barang"));
+		pickPhotoLauncher.launch(Intent.createChooser(intent, "Pilih foto sumur"));
 	}
 
 	private void showError(Exception e) {

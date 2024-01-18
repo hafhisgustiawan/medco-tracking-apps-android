@@ -90,6 +90,16 @@ public class ReportFragment extends BaseFragment {
 		});
 	}
 
+	@Override
+	public void onResume() {
+		super.onResume();
+		if (adapter == null) {
+			initRecyclerView();
+		} else {
+			adapter.refresh();
+		}
+	}
+
 	@SuppressLint("NonConstantResourceId")
 	@Override
 	public void initListeners() {

@@ -32,6 +32,7 @@ import com.medco.trackingapp.R;
 import com.medco.trackingapp.adapter.ReportAdapter;
 import com.medco.trackingapp.databinding.ActivityWellBinding;
 import com.medco.trackingapp.fragment.CautionFragment;
+import com.medco.trackingapp.fragment.ManageReportFragment;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.ReportItem;
 import com.medco.trackingapp.model.WellItem;
@@ -104,6 +105,12 @@ public class WellActivity extends BaseActivity {
 		});
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		initRecyclerReport();
+	}
+
 	@SuppressLint("NonConstantResourceId")
 	@Override
 	public void initListeners() {
@@ -155,6 +162,21 @@ public class WellActivity extends BaseActivity {
 			Intent intent = new Intent(mContext, DirectionActivity.class);
 			intent.putExtra("path", currentWellRef.getPath());
 			mContext.startActivity(intent);
+		});
+
+		binding.btnAddReport.setOnClickListener(view -> {
+			if (fragmentManager.isDestroyed() || currentWellRef == null) return;
+			ManageReportFragment fragment = new ManageReportFragment(currentWellRef, null);
+			fragment.setCancelable(false);
+			fragment.ListenerApiClose(selector -> {
+				fragment.dismiss();
+				if (selector == 1) {
+					Toast.makeText(mContext, "Berhasil menambahkan laporan", Toast
+						.LENGTH_SHORT).show();
+					initRecyclerReport();
+				}
+			});
+			fragment.show(fragmentManager, TAG);
 		});
 	}
 

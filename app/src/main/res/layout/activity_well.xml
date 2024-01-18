@@ -282,98 +282,6 @@
 
 						</androidx.constraintlayout.widget.ConstraintLayout>
 
-						<!--<androidx.constraintlayout.widget.ConstraintLayout
-							android:id="@+id/distance_duration_layout"
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:layout_marginHorizontal="16sp"
-							android:layout_marginTop="16sp"
-							android:background="@drawable/bg_btn_white"
-							android:padding="16sp"
-							android:visibility='@{distanceDurationItem == null ? View.GONE : View.VISIBLE}'
-							app:layout_constraintEnd_toEndOf="parent"
-							app:layout_constraintStart_toStartOf="parent"
-							app:layout_constraintTop_toBottomOf="@id/layout_description">
-
-							<androidx.constraintlayout.widget.Guideline
-								android:id="@+id/gl"
-								android:layout_width="wrap_content"
-								android:layout_height="wrap_content"
-								android:orientation="vertical"
-								app:layout_constraintGuide_percent="0.5" />
-
-							<TextView
-								android:id="@+id/tv_title_distance"
-								android:layout_width="0sp"
-								android:layout_height="wrap_content"
-								android:text="@string/distance"
-								android:textColor="@color/text_transparent"
-								android:textSize="14sp"
-								app:layout_constraintEnd_toStartOf="@id/gl"
-								app:layout_constraintStart_toStartOf="parent"
-								app:layout_constraintTop_toTopOf="parent" />
-
-							<TextView
-								android:id="@+id/tv_title_traveling_time"
-								android:layout_width="0sp"
-								android:layout_height="wrap_content"
-								android:layout_marginTop="12sp"
-								android:text="@string/traveling_time"
-								android:textColor="@color/text_transparent"
-								android:textSize="14sp"
-								app:layout_constraintEnd_toStartOf="@id/gl"
-								app:layout_constraintStart_toStartOf="parent"
-								app:layout_constraintTop_toBottomOf="@id/tv_title_distance" />
-
-							<TextView
-								android:id="@+id/tv_distance"
-								android:layout_width="0sp"
-								android:layout_height="wrap_content"
-								android:ellipsize="start"
-								android:hint="@string/txt_min"
-								android:maxLines="1"
-								android:text="@{distanceDurationItem.distance}"
-								android:textAlignment="textEnd"
-								android:textColor="@color/black"
-								android:textSize="14sp"
-								android:textStyle="bold"
-								app:layout_constraintBottom_toBottomOf="@id/tv_title_distance"
-								app:layout_constraintEnd_toEndOf="parent"
-								app:layout_constraintStart_toEndOf="@id/gl"
-								app:layout_constraintTop_toTopOf="@id/tv_title_distance" />
-
-							<TextView
-								android:id="@+id/tv_traveling_time"
-								android:layout_width="0sp"
-								android:layout_height="wrap_content"
-								android:ellipsize="start"
-								android:hint="@string/txt_min"
-								android:maxLines="1"
-								android:text="@{distanceDurationItem.duration}"
-								android:textAlignment="textEnd"
-								android:textColor="@color/black"
-								android:textSize="14sp"
-								android:textStyle="bold"
-								app:layout_constraintBottom_toBottomOf="@id/tv_title_traveling_time"
-								app:layout_constraintEnd_toEndOf="parent"
-								app:layout_constraintStart_toEndOf="@id/gl"
-								app:layout_constraintTop_toTopOf="@id/tv_title_traveling_time" />
-
-						</androidx.constraintlayout.widget.ConstraintLayout>
-
-						<TextView
-							android:layout_width="match_parent"
-							android:layout_height="wrap_content"
-							android:layout_margin="16sp"
-							android:background="@drawable/bg_btn_white"
-							android:padding="16sp"
-							android:text="@string/txt_route_not_available"
-							android:textAlignment="center"
-							android:visibility='@{distanceDurationItem != null ? View.GONE : View.VISIBLE}'
-							app:layout_constraintEnd_toEndOf="parent"
-							app:layout_constraintStart_toStartOf="parent"
-							app:layout_constraintTop_toBottomOf="@id/distance_duration_layout" />-->
-
 					</androidx.constraintlayout.widget.ConstraintLayout>
 
 				</com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -383,8 +291,8 @@
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16sp"
 					android:layout_marginTop="24sp"
-					android:layout_marginBottom="8sp"
-					android:background="@drawable/bg_btn_white"
+					android:layout_marginBottom="16sp"
+					android:background="@drawable/bg_btn_primary_dark"
 					android:padding="16sp">
 
 					<TextView
@@ -393,7 +301,7 @@
 						android:layout_height="wrap_content"
 						android:layout_marginEnd="16sp"
 						android:text="@string/report"
-						android:textColor="@color/text_transparent"
+						android:textColor="@color/white"
 						android:textStyle="bold"
 						app:layout_constraintEnd_toStartOf="@id/btn_add_report"
 						app:layout_constraintStart_toStartOf="parent"
@@ -406,6 +314,7 @@
 						android:layout_height="wrap_content"
 						android:layout_marginTop="8sp"
 						android:layout_marginEnd="4sp"
+						android:textColor="@color/white"
 						android:text="@string/txt_total"
 						app:layout_constraintEnd_toStartOf="@id/btn_add_report"
 						app:layout_constraintStart_toStartOf="parent"
@@ -422,7 +331,7 @@
 						app:layout_constraintBottom_toBottomOf="parent"
 						app:layout_constraintEnd_toEndOf="parent"
 						app:layout_constraintTop_toTopOf="parent"
-						app:tint="@color/text_transparent"
+						app:tint="@color/white"
 						tools:ignore="TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
 				</androidx.constraintlayout.widget.ConstraintLayout>

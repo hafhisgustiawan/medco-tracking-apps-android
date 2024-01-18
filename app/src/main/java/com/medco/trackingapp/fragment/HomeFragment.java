@@ -101,6 +101,22 @@ public class HomeFragment extends BaseFragment {
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		if (wellAdapter == null) {
+			initRecyclerWell();
+		} else {
+			wellAdapter.refresh();
+		}
+
+		if (reportAdapter == null) {
+			initRecyclerReport();
+		} else {
+			reportAdapter.refresh();
+		}
+	}
+
+	@Override
 	public void initListeners() {
 		binding.btnManageAccount.setOnClickListener(view -> listenerChange
 			.onListenerChange(R.id.nav_acc));

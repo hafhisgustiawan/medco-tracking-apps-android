@@ -67,5 +67,11 @@ public class ManageReportBindAdapter {
 			Objects.equals(item.getNote(), "")) {
 			return;
 		}
+		if (!validateReportManageReport(item)) return;
+		if (!validateConditionManageReport(item)) return;
+		if (!validateNoteManageReport(item)) return;
+
+		btn.setEnabled(true);
+
 	}
 }

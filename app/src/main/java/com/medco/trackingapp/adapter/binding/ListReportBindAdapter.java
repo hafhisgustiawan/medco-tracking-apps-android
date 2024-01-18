@@ -1,5 +1,6 @@
 package com.medco.trackingapp.adapter.binding;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.TextView;
 
@@ -46,15 +47,26 @@ public class ListReportBindAdapter {
 		});
 	}
 
+	@SuppressLint("SetTextI18n")
 	@BindingAdapter("initWellCategoriesFromRef")
 	public static void initWellCategoriesFromRef(TextView tv, DocumentReference wellRef) {
 		if (wellRef == null) return;
 
 		wellRef.get().addOnCompleteListener(task -> {
 			if (!task.isSuccessful()) return;
-			String name = task.getResult().getString("name");
-			if (name == null) return;
-			tv.setText(name);
+			String cat = task.getResult().getString("category");
+			if (cat == null) return;
+			if (cat.equals("as")) {
+				tv.setText("AS (Alur Siwah)");
+				return;
+			}
+
+			if (cat.equals("jr")) {
+				tv.setText("JR (Julok Rayeuk)");
+				return;
+			}
+
+			tv.setText("Other Well");
 		});
 	}
 
@@ -79,7 +91,13 @@ public class ListReportBindAdapter {
 		userRef.get().addOnCompleteListener(task -> {
 			if (!task.isSuccessful()) return;
 			UserItem item = task.getResult().toObject(UserItem.class);
-			if (item == null || item.getPhoto() == null) return;
+			if (item == null) return;
+
+			if (item.getPhoto() == null) {
+				Glide.with(ctx).load(R.drawable.person_icon).fitCenter()
+					.centerCrop().into(img);
+				return;
+			}
 
 			FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
 			StorageReference ref = firebaseStorage.getReference(ctx.getString(R.string

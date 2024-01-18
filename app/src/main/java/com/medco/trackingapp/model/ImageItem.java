@@ -5,6 +5,7 @@ import android.net.Uri;
 public class ImageItem {
 	private Uri uri;
 	private String image;
+	private String type; //well | report
 
 	public ImageItem() {
 	}
@@ -29,5 +30,13 @@ public class ImageItem {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 }

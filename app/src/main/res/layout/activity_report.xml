@@ -5,16 +5,9 @@
 
 	<data>
 
-		<import type="android.view.View" />
-
 		<variable
 			name="reportItem"
 			type="com.medco.trackingapp.model.ReportItem" />
-
-		<variable
-			name="userRef"
-			type="com.google.firebase.firestore.DocumentReference" />
-
 	</data>
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -93,6 +86,7 @@
 
 							<ImageButton
 								android:id="@+id/btn_more_option"
+								visibleForSameUserInReport="@{reportItem}"
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
 								android:layout_marginEnd="14sp"
@@ -102,8 +96,7 @@
 								app:layout_constraintBottom_toBottomOf="@id/tv_title"
 								app:layout_constraintEnd_toEndOf="parent"
 								app:layout_constraintTop_toTopOf="@id/tv_title"
-								visibleForSameUserInReport="@{reportItem}"
-								tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck" />
+								tools:ignore="DuplicateSpeakableTextCheck,TouchTargetSizeCheck,RedundantDescriptionCheck" />
 
 						</androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -153,6 +146,74 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content">
 
+					<TextView
+						android:id="@+id/tv_well_name"
+						initWellNameFromRef="@{reportItem.wellRef}"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="16sp"
+						android:layout_marginTop="16sp"
+						android:background="@drawable/bg_btn_soft_primary_dark"
+						android:drawablePadding="4sp"
+						android:gravity="center_vertical"
+						android:hint="@string/well"
+						android:paddingHorizontal="6sp"
+						android:paddingVertical="3sp"
+						android:textColor="@color/colorPrimaryDark"
+						android:textColorHint="@color/colorPrimaryDark"
+						android:textSize="14sp"
+						app:drawableStartCompat="@drawable/baseline_all_out_18"
+						app:drawableTint="@color/colorPrimaryDark"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toTopOf="parent"
+						tools:ignore="SmallSp,TextContrastCheck" />
+
+					<TextView
+						android:id="@+id/tv_category"
+						initWellCategoriesFromRef="@{reportItem.wellRef}"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginStart="6sp"
+						android:background="@drawable/bg_btn_soft_primary_dark"
+						android:drawablePadding="4sp"
+						android:gravity="center_vertical"
+						android:hint="@string/txt_min"
+						android:paddingHorizontal="6sp"
+						android:paddingVertical="3sp"
+						android:textColor="@color/colorPrimaryDark"
+						android:textColorHint="@color/colorPrimaryDark"
+						android:textSize="14sp"
+						app:drawableStartCompat="@drawable/baseline_category_16"
+						app:drawableTint="@color/colorPrimaryDark"
+						app:layout_constraintBottom_toBottomOf="@id/tv_well_name"
+						app:layout_constraintStart_toEndOf="@id/tv_well_name"
+						app:layout_constraintTop_toTopOf="@id/tv_well_name"
+						tools:ignore="SmallSp,TextContrastCheck" />
+
+					<TextView
+						android:id="@+id/tv_date"
+						formatTimestampTv="@{reportItem.createdAt}"
+						android:layout_width="0sp"
+						android:layout_height="wrap_content"
+						android:layout_marginHorizontal="16sp"
+						android:layout_marginTop="8sp"
+						android:layout_marginBottom="12sp"
+						android:paddingHorizontal="3sp"
+						android:drawablePadding="4sp"
+						android:ellipsize="end"
+						android:gravity="center_vertical"
+						android:hint="@string/txt_placeholder_date"
+						android:maxLines="1"
+						android:paddingStart="2sp"
+						android:textColor="@color/text_transparent"
+						android:textSize="10sp"
+						app:drawableStartCompat="@drawable/baseline_event_18"
+						app:drawableTint="@color/text_transparent"
+						app:layout_constraintEnd_toEndOf="parent"
+						app:layout_constraintStart_toStartOf="parent"
+						app:layout_constraintTop_toBottomOf="@id/tv_well_name"
+						tools:ignore="RtlSymmetry,SmallSp" />
+
 					<androidx.constraintlayout.widget.ConstraintLayout
 						android:id="@+id/layout_report"
 						android:layout_width="match_parent"
@@ -163,9 +224,9 @@
 						android:padding="16sp"
 						app:layout_constraintEnd_toEndOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toTopOf="parent">
+						app:layout_constraintTop_toBottomOf="@id/tv_date">
 
-						<TextView
+						<!--<TextView
 							android:id="@+id/tv_title_report"
 							android:layout_width="0sp"
 							android:layout_height="wrap_content"
@@ -178,7 +239,37 @@
 							android:textStyle="bold"
 							app:layout_constraintEnd_toEndOf="parent"
 							app:layout_constraintStart_toStartOf="parent"
-							app:layout_constraintTop_toTopOf="parent" />
+							app:layout_constraintTop_toTopOf="parent" />-->
+
+						<com.google.android.material.imageview.ShapeableImageView
+							android:id="@+id/img_user"
+							initUserPhotoFromRef="@{reportItem.userRef}"
+							android:layout_width="32sp"
+							android:layout_height="0sp"
+							android:background="@color/dark_white"
+							app:layout_constraintDimensionRatio="1:1"
+							app:layout_constraintStart_toStartOf="parent"
+							app:layout_constraintTop_toTopOf="parent"
+							app:shapeAppearanceOverlay="@style/ShapeCircle"
+							tools:ignore="ImageContrastCheck" />
+
+						<TextView
+							android:id="@+id/tv_name_user"
+							android:layout_width="0sp"
+							android:layout_height="wrap_content"
+							android:ellipsize="end"
+							android:maxLines="1"
+							android:textColor="@color/black"
+							android:textSize="14sp"
+							android:textStyle="bold"
+							initUserNameFromRef="@{reportItem.userRef}"
+							android:hint="@string/txt_placeholder_name"
+							android:layout_marginStart="6sp"
+							app:layout_constraintTop_toTopOf="@id/img_user"
+							app:layout_constraintBottom_toBottomOf="@id/img_user"
+							app:layout_constraintStart_toEndOf="@id/img_user"
+							app:layout_constraintEnd_toEndOf="parent"
+							tools:ignore="SmallSp" />
 
 						<TextView
 							android:id="@+id/tv_report"
@@ -191,7 +282,7 @@
 							app:layout_constraintBottom_toBottomOf="parent"
 							app:layout_constraintEnd_toEndOf="parent"
 							app:layout_constraintStart_toStartOf="parent"
-							app:layout_constraintTop_toBottomOf="@id/tv_title_report" />
+							app:layout_constraintTop_toBottomOf="@id/img_user" />
 
 					</androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -277,98 +368,6 @@
 
 					</androidx.constraintlayout.widget.ConstraintLayout>
 
-					<!--<androidx.constraintlayout.widget.ConstraintLayout
-						android:id="@+id/layout_firefighter"
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:layout_margin="16sp"
-						android:background="@drawable/state_select_soft_primary_dark"
-						android:padding="4sp"
-						app:layout_constraintEnd_toEndOf="parent"
-						app:layout_constraintStart_toStartOf="parent"
-						app:layout_constraintTop_toBottomOf="@id/layout_description">
-
-						<com.google.android.material.imageview.ShapeableImageView
-							android:id="@+id/img_user"
-							userPhoto="@{firefighterItem != null ? firefighterItem.userRef : null}"
-							android:layout_width="0sp"
-							android:layout_height="0sp"
-							android:layout_margin="12sp"
-							android:background="@color/dark_white"
-							app:layout_constraintBottom_toBottomOf="parent"
-							app:layout_constraintDimensionRatio="1:1"
-							app:layout_constraintStart_toStartOf="parent"
-							app:layout_constraintTop_toTopOf="parent"
-							app:shapeAppearanceOverlay="@style/ShapeNormalCorner"
-							tools:ignore="ImageContrastCheck" />
-
-						<TextView
-							android:id="@+id/tv_title_firefighter"
-							android:layout_width="0sp"
-							android:layout_height="wrap_content"
-							android:layout_margin="12sp"
-							android:ellipsize="end"
-							android:hint="@string/txt_placeholder_name_pemadam"
-							android:maxLines="1"
-							android:text='@{firefighterItem != null ? firefighterItem.name : "-"}'
-							android:textColor="@color/black"
-							android:textSize="14sp"
-							android:textStyle="bold"
-							app:layout_constraintEnd_toStartOf="@id/btn_navigate_next"
-							app:layout_constraintStart_toEndOf="@id/img_user"
-							app:layout_constraintTop_toTopOf="parent" />
-
-						<TextView
-							android:id="@+id/tv_address"
-							android:layout_width="0sp"
-							android:layout_height="wrap_content"
-							android:layout_marginHorizontal="12sp"
-							android:layout_marginTop="2sp"
-							android:ellipsize="end"
-							android:hint="@string/txt_hint_firefighter_address"
-							android:maxLines="1"
-							android:text='@{firefighterItem != null ? firefighterItem.address : "-"}'
-							android:textColor="@color/text_transparent"
-							android:textSize="12sp"
-							app:layout_constraintEnd_toStartOf="@id/btn_navigate_next"
-							app:layout_constraintStart_toEndOf="@id/img_user"
-							app:layout_constraintTop_toBottomOf="@id/tv_title_firefighter" />
-
-						<TextView
-							android:id="@+id/tv_email"
-							userEmail='@{firefighterItem != null ? firefighterItem.userRef : null}'
-							android:layout_width="0sp"
-							android:layout_height="wrap_content"
-							android:layout_marginHorizontal="12sp"
-							android:layout_marginTop="2sp"
-							android:layout_marginBottom="12sp"
-							android:ellipsize="end"
-							android:hint="@string/txt_placeholder_email"
-							android:maxLines="1"
-							android:textColor="@color/black"
-							android:textSize="12sp"
-							app:layout_constraintBottom_toBottomOf="parent"
-							app:layout_constraintEnd_toStartOf="@id/btn_navigate_next"
-							app:layout_constraintStart_toEndOf="@id/img_user"
-							app:layout_constraintTop_toBottomOf="@id/tv_address" />
-
-						<ImageButton
-							android:id="@+id/btn_navigate_next"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:layout_marginEnd="6sp"
-							android:background="@android:color/transparent"
-							android:backgroundTint="@color/text_transparent"
-							android:contentDescription="@string/img_btn_desc"
-							android:src="@drawable/baseline_arrow_forward_ios_16"
-							app:layout_constraintBottom_toBottomOf="parent"
-							app:layout_constraintEnd_toEndOf="parent"
-							app:layout_constraintTop_toTopOf="parent"
-							app:tint="@color/text_transparent"
-							tools:ignore="RedundantDescriptionCheck,TouchTargetSizeCheck" />
-
-					</androidx.constraintlayout.widget.ConstraintLayout>-->
-
 				</androidx.constraintlayout.widget.ConstraintLayout>
 
 			</androidx.core.widget.NestedScrollView>
@@ -380,8 +379,8 @@
 			style="@android:style/Widget.Holo.Light.ProgressBar.Inverse"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:background="@drawable/bg_btn_gray"
-			android:padding="16sp"
+			android:background="@drawable/bg_btn_soft_primary_dark"
+			android:padding="6sp"
 			android:visibility="gone"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"

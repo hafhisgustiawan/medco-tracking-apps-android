@@ -10,8 +10,8 @@
 			type="Boolean" />
 
 		<variable
-			name="currentReportRef"
-			type="com.google.firebase.firestore.DocumentReference" />
+			name="currentReportSnapshot"
+			type="com.google.firebase.firestore.DocumentSnapshot" />
 
 		<variable
 			name="reportItem"
@@ -22,13 +22,14 @@
 		android:id="@+id/layout_main"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:background="@color/white_transparent_bg"
 		tools:context=".fragment.ManageReportFragment">
 
 		<com.google.android.material.appbar.AppBarLayout
 			android:id="@+id/app_bar"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:background="@color/white"
+			android:background="@color/white_transparent_bg"
 			android:elevation="0sp"
 			android:fitsSystemWindows="true"
 			app:elevation="0sp">
@@ -61,7 +62,7 @@
 						android:layout_height="wrap_content"
 						android:layout_marginTop="16sp"
 						android:hint="@string/txt_title_manage_report"
-						android:text='@{currentReportRef == null ? "Tambah Pengguna" : "Perbarui Data Pengguna"}'
+						android:text='@{currentReportSnapshot == null ? "Tambah Laporan" : "Perbarui Laporan"}'
 						android:textColor="@color/black"
 						android:textSize="20sp"
 						android:textStyle="bold"
@@ -73,7 +74,7 @@
 						android:id="@+id/rv_image"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:layout_marginTop="24sp"
+						android:layout_marginTop="32sp"
 						app:layout_constraintEnd_toEndOf="parent"
 						app:layout_constraintStart_toStartOf="parent"
 						app:layout_constraintTop_toBottomOf="@id/tv_title" />
@@ -120,6 +121,7 @@
 						android:paddingVertical="16dp"
 						android:textColor="@color/black"
 						android:textSize="14sp"
+						android:text="@{reportItem.report}"
 						tools:ignore="TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
 
 				</com.google.android.material.textfield.TextInputLayout>
@@ -150,6 +152,7 @@
 						android:paddingVertical="16dp"
 						android:textColor="@color/black"
 						android:textSize="14sp"
+						android:text="@{reportItem.condition}"
 						tools:ignore="TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
 
 				</com.google.android.material.textfield.TextInputLayout>
@@ -180,24 +183,29 @@
 						android:paddingVertical="16dp"
 						android:textColor="@color/black"
 						android:textSize="14dp"
+						android:text="@{reportItem.note}"
 						tools:ignore="SpUsage,TextContrastCheck,TextSizeCheck,VisualLintTextFieldSize" />
 
 				</com.google.android.material.textfield.TextInputLayout>
 
 				<com.google.android.material.button.MaterialButton
 					android:id="@+id/btn_save"
+					style="@style/Widget.MaterialComponents.Button.Icon"
+					validateBtnManageReport="@{reportItem}"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:layout_marginHorizontal="16sp"
 					android:layout_marginTop="16sp"
-					android:backgroundTint="@color/colorPrimaryDark"
 					android:hint="@string/txt_save"
 					android:paddingVertical="16sp"
-					android:text='@{currentReportRef == null ? "tambah" : "simpan"}'
+					android:progressVisible="@{loading}"
+					android:text='@{currentReportSnapshot == null ? "tambah" : "simpan"}'
 					android:textColor="@color/white"
 					android:textSize="14sp"
 					app:cornerRadius="8sp"
-					validateBtnManageReport="@{reportItem}"
+					app:iconGravity="textStart"
+					app:iconSize="18sp"
+					app:iconTint="@color/white"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintTop_toBottomOf="@id/til_note"
@@ -212,7 +220,18 @@
 					android:textColor="@color/red"
 					app:layout_constraintEnd_toEndOf="parent"
 					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toBottomOf="@id/btn_save" />
+					app:layout_constraintTop_toBottomOf="@id/btn_save"
+					tools:ignore="TextContrastCheck" />
+
+				<View
+					android:id="@+id/spacer"
+					android:layout_width="match_parent"
+					android:layout_height="420sp"
+					android:layout_marginTop="48sp"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toBottomOf="@id/tv_close"
+					tools:ignore="VisualLintBounds" />
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
 

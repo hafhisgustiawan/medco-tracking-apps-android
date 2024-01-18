@@ -185,8 +185,7 @@ public class GlobalBindAdapter {
 		if (item.getImage() == null) return;
 		Log.d("TAG", "loadImageList: DARI IMAGE");
 		FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-		StorageReference fileRef = firebaseStorage.getReference(imageView.getContext()
-			.getString(R.string.collection_well)).child(item.getImage());
+		StorageReference fileRef = firebaseStorage.getReference(item.getType()).child(item.getImage());
 		fileRef.getDownloadUrl().addOnCompleteListener(task -> {
 			if (!task.isSuccessful()) return;
 			Glide.with(ctx).load(task.getResult()).fitCenter().centerCrop()
