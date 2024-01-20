@@ -11,6 +11,7 @@ public class ReportItem {
 	private String report;
 	private String condition;
 	private String note;
+	private String category;
 	private List<String> images;
 	private Timestamp createdAt;
 
@@ -68,5 +69,13 @@ public class ReportItem {
 
 	public void setImages(List<String> images) {
 		this.images = images;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
 	}
 }

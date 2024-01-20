@@ -254,6 +254,7 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 		}));
 
 		binding.btnSave.setOnClickListener(view -> {
+			if (mWellItem == null) return;
 			if (adapter == null || adapter.getData() == null || adapter.getData().size() == 1) {
 				showError(new CustomException("Anda belum menambahkan foto laporan", new Throwable()));
 				return;
@@ -356,6 +357,7 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 			showError(new CustomException("Data tidak valid", new Throwable()));
 			return;
 		}
+		item.setCategory(mWellItem.getCategory());
 		item.setCreatedAt(Timestamp.now());
 
 		List<UploadTask> putFileTasks = new ArrayList<>();
