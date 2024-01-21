@@ -151,31 +151,21 @@ public class AuthActivity extends BaseActivity {
 
 	private void checkExistanceUserByEmail(String email, String idToken) {
 		showProgress();
-		firebaseAuth.signInAnonymously().addOnCompleteListener(t -> {
+		userColl.whereEqualTo("email", email).get().addOnCompleteListener(task -> {
 			dismissProgress();
-			if (!t.isSuccessful()) {
+			if (!task.isSuccessful()) {
 				firebaseAuth.signOut();
-				showError(t.getException());
+				showError(task.getException());
+				return;
+			}
+			if (task.getResult().isEmpty()) {
+				firebaseAuth.signOut();
+				snackbarHelper.show("Email Anda tidak terdaftar dalam sistem aplikasi",
+					Snackbar.LENGTH_LONG);
 				return;
 			}
 
-			showProgress();
-			userColl.whereEqualTo("email", email).get().addOnCompleteListener(task -> {
-				dismissProgress();
-				if (!task.isSuccessful()) {
-					firebaseAuth.signOut();
-					showError(task.getException());
-					return;
-				}
-				if (task.getResult().isEmpty()) {
-					firebaseAuth.signOut();
-					snackbarHelper.show("Email Anda tidak terdaftar dalam sistem aplikasi",
-						Snackbar.LENGTH_LONG);
-					return;
-				}
-
-				firebaseAuthWithGoogle(idToken);
-			});
+			firebaseAuthWithGoogle(idToken);
 		});
 	}
 
@@ -259,9 +249,8 @@ public class AuthActivity extends BaseActivity {
 							return;
 						}
 						List<Task<Void>> tasks = new ArrayList<>();
-						task.getResult().getDocuments().forEach(documentSnapshot -> {
-							tasks.add(documentSnapshot.getReference().delete());
-						});
+						task.getResult().getDocuments().forEach(documentSnapshot -> tasks
+							.add(documentSnapshot.getReference().delete()));
 						// 1) HAPUS DATA LAMANYA
 						deleteOldData(tasks);
 					});
