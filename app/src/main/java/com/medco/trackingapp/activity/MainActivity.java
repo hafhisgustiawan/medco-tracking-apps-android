@@ -142,7 +142,8 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 					break;
 			}
 			if (selectedFragment == null) return;
-			getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+			getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim
+				.slide_in_left, android.R.anim.slide_out_right).replace(R.id.fragment_container,
 				selectedFragment).commit();
 		});
 	}
