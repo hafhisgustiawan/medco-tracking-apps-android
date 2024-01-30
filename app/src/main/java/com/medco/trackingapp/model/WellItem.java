@@ -10,6 +10,7 @@ public class WellItem {
 	private GeoPoint location;
 	private String address;
 	private String category; //enum as / jr / otherwell
+	private String status; //online : green , shut in : red, temporary suspended : red, plugged and abandonned : red
 	private String name;
 	private String description;
 	private Timestamp createdAt;
@@ -17,7 +18,7 @@ public class WellItem {
 	public List<String> getImages() {
 		return images;
 	}
-	
+
 	public void setImages(List<String> images) {
 		this.images = images;
 	}
@@ -68,5 +69,13 @@ public class WellItem {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

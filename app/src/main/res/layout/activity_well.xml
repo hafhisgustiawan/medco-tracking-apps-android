@@ -217,6 +217,24 @@
 								tools:ignore="VisualLintBounds" />
 
 							<TextView
+								android:id="@+id/tv_status"
+								initIconStatus="@{wellItem}"
+								android:layout_width="0sp"
+								android:layout_height="wrap_content"
+								android:layout_marginTop="3sp"
+								android:drawablePadding="4sp"
+								android:ellipsize="end"
+								android:hint="@string/txt_placeholder_status"
+								android:maxLines="1"
+								android:textColor="@color/text_transparent"
+								android:textSize="12sp"
+								app:drawableStartCompat="@drawable/baseline_lens_green_16"
+								app:layout_constraintEnd_toEndOf="parent"
+								app:layout_constraintStart_toStartOf="parent"
+								app:layout_constraintTop_toBottomOf="@id/tv_category"
+								tools:ignore="VisualLintBounds" />
+
+							<TextView
 								android:id="@+id/tv_date"
 								formatTimestampTv="@{wellItem.createdAt}"
 								android:layout_width="0sp"
@@ -234,7 +252,7 @@
 								app:layout_constraintBottom_toBottomOf="parent"
 								app:layout_constraintEnd_toEndOf="parent"
 								app:layout_constraintStart_toStartOf="parent"
-								app:layout_constraintTop_toBottomOf="@id/tv_category"
+								app:layout_constraintTop_toBottomOf="@id/tv_status"
 								tools:ignore="SmallSp" />
 
 						</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package com.medco.trackingapp.adapter.binding;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
@@ -67,6 +68,29 @@ public class ListReportBindAdapter {
 			}
 
 			tv.setText("Other Well");
+		});
+	}
+
+	@SuppressLint("SetTextI18n")
+	@BindingAdapter("initIconStatusFromRef")
+	public static void initIconStatusFromRef(TextView tv, DocumentReference wellRef) {
+		tv.setVisibility(View.GONE);
+		if (wellRef == null) return;
+
+		wellRef.get().addOnCompleteListener(task -> {
+			if (!task.isSuccessful()) return;
+			String status = task.getResult().getString("status");
+			if (status == null) return;
+			String statusTxt = status.equals("online") ? "Online" : status
+				.equals("shut in") ? "Shut In" : status.equals("temporary suspended") ?
+				"Temporary Suspended" : "Plugged and Abandoned";
+
+			int drawable = status.equals("online") ? R.drawable.baseline_lens_green_16 :
+				R.drawable.baseline_lens_red_16;
+
+			tv.setText(statusTxt);
+			tv.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, 0, 0, 0);
+			tv.setVisibility(View.VISIBLE);
 		});
 	}
 

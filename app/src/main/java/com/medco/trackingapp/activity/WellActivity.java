@@ -99,6 +99,8 @@ public class WellActivity extends BaseActivity {
 			}
 
 			mWellItem = tsk.getResult().toObject(WellItem.class);
+			/*Toast.makeText(mContext, mWellItem != null ? mWellItem.getStatus() : "NULL", Toast
+				.LENGTH_SHORT).show();*/
 			binding.setWellItem(mWellItem);
 
 			initRecyclerReport();

@@ -141,7 +141,33 @@ public class ManageWellActivity extends BaseActivity {
 					if (item == null) return;
 					item.setCategory(realCat.get(which));
 					binding.etCategories.setText(option[which]);
+					mViewModel.setManageWellState(item);
 				}).create().show();
+		});
+
+		binding.etStatus.setOnClickListener(view -> {
+			final String[] option = new String[4];
+			option[0] = "Online";
+			option[1] = "Shut In";
+			option[2] = "Temporary Suspended";
+			option[3] = "Plugged and Abandoned";
+
+			List<String> realStatus = new ArrayList<>();
+			realStatus.add("online");
+			realStatus.add("shut in");
+			realStatus.add("temporary suspended");
+			realStatus.add("plugged and abandoned");
+
+			new AlertDialog.Builder(mContext)
+				.setTitle("Pilih Status")
+				.setItems(option, (dialog, which) -> {
+					WellItem item = mViewModel.getManageWellState().getValue();
+					if (item == null) return;
+					item.setStatus(realStatus.get(which));
+					binding.etStatus.setText(option[which]);
+					mViewModel.setManageWellState(item);
+				}).create().show();
+
 		});
 
 		binding.etDescription.addTextChangedListener(new EtWatcher(str -> {

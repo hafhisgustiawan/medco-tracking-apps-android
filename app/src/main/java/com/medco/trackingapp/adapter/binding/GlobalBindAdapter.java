@@ -250,4 +250,21 @@ public class GlobalBindAdapter {
 		btn.setEnabled(true);
 	}
 
+	@BindingAdapter("initIconStatus")
+	public static void initIconStatus(TextView textView, WellItem item) {
+		textView.setVisibility(View.GONE);
+		if (item == null || item.getStatus() == null) return;
+
+		String status = item.getStatus().equals("online") ? "Online" : item.getStatus()
+			.equals("shut in") ? "Shut In" : item.getStatus().equals("temporary suspended") ?
+			"Temporary Suspended" : "Plugged and Abandoned";
+
+		int drawable = item.getStatus().equals("online") ? R.drawable.baseline_lens_green_16 :
+			R.drawable.baseline_lens_red_16;
+
+		textView.setText(status);
+		textView.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, 0, 0, 0);
+		textView.setVisibility(View.VISIBLE);
+	}
+
 }

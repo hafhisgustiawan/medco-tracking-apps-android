@@ -30,6 +30,29 @@ public class ManageWellBindAdapter {
 		et.setText("Other Well (Sumur Tua)");
 	}
 
+	@SuppressLint("SetTextI18n")
+	@BindingAdapter("initStatusWell")
+	public static void initStatusWell(TextInputEditText et, String status) {
+		if (status == null) return;
+
+		if (status.equals("online")) {
+			et.setText("Online");
+			return;
+		}
+
+		if (status.equals("shut in")) {
+			et.setText("Shut In");
+			return;
+		}
+
+		if (status.equals("temporary suspended")) {
+			et.setText("Temporary Suspended");
+			return;
+		}
+
+		et.setText("Plugged and Abandoned");
+	}
+
 	public static boolean validateNameManageWell(WellItem item) {
 		if (item == null) return true;
 		if (item.getName() == null || Objects.equals(item.getName(), "")) return true;
@@ -55,6 +78,21 @@ public class ManageWellBindAdapter {
 		til.setError(null);
 		if (validateCategoriesManageWell(item)) return;
 		til.setError("Kategori tidak sesuai");
+	}
+
+	public static boolean validateStatusManageWell(WellItem item) {
+		if (item == null) return true;
+		if (item.getStatus() == null || Objects.equals(item.getStatus(), "")) return true;
+		return Objects.equals(item.getStatus(), "online") || Objects.equals(item.getStatus(),
+			"shut in") || Objects.equals(item.getStatus(), "temporary suspended") || Objects
+			.equals(item.getStatus(), "plugged and abandoned");
+	}
+
+	@BindingAdapter("validateTilStatusManageWell")
+	public static void validateTilStatusManageWell(TextInputLayout til, WellItem item) {
+		til.setError(null);
+		if (validateStatusManageWell(item)) return;
+		til.setError("Status tidak sesuai");
 	}
 
 	public static boolean validateDescriptionManageWell(WellItem item) {
@@ -128,12 +166,13 @@ public class ManageWellBindAdapter {
 		// 0) NULL CHECK
 		if (item == null) return;
 
-		if (item.getName() == null || item.getCategory() == null || item.getDescription() == null
-			|| item.getLocation() == null || item.getAddress() == null) {
+		if (item.getName() == null || item.getCategory() == null || item.getStatus() == null ||
+			item.getDescription() == null || item.getLocation() == null || item.getAddress() == null) {
 			return;
 		}
 		if (Objects.equals(item.getName(), "") || Objects.equals(item.getCategory(), "") ||
-			Objects.equals(item.getDescription(), "") || Objects.equals(item.getAddress(), "")) {
+			Objects.equals(item.getStatus(), "") || Objects.equals(item.getDescription(), "") ||
+			Objects.equals(item.getAddress(), "")) {
 			return;
 		}
 
@@ -141,6 +180,7 @@ public class ManageWellBindAdapter {
 
 		if (!validateNameManageWell(item)) return;
 		if (!validateCategoriesManageWell(item)) return;
+		if (!validateStatusManageWell(item)) return;
 		if (!validateDescriptionManageWell(item)) return;
 		if (!validateAddressManageWell(item)) return;
 		if (!validateLatitudeManageWell(item)) return;

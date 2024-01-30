@@ -271,6 +271,7 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 				.setPositiveButton("Ya", (dialogInterface, i) -> {
 					if (mReportSnapshot == null) {
 						detectLimitDistance();
+//						limitDistanceWithDistanceMatrix();
 					} else {
 						deleteNotExistingData();
 					}
@@ -278,6 +279,66 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 				.create().show();
 		});
 	}
+
+	/*private void limitDistanceWithDistanceMatrix() {
+		if (mLocation == null) {
+			showError(new CustomException("Lokasi anda tidak terdeteksi", new Throwable()));
+			return;
+		}
+
+		if (mWellItem == null || mWellItem.getLocation() == null) {
+			showError(new CustomException("Lokasi sumur tidak ditemukan", new Throwable()));
+			return;
+		}
+
+		showProgress();
+		mapsApiInterface.getDistance(BuildConfig.MAPS_API_KEY, mLocation.getLatitude() + ","
+				+ mLocation.getLongitude(), mWellItem
+				.getLocation().getLatitude() + "," + mWellItem
+				.getLocation().getLongitude())
+			.subscribeOn(Schedulers.io())
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe(new SingleObserver<ResultMapsDistanceItem>() {
+				@Override
+				public void onSubscribe(@NonNull Disposable d) {
+
+				}
+
+				@SuppressLint("SetTextI18n")
+				@Override
+				public void onSuccess(@NonNull ResultMapsDistanceItem resultMapsDistanceItem) {
+
+					ResultMapsDistanceItem.Distance distance = resultMapsDistanceItem.getRows()
+						.get(0).getElements().get(0).getDistance();
+
+					if (distance == null || distance.getValue() == 0) {
+						showError(new CustomException("Rute tidak ditemukan. Jika anda berada terlalu " +
+							"dekat dengan sumur, coba lagi dengan sedikit menjauh dari titik sumur.",
+							new Throwable()));
+						return;
+					}
+
+					if (distance.getValue() <= 1000) {
+						addData();
+					} else {
+						String message = "Sistem mendeteksi bahwa jarak anda dan lokasi sumur lebih dari " +
+							"1000 m, yaitu " + distance.getValue() + " m. Pastikan jarak anda berada maksimal " +
+							"1000 m dari lokasi sumur.";
+
+						new AlertDialog.Builder(mContext)
+							.setCancelable(true)
+							.setMessage(message)
+							.setNegativeButton("Oke", null)
+							.create().show();
+					}
+				}
+
+				@Override
+				public void onError(@NonNull Throwable e) {
+					showErrorThrowable(e);
+				}
+			});
+	}*/
 
 	private void detectLimitDistance() {
 		if (mLocation == null) {
@@ -321,7 +382,7 @@ public class ManageReportFragment extends BottomSheetDialogFragment {
 					List<LegsItem> legs = route.getLegs();
 
 					if (legs == null || legs.size() == 0) {
-						showError(new CustomException("Rute tidak ditemukan", new Throwable()));
+						showError(new CustomException("Legs pada api berjumlah 0", new Throwable()));
 						return;
 					}
 

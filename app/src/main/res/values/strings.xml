@@ -107,4 +107,6 @@
 	<string name="txt_title_condition">Kondisi Sumur</string>
 	<string name="txt_title_note">Catatan atau Personil</string>
 	<string name="txt_range_date">Rentang tanggal</string>
+	<string name="txt_hint_choose_status">Pilih status</string>
+	<string name="txt_placeholder_status">Status</string>
 </resources>

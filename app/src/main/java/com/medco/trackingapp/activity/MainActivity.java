@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,12 +110,12 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 			}
 
 			binding.setUserRef(currentUserRef);
-			Fragment selectedFragment = initHomeFragment();
+			/*Fragment selectedFragment = initHomeFragment();
 			if (selectedFragment == null) return;
-			fragmentManager.beginTransaction().replace(R.id.fragment_container,
+			fragmentManager.beginTransaction().setCustomAnimations(android.R.anim
+				.slide_in_left, android.R.anim.slide_out_right).replace(R.id.fragment_container,
 				selectedFragment).commit();
-			binding.bottomNavigation.setItemSelected(R.id.nav_home, true);
-
+			binding.bottomNavigation.setItemSelected(R.id.nav_home, true);*/
 		});
 	}
 
@@ -122,6 +123,7 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 	@Override
 	public void initListeners() {
 		binding.bottomNavigation.setOnItemSelectedListener(i -> {
+			if (fragmentManager.isDestroyed()) return;
 			Fragment selectedFragment = initHomeFragment();
 
 			switch (i) {
@@ -142,9 +144,14 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 					break;
 			}
 			if (selectedFragment == null) return;
-			getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim
+			FragmentTransaction transaction = fragmentManager.beginTransaction();
+			transaction.setCustomAnimations(android.R.anim
 				.slide_in_left, android.R.anim.slide_out_right).replace(R.id.fragment_container,
-				selectedFragment).commit();
+				selectedFragment);
+			/*if (!(selectedFragment instanceof HomeFragment)) {
+				transaction.addToBackStack("BACK");
+			}*/
+			transaction.commit();
 		});
 	}
 
@@ -155,6 +162,25 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 			.setItemSelected(idMenu, true));
 		return fragment;
 	}
+
+	/*private void updateActiveMenu() {
+		List<Fragment> fragments = fragmentManager.getFragments();
+		if (fragments.size() == 0) return;
+		Fragment fragment = fragments.get(fragments.size() - 1);
+		if (fragment == null) return;
+		Toast.makeText(mContext, "Fragment tidak null : " + fragment, Toast.LENGTH_SHORT).show();
+		if (fragment instanceof HomeFragment) {
+			binding.bottomNavigation.setItemSelected(R.id.nav_home, true);
+		} else if (fragment instanceof WellFragment) {
+			binding.bottomNavigation.setItemSelected(R.id.nav_well, true);
+		} else if (fragment instanceof ReportFragment) {
+			binding.bottomNavigation.setItemSelected(R.id.nav_report, true);
+		} else if (fragment instanceof UserFragment) {
+			binding.bottomNavigation.setItemSelected(R.id.nav_user, true);
+		} else if (fragment instanceof AccountFragment) {
+			binding.bottomNavigation.setItemSelected(R.id.nav_acc, true);
+		}
+	}*/
 
 	@Override
 	public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -225,6 +251,12 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 
 	@Override
 	public void onBackPressed() {
+		/*if (fragmentManager != null && fragmentManager.getBackStackEntryCount() > 0) {
+			fragmentManager.popBackStack();
+			updateActiveMenu();
+			return;
+		}*/
+
 		if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
 			super.onBackPressed();
 			return;
