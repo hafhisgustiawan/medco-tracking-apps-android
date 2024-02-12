@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "eadfdf49c5c4c3a3657d8bab6b6a7ede",
+    "entities": [
+      {
+        "tableName": "well",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`well_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `docId` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "well_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "docId",
+            "columnName": "docId",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "well_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eadfdf49c5c4c3a3657d8bab6b6a7ede')"
+    ]
+  }
+}
