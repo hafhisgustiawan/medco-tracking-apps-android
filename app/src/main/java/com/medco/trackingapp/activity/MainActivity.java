@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,10 +36,11 @@ import com.medco.trackingapp.fragment.UserFragment;
 import com.medco.trackingapp.fragment.WellFragment;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.UserItem;
+import com.medco.trackingapp.workers.GetWellWorker;
 
 public class MainActivity extends BaseActivity implements FirebaseAuth.AuthStateListener {
 
-	public static final String TAG = "MainActivity";
+	public static final String TAG = MainActivity.class.getSimpleName();
 	//alert
 	private static final int TIME_INTERVAL = 2000; // Waktu dalam milidetik
 	private Context mContext;
@@ -87,6 +92,7 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 
 	@Override
 	public void initViews() {
+		initWellRoomDb();
 		showProgress();
 		currentUserRef.get().addOnCompleteListener(task -> {
 			dismissProgress();
@@ -153,6 +159,14 @@ public class MainActivity extends BaseActivity implements FirebaseAuth.AuthState
 			}*/
 			transaction.commit();
 		});
+	}
+
+	private void initWellRoomDb() {
+		Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType
+			.CONNECTED).build();
+		OneTimeWorkRequest oneTimeWorkRequest = new OneTimeWorkRequest.Builder(GetWellWorker.class)
+			.setConstraints(constraints).build();
+		WorkManager.getInstance(mContext).enqueue(oneTimeWorkRequest);
 	}
 
 	private Fragment initHomeFragment() {

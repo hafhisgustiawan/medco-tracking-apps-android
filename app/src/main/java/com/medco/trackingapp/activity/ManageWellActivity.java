@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ManageWellActivity extends BaseActivity {
 
-	public static final String TAG = "ManageWellActivity";
+	public static final String TAG = ManageWellActivity.class.getSimpleName();
 	private Context mContext;
 	private FragmentManager fragmentManager;
 	private ActivityManageWellBinding binding;

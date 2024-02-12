@@ -43,7 +43,7 @@ import com.medco.trackingapp.model.UserItem;
 
 public class AccountFragment extends BaseFragment {
 
-	public static final String TAG = "Account Fragment";
+	public static final String TAG = AccountFragment.class.getSimpleName();
 	private Context mContext;
 	private FragmentManager fragmentManager;
 	private FragmentActivity mActivity;

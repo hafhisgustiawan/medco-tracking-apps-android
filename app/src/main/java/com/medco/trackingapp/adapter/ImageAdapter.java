@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
-	public static final String TAG = "Image Adapter";
+	public static final String TAG = ImageAdapter.class.getSimpleName();
 
 	//constructor variable
 	public Context mContext;

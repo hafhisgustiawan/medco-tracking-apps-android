@@ -12,10 +12,12 @@ import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.util.Pair;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.room.Room;
 
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -29,33 +31,39 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.medco.trackingapp.R;
 import com.medco.trackingapp.adapter.ReportAdapter;
+import com.medco.trackingapp.adapter.WellSuggestAdapter;
 import com.medco.trackingapp.databinding.FragmentReportBinding;
 import com.medco.trackingapp.helper.SnackbarHelper;
 import com.medco.trackingapp.model.FilterItem;
 import com.medco.trackingapp.model.ReportItem;
 import com.medco.trackingapp.model.UserItem;
+import com.medco.trackingapp.model.Well;
 import com.medco.trackingapp.model.viewmodel.FilterViewModel;
+import com.medco.trackingapp.utils.AppDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class ReportFragment extends BaseFragment {
 
-	public static final String TAG = "ReportFragment";
+	public static final String TAG = ReportFragment.class.getSimpleName();
 	private Context mContext;
 	private FragmentReportBinding binding;
 	private SnackbarHelper snackbarHelper;
 	private Animation animation;
 	private DocumentReference currentUserRef;
 	private CollectionReference reportColl;
+	private CollectionReference wellColl;
 	private ReportAdapter adapter;
 	private UserItem mUserItem;
 	private FilterViewModel mViewModel;
 	private Locale localeID;
 	private SimpleDateFormat dateFormat;
+	private AppDatabase db;
 
 	public ReportFragment() {
 		// Required empty public constructor
@@ -79,6 +87,7 @@ public class ReportFragment extends BaseFragment {
 		FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 		FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 		reportColl = firebaseFirestore.collection(getString(R.string.collection_report));
+		wellColl = firebaseFirestore.collection(getString(R.string.collection_well));
 
 		if (firebaseUser == null) return binding.getRoot();
 		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
@@ -89,6 +98,9 @@ public class ReportFragment extends BaseFragment {
 		localeID = new Locale("in", "ID");
 		dateFormat = new SimpleDateFormat("dd/MM/yy", localeID);
 
+		db = Room.databaseBuilder(mContext, AppDatabase.class, "well")
+			.allowMainThreadQueries().build();
+
 		initViews();
 		initListeners();
 		return binding.getRoot();
@@ -97,7 +109,6 @@ public class ReportFragment extends BaseFragment {
 	@SuppressLint("SetTextI18n")
 	@Override
 	public void initViews() {
-//		binding.setUserRef(currentUserRef);
 		showProgress();
 		currentUserRef.get().addOnCompleteListener(task -> {
 			dismissProgress();
@@ -168,7 +179,55 @@ public class ReportFragment extends BaseFragment {
 			});
 			popupMenu.show();
 		});
+
+		binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				return false;
+			}
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				if (newText.trim().length() != 0) {
+					binding.layoutResult.setVisibility(View.GONE);
+					setUpRecyclerViewSuggest(newText);
+				} else {
+					FilterItem filterItem = mViewModel.getFilterState().getValue();
+					if (filterItem == null) {
+						binding.layoutResult.setVisibility(View.VISIBLE);
+						return false;
+					}
+
+					filterItem.setWellDocId(null);
+					filterItem.setWellName(null);
+					mViewModel.setFilterState(filterItem);
+					binding.layoutResult.setVisibility(View.VISIBLE);
+				}
+				return false;
+			}
+		});
 	}
+
+	private void setUpRecyclerViewSuggest(String keyword) {
+		List<Well> wells = db.wellDAO().getWellByKeyword(keyword);
+
+		WellSuggestAdapter suggestAdapter = new WellSuggestAdapter(mContext, wells);
+		binding.rvReport.setLayoutManager(new LinearLayoutManager(mContext));
+		binding.rvReport.setAdapter(suggestAdapter);
+
+		suggestAdapter.setOnItemClickListener((position, well) -> {
+			binding.searchView.setQuery(well.getName(), true);
+			FilterItem filterItem = mViewModel.getFilterState().getValue();
+			if (filterItem == null) return;
+
+			filterItem.setWellDocId(well.getDocId());
+			filterItem.setWellName(well.getName());
+			mViewModel.setFilterState(filterItem);
+		});
+
+		binding.layoutResult.setVisibility(View.GONE);
+	}
+
 
 	private void showRangeDatePicker() {
 		MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder
@@ -188,6 +247,7 @@ public class ReportFragment extends BaseFragment {
 
 	private void initRecyclerView() {
 		if (getQuery() == null) return;
+		binding.layoutResult.setVisibility(View.VISIBLE);
 		PagedList.Config config = new PagedList.Config.Builder()
 			.setInitialLoadSizeHint(1)
 			.setPageSize(100)
@@ -217,6 +277,13 @@ public class ReportFragment extends BaseFragment {
 		if (item == null || currentUserRef == null) return null;
 
 		if (item.getPair() != null) {
+			if (item.getWellDocId() != null) {
+				return reportColl.whereEqualTo("wellRef", wellColl.document(item.getWellDocId()))
+					.whereGreaterThanOrEqualTo("createdAt", getTimestampDayStart(item.getPair().first)
+					).whereLessThanOrEqualTo("createdAt", getTimestampDayEnd(item.getPair().second))
+					.orderBy("createdAt", Query.Direction.DESCENDING);
+			}
+
 			return reportColl
 				.whereGreaterThanOrEqualTo("createdAt", getTimestampDayStart(item.getPair().first))
 				.whereLessThanOrEqualTo("createdAt", getTimestampDayEnd(item.getPair().second))
@@ -225,8 +292,19 @@ public class ReportFragment extends BaseFragment {
 
 
 		if (Objects.equals(item.getLabel(), "mine")) {
+			if (item.getWellDocId() != null) {
+				return reportColl.whereEqualTo("wellRef", wellColl.document(item.getWellDocId()))
+					.whereEqualTo("userRef", currentUserRef).orderBy("createdAt", Query.Direction
+						.DESCENDING);
+			}
+
 			return reportColl.whereEqualTo("userRef", currentUserRef).orderBy("createdAt",
 				Query.Direction.DESCENDING);
+		}
+
+		if (item.getWellDocId() != null) {
+			return reportColl.whereEqualTo("wellRef", wellColl.document(item.getWellDocId()))
+				.orderBy("createdAt", Query.Direction.DESCENDING);
 		}
 		return reportColl.orderBy("createdAt", Query.Direction.DESCENDING);
 	}

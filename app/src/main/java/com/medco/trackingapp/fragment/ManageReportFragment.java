@@ -81,7 +81,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ManageReportFragment extends BottomSheetDialogFragment {
 
-	public static final String TAG = "ManageReportFragment";
+	public static final String TAG = ManageReportFragment.class.getSimpleName();
 	private Context mContext;
 	private SnackbarHelper snackbarHelper;
 	private FragmentManageReportBinding binding;

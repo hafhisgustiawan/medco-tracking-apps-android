@@ -25,7 +25,7 @@ import com.medco.trackingapp.model.ReportItem;
 public class ReportAdapter extends FirestorePagingAdapter<ReportItem, ReportAdapter
 	.ViewHolder> {
 
-	public static final String TAG = "ReportAdapter";
+	public static final String TAG = ReportAdapter.class.getSimpleName();
 	private static final int ITEM = 0;
 	private static final int LOADING = 1;
 	public Animation animation;

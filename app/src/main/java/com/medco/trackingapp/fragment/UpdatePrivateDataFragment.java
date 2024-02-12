@@ -33,7 +33,7 @@ import com.medco.trackingapp.model.viewmodel.PrivateDataViewModel;
 import java.util.Objects;
 
 public class UpdatePrivateDataFragment extends BottomSheetDialogFragment {
-	public static final String TAG = "UpdatePrivateDataFragment";
+	public static final String TAG = UpdatePrivateDataFragment.class.getSimpleName();
 	// 1) constructor variable
 	public UserItem mUserItem;
 	public int mSelector; //0 -> name || 1 -> email || 2 -> phone

@@ -31,14 +31,13 @@ import com.medco.trackingapp.model.ReportItem;
 
 public class ReportActivity extends BaseActivity {
 
-	public static final String TAG = "ReportActivity";
+	public static final String TAG = ReportActivity.class.getSimpleName();
 	private Context mContext;
 	private ActivityReportBinding binding;
 	private Animation animation;
 	private SnackbarHelper snackbarHelper;
 	private FragmentManager fragmentManager;
 	private DocumentReference currentReportRef;
-	private DocumentReference currentUserRef;
 	private DocumentSnapshot mReportSnap;
 	private ReportItem mReportItem;
 
@@ -57,8 +56,6 @@ public class ReportActivity extends BaseActivity {
 		FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 		if (firebaseUser == null) return;
 		FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-		currentUserRef = firebaseFirestore.collection(getString(R.string.collection_user))
-			.document(firebaseUser.getUid());
 
 		Intent intent = getIntent();
 		String path = intent.getStringExtra("path");

@@ -22,7 +22,7 @@ import java.util.Objects;
 
 public class ResetPasswordFragment extends BottomSheetDialogFragment {
 
-	public static final String TAG = "ResetPasswordFragment";
+	public static final String TAG = ResetPasswordFragment.class.getSimpleName();
 	//callback
 	public ListenerClose listenerClose;
 	private FragmentActivity mActivity;

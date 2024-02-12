@@ -59,7 +59,7 @@ import retrofit2.Response;
 
 public class SetLocationFragment extends BottomSheetDialogFragment
 	implements OnMapReadyCallback {
-	public static final String TAG = "Set Location Fragment";
+	public static final String TAG = SetLocationFragment.class.getSimpleName();
 	//callback
 	public ListenerUpdate listenerUpdate;
 	public ListenerClose listenerClose;

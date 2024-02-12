@@ -19,7 +19,7 @@ import java.util.List;
 
 public class ResetPasswordActivity extends BaseActivity {
 
-	public static final String TAG = "ResetPasswordActivity";
+	public static final String TAG = ResetPasswordActivity.class.getSimpleName();
 	private ActivityResetPasswordBinding binding;
 	private SnackbarHelper snackbarHelper;
 	private FirebaseAuth firebaseAuth;

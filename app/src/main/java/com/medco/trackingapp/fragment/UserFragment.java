@@ -33,7 +33,7 @@ import com.medco.trackingapp.model.viewmodel.StringViewModel;
 import java.util.Objects;
 
 public class UserFragment extends BaseFragment {
-	public static final String TAG = "UserFragment";
+	public static final String TAG = UserFragment.class.getSimpleName();
 	private Context mContext;
 	private FragmentUserBinding binding;
 	private FragmentManager fragmentManager;

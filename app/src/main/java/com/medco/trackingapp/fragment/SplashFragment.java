@@ -15,7 +15,7 @@ import com.medco.trackingapp.databinding.FragmentSplashBinding;
 
 public class SplashFragment extends Fragment {
 
-	public static final String TAG = "SplashFragment";
+	public static final String TAG = SplashFragment.class.getSimpleName();
 
 	//constructor variable
 	private final int mSelector;

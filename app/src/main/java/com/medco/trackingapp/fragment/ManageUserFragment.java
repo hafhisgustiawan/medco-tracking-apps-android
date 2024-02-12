@@ -35,7 +35,7 @@ import java.util.Objects;
 
 public class ManageUserFragment extends BottomSheetDialogFragment {
 
-	public static final String TAG = "ManageUserFragment";
+	public static final String TAG = ManageUserFragment.class.getSimpleName();
 	private final DocumentSnapshot mUserSnapshot;
 	private Context mContext;
 	private SnackbarHelper snackbarHelper;

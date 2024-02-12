@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class SuggestMapsAdapter extends RecyclerView.Adapter<SuggestMapsAdapter
 	.ViewHolder> {
 
-	public static final String TAG = "Suggest Maps Adapter";
+	public static final String TAG = SuggestMapsAdapter.class.getSimpleName();
 	public ArrayList<PlaceItem> mData;
 	public Context mContext;
 	public Animation animation;

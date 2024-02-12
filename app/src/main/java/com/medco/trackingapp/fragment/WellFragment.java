@@ -34,7 +34,7 @@ import com.medco.trackingapp.model.viewmodel.StringViewModel;
 import java.util.Objects;
 
 public class WellFragment extends BaseFragment {
-	public static final String TAG = "WellFragment";
+	public static final String TAG = WellFragment.class.getSimpleName();
 	private Context mContext;
 	private FragmentWellBinding binding;
 	private SnackbarHelper snackbarHelper;

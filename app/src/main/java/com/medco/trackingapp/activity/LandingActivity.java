@@ -18,7 +18,7 @@ import com.medco.trackingapp.databinding.ActivityLandingBinding;
 
 public class LandingActivity extends BaseActivity {
 
-	public static final String TAG = "LandingActivity";
+	public static final String TAG = LandingActivity.class.getSimpleName();
 	private Context mContext;
 	private Boolean isSplashScreen;
 	private ActivityLandingBinding binding;

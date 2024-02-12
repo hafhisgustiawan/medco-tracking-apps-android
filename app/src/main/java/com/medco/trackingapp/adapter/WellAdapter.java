@@ -28,7 +28,7 @@ import java.util.Objects;
 
 public class WellAdapter extends FirestorePagingAdapter<WellItem, WellAdapter.ViewHolder> {
 
-	public static final String TAG = "WellAdapter";
+	public static final String TAG = WellAdapter.class.getSimpleName();
 	private static final int ITEM = 0;
 	private static final int LOADING = 1;
 	private final String mType;

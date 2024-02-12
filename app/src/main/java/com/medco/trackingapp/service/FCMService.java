@@ -25,7 +25,7 @@ import com.medco.trackingapp.activity.MainActivity;
 import com.medco.trackingapp.utils.Channel;
 
 public class FCMService extends FirebaseMessagingService {
-	public static final String TAG = "Firebase Messaging Service";
+	public static final String TAG = FCMService.class.getSimpleName();
 	//firebase
 	public FirebaseUser firebaseUser;
 	public FirebaseFirestore firebaseFirestore;

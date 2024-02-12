@@ -42,7 +42,7 @@ import java.util.List;
 
 public class AuthActivity extends BaseActivity {
 
-	public static final String TAG = "AuthActivity";
+	public static final String TAG = AuthActivity.class.getSimpleName();
 	private Context mContext;
 	private ActivityAuthBinding binding;
 	private SnackbarHelper snackbarHelper;

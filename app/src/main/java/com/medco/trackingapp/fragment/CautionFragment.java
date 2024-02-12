@@ -12,7 +12,7 @@ import com.medco.trackingapp.databinding.FragmentCautionBinding;
 
 public class CautionFragment extends BottomSheetDialogFragment {
 
-	public static final String TAG = "Caution Fragment";
+	public static final String TAG = CautionFragment.class.getSimpleName();
 
 	//constructor variable
 	public int mRawId;

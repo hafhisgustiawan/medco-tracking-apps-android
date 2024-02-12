@@ -66,7 +66,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DirectionActivity extends BaseActivity implements OnMapReadyCallback {
 
-	public static final String TAG = "DirectionActivity";
+	public static final String TAG = DirectionActivity.class.getSimpleName();
 	private Context mContext;
 	private ActivityDirectionBinding binding;
 	private SnackbarHelper snackbarHelper;

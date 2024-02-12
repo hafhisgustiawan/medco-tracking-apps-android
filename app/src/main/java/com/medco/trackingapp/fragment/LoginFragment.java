@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class LoginFragment extends BottomSheetDialogFragment {
 
-	public static final String TAG = "LoginFragment";
+	public static final String TAG = LoginFragment.class.getSimpleName();
 	//callback
 	public ListenerClose listenerClose;
 	private FragmentLoginBinding binding;

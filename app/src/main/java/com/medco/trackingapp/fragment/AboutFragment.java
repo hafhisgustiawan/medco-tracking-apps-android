@@ -12,7 +12,7 @@ import com.medco.trackingapp.databinding.FragmentAboutBinding;
 
 public class AboutFragment extends BottomSheetDialogFragment {
 
-	public static final String TAG = "About Fragment";
+	public static final String TAG = AboutFragment.class.getSimpleName();
 	public ListenerClose listenerClose;
 
 	public AboutFragment() {

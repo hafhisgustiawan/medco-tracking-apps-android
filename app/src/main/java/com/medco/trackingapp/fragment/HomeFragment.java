@@ -34,7 +34,7 @@ import com.medco.trackingapp.model.WellItem;
 
 public class HomeFragment extends BaseFragment {
 
-	public static final String TAG = "HomeFragment";
+	public static final String TAG = HomeFragment.class.getSimpleName();
 	//callback
 	public ListenerChange listenerChange;
 	private Context mContext;

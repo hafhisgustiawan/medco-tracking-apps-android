@@ -34,7 +34,7 @@ import java.util.Objects;
 public class UserAdapter extends FirestorePagingAdapter<UserItem,
 	UserAdapter.ViewHolder> {
 
-	public static final String TAG = "Notification Adapter";
+	public static final String TAG = UserAdapter.class.getSimpleName();
 	private static final int ITEM = 0;
 	private static final int LOADING = 1;
 	public Animation animation;
